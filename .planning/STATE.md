@@ -39,6 +39,7 @@ Progress: [████████████] 55%
 *Updated after each plan completion*
 | Phase 04 P01 | 3min | 2 tasks | 2 files |
 | Phase 04 P02 | 3min | 2 tasks | 2 files |
+| Phase 04 P01 | 4min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -84,6 +85,11 @@ Recent decisions affecting current work:
 - [03-04]: Sankey-only direction filter (Chord/Force have none) per user decision
 - [03-04]: OntologyRelationChart wraps its own Card for self-contained layout with toggle
 - [03-04]: ChartSkeleton import removed from page.tsx since all placeholders replaced
+- [04-01]: DgraphNode extends ClusterNode locally in dgraph-data.ts (not modifying types/index.ts)
+- [04-01]: Layout toggle swaps forces on existing simulation (no destroy/recreate) for smooth transitions
+- [04-01]: Particle rAF loop runs continuously; toggle hides group via display:none for instant re-enable
+- [04-01]: Status ring pulse uses SVG-injected CSS @keyframes for component encapsulation
+- [04-01]: cleanupD3Svg cast to HTMLElement via `as unknown as HTMLElement` for SVG elements
 - [04-02]: SVGSVGElement cast to HTMLElement for cleanupD3Svg (D3 select works on both element types)
 - [04-02]: Legend rendered in JSX (not SVG) for better theme CSS variable integration
 - [04-02]: ShardBarChart colorScale uses CSS var() references in legend for SSR-safe rendering
@@ -101,5 +107,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-19
-Stopped at: Completed 04-02-PLAN.md
-Resume file: .planning/phases/04-dgraph-monitoring/04-02-SUMMARY.md
+Stopped at: Completed 04-01-PLAN.md (re-executed after 04-02)
+Resume file: .planning/phases/04-dgraph-monitoring/04-01-SUMMARY.md
