@@ -8,7 +8,11 @@ import { QueryModeToggle } from "@/components/query/QueryModeToggle";
 import { TemplateSelector } from "@/components/query/TemplateSelector";
 import { QueryHistory } from "@/components/query/QueryHistory";
 import { ResultTabs, type ResultTab } from "@/components/query/ResultTabs";
-import { ResultViewBar, type ViewType } from "@/components/query/ResultViewBar";
+import { ResultInfoBar } from "@/components/query/ResultInfoBar";
+import {
+  GraphPanelViewSelector,
+  type GraphViewType,
+} from "@/components/query/GraphPanelViewSelector";
 import { TableView } from "@/components/query/views/TableView";
 import { ForceGraphView } from "@/components/query/views/ForceGraphView";
 import { TreemapView } from "@/components/query/views/TreemapView";
@@ -55,7 +59,7 @@ export function QueryConsole() {
   const [queryMode, setQueryMode] = useState<QueryType>("graphql");
   const [tabs, setTabs] = useState<ResultTab[]>([]);
   const [activeTabId, setActiveTabId] = useState<string | null>(null);
-  const [activeView, setActiveView] = useState<ViewType>("table");
+  const [graphView, setGraphView] = useState<GraphViewType>("graph");
   const [isExecuting, setIsExecuting] = useState(false);
 
   const handleRunQuery = useCallback(() => {
@@ -151,26 +155,40 @@ export function QueryConsole() {
         />
         {activeTab && (
           <>
-            <ResultViewBar activeView={activeView} onViewChange={setActiveView} />
-            <div className="flex-1 overflow-auto p-2">
-              {activeView === "table" && (
+            <ResultInfoBar
+              tab={activeTab}
+              nodeCount={activeTab.data.length}
+              edgeCount={Math.max(0, activeTab.data.length - 1)}
+            />
+            <div className="flex flex-1 min-h-0">
+              {/* Left: Graph panel */}
+              <div className="flex flex-col w-1/2 border-r border-border/40 min-h-0">
+                <GraphPanelViewSelector
+                  activeView={graphView}
+                  onViewChange={setGraphView}
+                />
+                <div className="flex-1 overflow-auto p-2">
+                  {graphView === "graph" && (
+                    <ForceGraphView data={activeTab.data} />
+                  )}
+                  {graphView === "treemap" && (
+                    <TreemapView data={activeTab.data} />
+                  )}
+                  {graphView === "arc" && (
+                    <ArcDiagramView data={activeTab.data} />
+                  )}
+                  {graphView === "scatter" && (
+                    <ScatterView data={activeTab.data} />
+                  )}
+                  {graphView === "distribution" && (
+                    <DistributionView data={activeTab.data} />
+                  )}
+                </div>
+              </div>
+              {/* Right: Table panel */}
+              <div className="flex-1 overflow-auto p-2">
                 <TableView data={activeTab.data} />
-              )}
-              {activeView === "graph" && (
-                <ForceGraphView data={activeTab.data} />
-              )}
-              {activeView === "treemap" && (
-                <TreemapView data={activeTab.data} />
-              )}
-              {activeView === "arc" && (
-                <ArcDiagramView data={activeTab.data} />
-              )}
-              {activeView === "scatter" && (
-                <ScatterView data={activeTab.data} />
-              )}
-              {activeView === "distribution" && (
-                <DistributionView data={activeTab.data} />
-              )}
+              </div>
             </div>
           </>
         )}
