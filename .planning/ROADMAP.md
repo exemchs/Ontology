@@ -134,18 +134,35 @@ Plans:
 - [ ] 07-01: TBD
 - [ ] 07-02: TBD
 
+### Phase 8: Product UX Refinement
+**Goal**: 회의에서 도출된 7개 UX 개선 항목(CollapsibleResourcePanel, 쿼리 분할뷰, 데이터 임포트, 네임스페이스)의 완성도를 높이고 운영자 관점 사용성을 개선한다
+**Depends on**: Phase 7
+**Requirements**: UXR-01 through UXR-07 (meeting action items refinement)
+**Success Criteria** (what must be TRUE):
+  1. CollapsibleResourcePanel이 Dashboard와 GPU 모니터링에서 매끄럽게 동작하고 테마 전환에 반응한다
+  2. 쿼리 결과 분할뷰에서 그래프-테이블 간 선택 동기화가 동작한다
+  3. 데이터 임포트 폼이 완전한 UX 플로우를 갖추고 있다 (에러, 로딩, 성공 상태)
+  4. 네임스페이스 전환이 앱 전체에 반영되고 권한 기반 UI가 정확히 동작한다
+  5. 전체 제품이 Palantir 수준의 운영자 도구 느낌을 준다
+**Plans**: TBD
+
+Plans:
+- [ ] 08-01: TBD
+
 ## Progress
 
 **Execution Order:**
 Phases 3-7 depend on Phase 2 (Layout Shell). Phases 4, 5, 6 have no cross-dependencies and could be parallelized.
+Phase 8 refines UX improvements from product meeting.
 Critical path: Phase 1 -> Phase 2 -> Phase 4 (DGraph, highest risk)
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Data Layer | 4/4 | Complete | 2026-02-19 |
 | 2. Layout Shell | 2/2 | Complete | 2026-02-19 |
-| 3. Ontology Dashboard | 1/4 | In Progress | - |
-| 4. DGraph Monitoring | 0/? | Not started | - |
-| 5. GPU Monitoring | 0/3 | Planned | - |
-| 6. Ontology Studio & User Management | 0/? | Not started | - |
-| 7. Query Console & RBAC | 0/? | Not started | - |
+| 3. Ontology Dashboard | 4/4 | Complete | 2026-02-19 |
+| 4. DGraph Monitoring | 3/3 | Complete | 2026-02-19 |
+| 5. GPU Monitoring | 3/3 | Complete | 2026-02-19 |
+| 6. Ontology Studio & User Management | 3/3 | Complete | 2026-02-19 |
+| 7. Query Console & RBAC | 3/3 | Complete | 2026-02-19 |
+| 8. Product UX Refinement | 0/? | Not started | - |
