@@ -6,7 +6,6 @@ import {
   getDgraphNodes,
   getDgraphLinks,
   type DgraphNode,
-  type DgraphLink,
 } from "@/data/dgraph-data";
 
 import { ClusterTopology } from "@/components/dgraph/ClusterTopology";
