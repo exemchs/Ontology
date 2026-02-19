@@ -77,14 +77,14 @@
 
 ### RBAC & PII Masking
 
-- [ ] **RBAC-01**: 4역할 정의 (super_admin/service_app/data_analyst/auditor)
-- [ ] **RBAC-02**: PII 마스킹 함수 (maskName/maskPhone/maskEmail/maskId/maskAddress/maskResidentId)
-- [ ] **RBAC-03**: 역할별 필드 마스킹 규칙 설정 (Plain/Masked/Anonymized/Denied)
-- [ ] **RBAC-04**: Role Selector (Query Console 내 Select 드롭다운)
-- [ ] **RBAC-05**: PII 데모 탭 2종 (FAB Equipment 8행 + General PII 5행)
-- [ ] **RBAC-06**: PII 테이블 (마스킹 셀 배경색 bg-amber/bg-red + 아이콘)
-- [ ] **RBAC-07**: 컬럼 헤더 PII 등급 배지 (높음/중간/없음)
-- [ ] **RBAC-08**: 역할별 Info Banner (권한 요약 메시지)
+- [x] **RBAC-01**: 4역할 정의 (super_admin/service_app/data_analyst/auditor)
+- [x] **RBAC-02**: PII 마스킹 함수 (maskName/maskPhone/maskEmail/maskId/maskAddress/maskResidentId)
+- [x] **RBAC-03**: 역할별 필드 마스킹 규칙 설정 (Plain/Masked/Anonymized/Denied)
+- [x] **RBAC-04**: Role Selector (Query Console 내 Select 드롭다운)
+- [x] **RBAC-05**: PII 데모 탭 2종 (FAB Equipment 8행 + General PII 5행)
+- [x] **RBAC-06**: PII 테이블 (마스킹 셀 배경색 bg-amber/bg-red + 아이콘)
+- [x] **RBAC-07**: 컬럼 헤더 PII 등급 배지 (높음/중간/없음)
+- [x] **RBAC-08**: 역할별 Info Banner (권한 요약 메시지)
 - [ ] **RBAC-09**: HeaderBar 역할 인디케이터 (현재 역할 배지 표시 — AUTH-03에서 이전)
 
 ### User Management
@@ -198,14 +198,14 @@
 | QURY-08 | Phase 7: Query Console & RBAC | Pending |
 | QURY-09 | Phase 7: Query Console & RBAC | Pending |
 | QURY-10 | Phase 7: Query Console & RBAC | Complete |
-| RBAC-01 | Phase 7: Query Console & RBAC | Pending |
-| RBAC-02 | Phase 7: Query Console & RBAC | Pending |
-| RBAC-03 | Phase 7: Query Console & RBAC | Pending |
-| RBAC-04 | Phase 7: Query Console & RBAC | Pending |
-| RBAC-05 | Phase 7: Query Console & RBAC | Pending |
-| RBAC-06 | Phase 7: Query Console & RBAC | Pending |
-| RBAC-07 | Phase 7: Query Console & RBAC | Pending |
-| RBAC-08 | Phase 7: Query Console & RBAC | Pending |
+| RBAC-01 | Phase 7: Query Console & RBAC | Complete |
+| RBAC-02 | Phase 7: Query Console & RBAC | Complete |
+| RBAC-03 | Phase 7: Query Console & RBAC | Complete |
+| RBAC-04 | Phase 7: Query Console & RBAC | Complete |
+| RBAC-05 | Phase 7: Query Console & RBAC | Complete |
+| RBAC-06 | Phase 7: Query Console & RBAC | Complete |
+| RBAC-07 | Phase 7: Query Console & RBAC | Complete |
+| RBAC-08 | Phase 7: Query Console & RBAC | Complete |
 | DATA-01 | Phase 1: Foundation & Data Layer | Complete |
 | DATA-02 | Phase 1: Foundation & Data Layer | Complete |
 | DATA-03 | Phase 1: Foundation & Data Layer | Complete |
