@@ -52,6 +52,9 @@ export function ResultTabs({
         >
           <span className="font-medium">{tab.label}</span>
           <Badge variant="secondary" className="text-[10px] h-4 px-1.5">
+            {tab.resultCount}
+          </Badge>
+          <Badge variant="outline" className="text-[10px] h-4 px-1.5">
             {tab.executionTime}ms
           </Badge>
           <Button
