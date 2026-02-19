@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-19)
 
 **Core value:** 반도체 FAB의 그래프 DB 운영, 온톨로지 관계, 인프라를 통합 대시보드에서 D3.js로 시각화하고, RBAC 기반 PII 데이터 거버넌스를 시연한다.
-**Current focus:** Phase 3 - Ontology Dashboard (Complete)
+**Current focus:** Phase 4 - DGraph Monitoring (In Progress)
 
 ## Current Position
 
-Phase: 3 of 7 (Ontology Dashboard) - COMPLETE
-Plan: 4 of 4 in current phase
-Status: Plan 03-04 Complete
-Last activity: 2026-02-19 — Completed 03-04-PLAN.md
+Phase: 4 of 7 (DGraph Monitoring) - IN PROGRESS
+Plan: 2 of 3 in current phase
+Status: Plan 04-02 Complete
+Last activity: 2026-02-19 — Completed 04-02-PLAN.md
 
-Progress: [██████████] 45%
+Progress: [████████████] 55%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 10
+- Total plans completed: 12
 - Average duration: 3min
-- Total execution time: 0.4 hours
+- Total execution time: 0.5 hours
 
 **By Phase:**
 
@@ -30,14 +30,15 @@ Progress: [██████████] 45%
 | 01-foundation-data-layer | 4/4 | 12min | 3min |
 | 02-layout-shell | 2/2 | 4min | 2min |
 | 03-ontology-dashboard | 4/4 | 14min | 3.5min |
+| 04-dgraph-monitoring | 2/3 | 6min | 3min |
 
 **Recent Trend:**
-- Last 5 plans: 03-04 (4min), 03-03 (4min), 03-02 (4min), 03-01 (2min), 02-02 (2min)
+- Last 5 plans: 04-02 (3min), 04-01 (3min), 03-04 (4min), 03-03 (4min), 03-02 (4min)
 - Trend: Stable
 
 *Updated after each plan completion*
-| Phase 03 P03 | 4min | 2 tasks | 3 files |
-| Phase 03 P04 | 4min | 2 tasks | 6 files |
+| Phase 04 P01 | 3min | 2 tasks | 2 files |
+| Phase 04 P02 | 3min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -83,6 +84,10 @@ Recent decisions affecting current work:
 - [03-04]: Sankey-only direction filter (Chord/Force have none) per user decision
 - [03-04]: OntologyRelationChart wraps its own Card for self-contained layout with toggle
 - [03-04]: ChartSkeleton import removed from page.tsx since all placeholders replaced
+- [04-02]: SVGSVGElement cast to HTMLElement for cleanupD3Svg (D3 select works on both element types)
+- [04-02]: Legend rendered in JSX (not SVG) for better theme CSS variable integration
+- [04-02]: ShardBarChart colorScale uses CSS var() references in legend for SSR-safe rendering
+- [04-02]: Brush overlay behind dots with pointer-events:all on dots for hover interactivity
 
 ### Pending Todos
 
@@ -96,5 +101,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-19
-Stopped at: Completed 03-04-PLAN.md (Phase 3 complete)
-Resume file: .planning/phases/03-ontology-dashboard/03-04-SUMMARY.md
+Stopped at: Completed 04-02-PLAN.md
+Resume file: .planning/phases/04-dgraph-monitoring/04-02-SUMMARY.md

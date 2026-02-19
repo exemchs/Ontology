@@ -40,8 +40,8 @@
 - [ ] **DGRP-02**: 데이터 흐름 파티클 애니메이션 (연결선 위 이동)
 - [ ] **DGRP-03**: 노드 상태 링 (healthy/warning/error 색상 + 펄스 애니메이션)
 - [ ] **DGRP-04**: 노드 상세 패널 (클릭 시 QPS/CPU/Memory 표시)
-- [ ] **DGRP-05**: D3 쿼리 산점도 (Brushable — 영역 선택으로 쿼리 필터링)
-- [ ] **DGRP-06**: D3 샤드 바 차트 (Grouped bar)
+- [x] **DGRP-05**: D3 쿼리 산점도 (Brushable — 영역 선택으로 쿼리 필터링)
+- [x] **DGRP-06**: D3 샤드 바 차트 (Grouped bar)
 - [ ] **DGRP-07**: Recent Events 목록
 
 ### GPU Monitoring
@@ -170,8 +170,8 @@
 | DGRP-02 | Phase 4: DGraph Monitoring | Pending |
 | DGRP-03 | Phase 4: DGraph Monitoring | Pending |
 | DGRP-04 | Phase 4: DGraph Monitoring | Pending |
-| DGRP-05 | Phase 4: DGraph Monitoring | Pending |
-| DGRP-06 | Phase 4: DGraph Monitoring | Pending |
+| DGRP-05 | Phase 4: DGraph Monitoring | Complete |
+| DGRP-06 | Phase 4: DGraph Monitoring | Complete |
 | DGRP-07 | Phase 4: DGraph Monitoring | Pending |
 | GPU-01 | Phase 5: GPU Monitoring | Pending |
 | GPU-02 | Phase 5: GPU Monitoring | Pending |
