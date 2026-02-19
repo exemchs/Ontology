@@ -182,6 +182,11 @@ Recent decisions affecting current work:
 - [08-04]: ErrorTimeline as React list (not D3) for scrollable content with severity badges
 - [08-04]: QPS normalized to 0-100 against 2000 q/s ceiling for AlphaComparisonBar visual comparison
 - [08-04]: DgraphHeatmapCell uses distinct interface (hour/queryType/count) from GpuHeatmapCell
+- [08-05]: SchemaTreeView uses shadcn Collapsible + ContextMenu for consistent UI primitives
+- [08-05]: OntologyMinimap as separate React component (not internal to OntologyGraph) for cleaner separation
+- [08-05]: onZoomChange ref pattern: store callback in ref for D3 handler access without effect re-run
+- [08-05]: TypeDistributionTreemap uses HierarchyRectangularNode cast for treemap x0/y0/x1/y1 properties
+- [08-05]: Minimap is read-only (no click-to-pan) to prevent infinite zoom loop per research
 
 ### Pending Todos
 
@@ -195,5 +200,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-20
-Stopped at: Completed 08-01-PLAN.md
-Resume file: .planning/phases/08-product-ux-refinement/08-01-SUMMARY.md
+Stopped at: Completed 08-05-PLAN.md
+Resume file: .planning/phases/08-product-ux-refinement/08-05-SUMMARY.md
