@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-19)
 
 **Core value:** 반도체 FAB의 그래프 DB 운영, 온톨로지 관계, 인프라를 통합 대시보드에서 D3.js로 시각화하고, RBAC 기반 PII 데이터 거버넌스를 시연한다.
-**Current focus:** Phase 5 - GPU Monitoring (In Progress)
+**Current focus:** Phase 5 - GPU Monitoring (Complete)
 
 ## Current Position
 
 Phase: 5 of 7 (GPU Monitoring)
-Plan: 1 of 3 in current phase
-Status: Executing Phase 05
-Last activity: 2026-02-19 — Completed 05-01-PLAN.md
+Plan: 3 of 3 in current phase
+Status: Phase 05 Complete
+Last activity: 2026-02-19 — Completed 05-03-PLAN.md
 
-Progress: [████████████████] 67%
+Progress: [███████████████████] 76%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 14
+- Total plans completed: 16
 - Average duration: 3min
-- Total execution time: 0.7 hours
+- Total execution time: 0.8 hours
 
 **By Phase:**
 
@@ -31,11 +31,11 @@ Progress: [████████████████] 67%
 | 02-layout-shell | 2/2 | 4min | 2min |
 | 03-ontology-dashboard | 4/4 | 14min | 3.5min |
 | 04-dgraph-monitoring | 3/3 | 9min | 3min |
-| 05-gpu-monitoring | 1/3 | 3min | 3min |
+| 05-gpu-monitoring | 3/3 | 7min | 2.3min |
 
 **Recent Trend:**
-- Last 5 plans: 05-01 (3min), 04-03 (3min), 04-02 (3min), 04-01 (3min), 03-04 (4min)
-- Trend: Stable
+- Last 5 plans: 05-03 (2min), 05-02 (2min), 05-01 (3min), 04-03 (3min), 04-02 (3min)
+- Trend: Stable (accelerating)
 
 *Updated after each plan completion*
 | Phase 04 P01 | 3min | 2 tasks | 2 files |
@@ -43,6 +43,8 @@ Progress: [████████████████] 67%
 | Phase 04 P03 | 3min | 2 tasks | 5 files |
 | Phase 04 P01 | 4min | 2 tasks | 3 files |
 | Phase 05 P01 | 3min | 3 tasks | 13 files |
+| Phase 05 P02 | 3min | 2 tasks | 2 files |
+| Phase 05 P03 | 2min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -106,6 +108,14 @@ Recent decisions affecting current work:
 - [05-01]: Health issue relative time formatter: minutes/hours/days display
 - [05-01]: Process memory formatted as GB when >= 1024 MB, else raw MB
 - [05-01]: D3 stub props use underscore prefix (_series, _data) to suppress unused warnings
+- [05-02]: Fixed Y-axis domain computed from ALL metric series, not just visible ones, to prevent scale jumping
+- [05-02]: Temperature normalized against 90C ceiling for grouped bar comparison
+- [05-02]: Legend allows toggling all but one GPU (minimum 1 visible to prevent empty chart)
+- [05-02]: Tab-controlled D3 chart via shadcn Tabs setting React state that D3 useEffect depends on
+- [05-03]: Heatmap color legend uses SVG linearGradient with 10-stop YlOrRd sampling
+- [05-03]: Ridgeline KDE bandwidth=7 with 50 evaluation points for smooth density curves
+- [05-03]: Ridgeline fill-opacity 0.6 with chart series CSS variables for theme integration
+- [05-03]: isClient useState pattern for SSR guard instead of bare ref check
 
 ### Pending Todos
 
@@ -119,5 +129,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-19
-Stopped at: Completed 05-01-PLAN.md
-Resume file: .planning/phases/05-gpu-monitoring/05-01-SUMMARY.md
+Stopped at: Completed 05-03-PLAN.md (Phase 05 complete)
+Resume file: .planning/phases/05-gpu-monitoring/05-03-SUMMARY.md
