@@ -19,8 +19,8 @@
 
 - [x] **AUTH-01**: Password Gate (세션 기반, configurable 비밀번호)
 - [x] **AUTH-02**: AppSidebar (4그룹 네비게이션: Operations/Monitoring/Workspace/Administration)
-- [x] **AUTH-03**: HeaderBar (브레드크럼, 검색, 테마 토글, 역할 인디케이터)
-- [x] **AUTH-04**: Welcome Popup (첫 방문 한국어 안내, localStorage 기반)
+- [x] **AUTH-03**: HeaderBar (브레드크럼, 검색 연동, Cmd+K 힌트) — 역할 인디케이터는 RBAC-09로 Phase 7 이전
+- [x] **AUTH-04**: Welcome Popup (첫 방문 한국어 안내, sessionStorage 기반 — 로그아웃 시 리셋)
 - [x] **AUTH-05**: Command Palette (Cmd+K 검색/네비게이션)
 - [x] **AUTH-06**: 라우팅 6개 페이지 (/, /monitoring/dgraph, /monitoring/gpu, /workspace/studio, /workspace/query, /admin/users)
 
@@ -85,6 +85,7 @@
 - [ ] **RBAC-06**: PII 테이블 (마스킹 셀 배경색 bg-amber/bg-red + 아이콘)
 - [ ] **RBAC-07**: 컬럼 헤더 PII 등급 배지 (높음/중간/없음)
 - [ ] **RBAC-08**: 역할별 Info Banner (권한 요약 메시지)
+- [ ] **RBAC-09**: HeaderBar 역할 인디케이터 (현재 역할 배지 표시 — AUTH-03에서 이전)
 
 ### User Management
 
