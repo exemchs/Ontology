@@ -3,6 +3,8 @@
 import { useState, useMemo } from "react";
 
 import { PageShell } from "@/components/ds/PageShell";
+import { CollapsibleResourcePanel } from "@/components/ds/CollapsibleResourcePanel";
+import { getDashboardGauges } from "@/data/dashboard-data";
 import { GpuSummaryHeader } from "@/components/gpu/GpuSummaryHeader";
 import { GpuCardGrid } from "@/components/gpu/GpuCardGrid";
 import { GpuPerformanceTrend } from "@/components/gpu/GpuPerformanceTrend";
@@ -39,6 +41,7 @@ export default function GpuPage() {
   const comparisonData = useMemo(() => getGpuComparison(), []);
   const healthIssues = useMemo(() => getGpuHealthIssues(), []);
   const processes = useMemo(() => getGpuProcesses(), []);
+  const systemGauges = useMemo(() => getDashboardGauges(), []);
 
   return (
     <PageShell
@@ -46,6 +49,10 @@ export default function GpuPage() {
       description="Real-time GPU performance and health overview"
     >
       <GpuSummaryHeader gpus={gpus} />
+      <CollapsibleResourcePanel
+        gauges={systemGauges}
+        storageKey="gpu-resource-collapsed"
+      />
       <GpuCardGrid gpus={gpus} />
 
       {/* Performance Trends */}
