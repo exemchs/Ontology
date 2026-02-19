@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { Play, Loader2 } from "lucide-react";
+import { useState, useCallback, useMemo } from "react";
+import { Play, Loader2, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { QueryEditor } from "@/components/query/QueryEditor";
 import { QueryModeToggle } from "@/components/query/QueryModeToggle";
@@ -15,10 +15,6 @@ import {
 } from "@/components/query/GraphPanelViewSelector";
 import { TableView } from "@/components/query/views/TableView";
 import { ForceGraphView } from "@/components/query/views/ForceGraphView";
-import { TreemapView } from "@/components/query/views/TreemapView";
-import { ArcDiagramView } from "@/components/query/views/ArcDiagramView";
-import { ScatterView } from "@/components/query/views/ScatterView";
-import { DistributionView } from "@/components/query/views/DistributionView";
 import { PiiDemo } from "@/components/query/pii/PiiDemo";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -26,10 +22,17 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
+import { exportJson, exportCsv } from "@/lib/query-export";
 import type { QueryType } from "@/types";
 
-// ── Mock result generator ─────────────────────────────────────────────────
+// -- Mock result generator ----------------------------------------------------
 function generateMockResult(queryType: QueryType): Record<string, unknown>[] {
   if (queryType === "graphql") {
     return [
@@ -53,7 +56,7 @@ function generateMockResult(queryType: QueryType): Record<string, unknown>[] {
   ];
 }
 
-// ── QueryConsole ──────────────────────────────────────────────────────────
+// -- QueryConsole -------------------------------------------------------------
 export function QueryConsole() {
   const [queryText, setQueryText] = useState("");
   const [queryMode, setQueryMode] = useState<QueryType>("graphql");
@@ -61,6 +64,7 @@ export function QueryConsole() {
   const [activeTabId, setActiveTabId] = useState<string | null>(null);
   const [graphView, setGraphView] = useState<GraphViewType>("graph");
   const [isExecuting, setIsExecuting] = useState(false);
+  const [hiddenTypes, setHiddenTypes] = useState<string[]>([]);
 
   const handleRunQuery = useCallback(() => {
     if (!queryText.trim() || isExecuting) return;
@@ -90,6 +94,7 @@ export function QueryConsole() {
         return updated;
       });
       setActiveTabId(newTab.id);
+      setHiddenTypes([]);
       setIsExecuting(false);
     }, delay);
   }, [queryText, queryMode, isExecuting, tabs.length]);
@@ -111,7 +116,45 @@ export function QueryConsole() {
     setQueryText(query);
   }, []);
 
+  const handleToggleType = useCallback((typeName: string) => {
+    setHiddenTypes((prev) =>
+      prev.includes(typeName)
+        ? prev.filter((t) => t !== typeName)
+        : [...prev, typeName]
+    );
+  }, []);
+
   const activeTab = tabs.find((t) => t.id === activeTabId);
+
+  // Extract unique type names from active tab data for graph type filter
+  const typeNames = useMemo(() => {
+    if (!activeTab) return [];
+    const types = new Set<string>();
+    activeTab.data.forEach((row) => {
+      const t = row.type ?? row.step;
+      if (t) types.add(String(t));
+    });
+    return Array.from(types).sort();
+  }, [activeTab]);
+
+  // Filter graph data by hidden types
+  const filteredGraphData = useMemo(() => {
+    if (!activeTab || hiddenTypes.length === 0) return activeTab?.data ?? [];
+    return activeTab.data.filter((row) => {
+      const t = String(row.type ?? row.step ?? "");
+      return !hiddenTypes.includes(t);
+    });
+  }, [activeTab, hiddenTypes]);
+
+  const handleExportJson = useCallback(() => {
+    if (!activeTab) return;
+    exportJson(activeTab.data, `query-result-${activeTab.id}`);
+  }, [activeTab]);
+
+  const handleExportCsv = useCallback(() => {
+    if (!activeTab) return;
+    exportCsv(activeTab.data, `query-result-${activeTab.id}`);
+  }, [activeTab]);
 
   return (
     <div className="flex flex-col h-full bg-background">
@@ -155,33 +198,46 @@ export function QueryConsole() {
         />
         {activeTab && (
           <>
-            <ResultInfoBar
-              tab={activeTab}
-              nodeCount={activeTab.data.length}
-              edgeCount={Math.max(0, activeTab.data.length - 1)}
-            />
+            <div className="flex items-center gap-2">
+              <div className="flex-1">
+                <ResultInfoBar
+                  tab={activeTab}
+                  nodeCount={activeTab.data.length}
+                  edgeCount={Math.max(0, activeTab.data.length - 1)}
+                />
+              </div>
+              <div className="flex items-center gap-1 pr-2">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm" className="h-6 gap-1 text-[10px]">
+                      <Download className="size-3" />
+                      Export
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={handleExportCsv} className="text-xs">
+                      Export CSV
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleExportJson} className="text-xs">
+                      Export JSON
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </div>
             <div className="flex flex-1 min-h-0">
               {/* Left: Graph panel */}
               <div className="flex flex-col w-1/2 border-r border-border/40 min-h-0">
                 <GraphPanelViewSelector
                   activeView={graphView}
                   onViewChange={setGraphView}
+                  typeNames={typeNames}
+                  hiddenTypes={hiddenTypes}
+                  onToggleType={handleToggleType}
                 />
                 <div className="flex-1 overflow-auto p-2">
                   {graphView === "graph" && (
-                    <ForceGraphView data={activeTab.data} />
-                  )}
-                  {graphView === "treemap" && (
-                    <TreemapView data={activeTab.data} />
-                  )}
-                  {graphView === "arc" && (
-                    <ArcDiagramView data={activeTab.data} />
-                  )}
-                  {graphView === "scatter" && (
-                    <ScatterView data={activeTab.data} />
-                  )}
-                  {graphView === "distribution" && (
-                    <DistributionView data={activeTab.data} />
+                    <ForceGraphView data={filteredGraphData} />
                   )}
                 </div>
               </div>

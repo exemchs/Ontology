@@ -1,22 +1,9 @@
 "use client";
 
-import {
-  Table2,
-  Network,
-  LayoutGrid,
-  Activity,
-  ScatterChart,
-  BarChart3,
-} from "lucide-react";
+import { Table2, Network } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-export type ViewType =
-  | "table"
-  | "graph"
-  | "treemap"
-  | "arc"
-  | "scatter"
-  | "distribution";
+export type ViewType = "table" | "graph";
 
 interface ResultViewBarProps {
   activeView: ViewType;
@@ -26,10 +13,6 @@ interface ResultViewBarProps {
 const viewOptions: { type: ViewType; icon: React.ElementType; label: string }[] = [
   { type: "table", icon: Table2, label: "Table" },
   { type: "graph", icon: Network, label: "Graph" },
-  { type: "treemap", icon: LayoutGrid, label: "Treemap" },
-  { type: "arc", icon: Activity, label: "Arc" },
-  { type: "scatter", icon: ScatterChart, label: "Scatter" },
-  { type: "distribution", icon: BarChart3, label: "Distribution" },
 ];
 
 export function ResultViewBar({ activeView, onViewChange }: ResultViewBarProps) {
