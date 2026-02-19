@@ -156,3 +156,19 @@ export interface GaugeData {
   max: number;
   color: string;
 }
+
+// ─── Dashboard Chart Types ─────────────────────────────────────────────────
+
+export interface ScatterPoint {
+  name: string;
+  latency: number;
+  throughput: number;
+  status: NodeStatus;
+}
+
+export interface ResourceBarData {
+  name: string;
+  cpu: number;
+  memory: number;
+  disk: number;
+}

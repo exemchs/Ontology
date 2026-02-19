@@ -5,7 +5,14 @@
 // jitter applied on each call to simulate live monitoring.
 // =============================================================================
 
-import type { GaugeData, TimeSeriesPoint } from "@/types";
+import type {
+  Alert,
+  GaugeData,
+  NodeStatus,
+  ResourceBarData,
+  ScatterPoint,
+  TimeSeriesPoint,
+} from "@/types";
 
 // ── Jitter Utility ──────────────────────────────────────────────────────────
 
@@ -118,17 +125,145 @@ export interface DashboardTimeSeries {
   data: TimeSeriesPoint[];
 }
 
-export function getDashboardTimeSeries(): DashboardTimeSeries[] {
+export function getDashboardTimeSeries(
+  interval: "hourly" | "daily" = "hourly"
+): DashboardTimeSeries[] {
+  const intervalMinutes = interval === "daily" ? 60 : 5;
   return [
     {
       name: "Agent Request Rate",
       color: "var(--color-chart-1)",
-      data: generateTimeSeriesData(24, [800, 2500], 5),
+      data: generateTimeSeriesData(24, [800, 2500], intervalMinutes),
     },
     {
       name: "Query QPS",
       color: "var(--color-chart-2)",
-      data: generateTimeSeriesData(24, [200, 800], 5),
+      data: generateTimeSeriesData(24, [200, 800], intervalMinutes),
+    },
+  ];
+}
+
+// ── Dashboard Scatter Data ──────────────────────────────────────────────────
+
+const scatterNodes: { name: string; latencyBase: number; throughputBase: number }[] = [
+  { name: "sks-zero-01", latencyBase: 2.1, throughputBase: 950 },
+  { name: "sks-zero-02", latencyBase: 1.8, throughputBase: 1020 },
+  { name: "sks-zero-03", latencyBase: 3.5, throughputBase: 870 },
+  { name: "sks-alpha-01", latencyBase: 4.2, throughputBase: 780 },
+  { name: "sks-alpha-02", latencyBase: 5.8, throughputBase: 620 },
+  { name: "sks-alpha-03", latencyBase: 2.9, throughputBase: 1100 },
+  { name: "sks-alpha-04", latencyBase: 7.2, throughputBase: 520 },
+  { name: "sks-shard-01", latencyBase: 1.5, throughputBase: 1180 },
+  { name: "sks-shard-02", latencyBase: 3.1, throughputBase: 910 },
+  { name: "sks-shard-03", latencyBase: 6.1, throughputBase: 580 },
+  { name: "sks-compute-01", latencyBase: 2.4, throughputBase: 1050 },
+  { name: "sks-compute-02", latencyBase: 4.8, throughputBase: 720 },
+];
+
+function getStatusFromLatency(latency: number): NodeStatus {
+  if (latency > 7) return "error";
+  if (latency > 5) return "warning";
+  return "healthy";
+}
+
+export function getDashboardScatterData(): ScatterPoint[] {
+  return scatterNodes.map((node) => {
+    const latency = round(addJitter(node.latencyBase, 10), 1);
+    const throughput = Math.round(addJitter(node.throughputBase, 5));
+    return {
+      name: node.name,
+      latency,
+      throughput,
+      status: getStatusFromLatency(latency),
+    };
+  });
+}
+
+// ── Dashboard Resource Bars ─────────────────────────────────────────────────
+
+const resourceNodes: { name: string; cpu: number; memory: number; disk: number }[] = [
+  { name: "zero-01", cpu: 42, memory: 58, disk: 45 },
+  { name: "zero-02", cpu: 38, memory: 52, disk: 40 },
+  { name: "zero-03", cpu: 55, memory: 67, disk: 50 },
+  { name: "alpha-01", cpu: 62, memory: 71, disk: 55 },
+  { name: "alpha-02", cpu: 78, memory: 75, disk: 62 },
+  { name: "alpha-03", cpu: 45, memory: 48, disk: 38 },
+  { name: "alpha-04", cpu: 85, memory: 80, disk: 68 },
+  { name: "shard-01", cpu: 33, memory: 44, disk: 35 },
+  { name: "shard-02", cpu: 50, memory: 60, disk: 48 },
+  { name: "shard-03", cpu: 72, memory: 68, disk: 58 },
+  { name: "compute-01", cpu: 40, memory: 55, disk: 42 },
+  { name: "compute-02", cpu: 58, memory: 63, disk: 52 },
+];
+
+export function getDashboardResourceBars(): ResourceBarData[] {
+  return resourceNodes.map((node) => ({
+    name: node.name,
+    cpu: round(addJitter(node.cpu, 5), 1),
+    memory: round(addJitter(node.memory, 5), 1),
+    disk: round(addJitter(node.disk, 5), 1),
+  }));
+}
+
+// ── Dashboard Alerts ────────────────────────────────────────────────────────
+
+export function getDashboardAlerts(): Alert[] {
+  const now = Date.now();
+  return [
+    {
+      id: 1,
+      clusterId: 1,
+      nodeId: 7,
+      severity: "error",
+      title: "High CPU utilization on alpha-04",
+      message:
+        "CPU usage exceeded 90% threshold for over 5 minutes. Current: 92.3%. Process 'dgraph-alpha' consuming majority of resources. Consider scaling horizontally or optimizing heavy queries.",
+      resolved: false,
+      resolvedAt: null,
+    },
+    {
+      id: 2,
+      clusterId: 1,
+      nodeId: 5,
+      severity: "error",
+      title: "Memory threshold breach on alpha-02",
+      message:
+        "Memory usage at 87.6% (14.0 GB / 16.0 GB). Approaching OOM kill threshold. Recommend increasing node memory or redistributing shards.",
+      resolved: true,
+      resolvedAt: new Date(now - 25 * 60 * 1000).toISOString(),
+    },
+    {
+      id: 3,
+      clusterId: 1,
+      nodeId: 10,
+      severity: "warning",
+      title: "Disk usage warning on shard-03",
+      message:
+        "Disk utilization at 78% on /data partition. Projected to reach 85% within 48 hours at current growth rate. Schedule cleanup or expand storage.",
+      resolved: false,
+      resolvedAt: null,
+    },
+    {
+      id: 4,
+      clusterId: 1,
+      nodeId: 4,
+      severity: "warning",
+      title: "Replication lag detected on alpha-01",
+      message:
+        "Replication lag of 3.2 seconds detected between alpha-01 and zero-01. Network latency between nodes is elevated. Monitoring for auto-recovery.",
+      resolved: true,
+      resolvedAt: new Date(now - 2 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      id: 5,
+      clusterId: 1,
+      nodeId: null,
+      severity: "info",
+      title: "Cluster health check completed",
+      message:
+        "Routine health check completed successfully. All zero nodes responsive. 11/12 nodes within normal parameters. 1 node (alpha-04) flagged for review.",
+      resolved: true,
+      resolvedAt: new Date(now - 10 * 60 * 1000).toISOString(),
     },
   ];
 }
