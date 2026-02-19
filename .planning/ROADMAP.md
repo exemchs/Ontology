@@ -49,10 +49,11 @@ Plans:
   2. 사이드바에서 6개 페이지를 모두 클릭하여 이동할 수 있고 현재 페이지가 하이라이트된다
   3. Cmd+K로 Command Palette가 열리고 페이지 검색/이동이 동작한다
   4. 첫 방문 시 Welcome Popup이 한국어로 표시되고 닫으면 다시 나타나지 않는다
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 02-01: TBD
+- [ ] 02-01-PLAN.md — Auth 인프라 + Password Gate (D3 그래프) + 라우팅 스켈레톤 6페이지
+- [ ] 02-02-PLAN.md — AppSidebar + HeaderBar + Welcome Popup + Command Palette
 
 ### Phase 3: Ontology Dashboard
 **Goal**: 랜딩 페이지에서 클러스터 상태, 리소스, 쿼리 트렌드, 온톨로지 관계를 한눈에 파악할 수 있다
@@ -137,7 +138,7 @@ Critical path: Phase 1 -> Phase 2 -> Phase 4 (DGraph, highest risk)
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Data Layer | 0/4 | Planned | - |
-| 2. Layout Shell | 0/? | Not started | - |
+| 2. Layout Shell | 0/2 | Planned | - |
 | 3. Ontology Dashboard | 0/? | Not started | - |
 | 4. DGraph Monitoring | 0/? | Not started | - |
 | 5. GPU Monitoring | 0/? | Not started | - |
