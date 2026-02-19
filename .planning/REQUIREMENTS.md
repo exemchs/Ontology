@@ -30,8 +30,8 @@
 - [x] **DASH-02**: D3 리소스 게이지 3종 (CPU/Memory/Disk — 270도 아크, 80% 임계 글로우)
 - [x] **DASH-03**: D3 듀얼 라인 차트 (Agent Request Rate + Graph Query QPS, hourly/daily 토글)
 - [x] **DASH-04**: D3 코드 다이어그램 (6개 온톨로지 타입 간 관계, 호버 하이라이트)
-- [ ] **DASH-05**: D3 노드 산점도 (Latency x Throughput, 글로우 효과)
-- [ ] **DASH-06**: D3 리소스 바 차트 (Stacked/Grouped 토글, CPU/Memory/Disk)
+- [x] **DASH-05**: D3 노드 산점도 (Latency x Throughput, 글로우 효과)
+- [x] **DASH-06**: D3 리소스 바 차트 (Stacked/Grouped 토글, CPU/Memory/Disk)
 - [x] **DASH-07**: Recent Alerts 목록
 
 ### DGraph Monitoring
@@ -163,8 +163,8 @@
 | DASH-02 | Phase 3: Ontology Dashboard | Complete |
 | DASH-03 | Phase 3: Ontology Dashboard | Complete |
 | DASH-04 | Phase 3: Ontology Dashboard | Complete |
-| DASH-05 | Phase 3: Ontology Dashboard | Pending |
-| DASH-06 | Phase 3: Ontology Dashboard | Pending |
+| DASH-05 | Phase 3: Ontology Dashboard | Complete |
+| DASH-06 | Phase 3: Ontology Dashboard | Complete |
 | DASH-07 | Phase 3: Ontology Dashboard | Complete |
 | DGRP-01 | Phase 4: DGraph Monitoring | Pending |
 | DGRP-02 | Phase 4: DGraph Monitoring | Pending |
