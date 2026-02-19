@@ -4,7 +4,7 @@
 // Hardcoded data for GPU cards, performance trends, heatmap, and comparison.
 // =============================================================================
 
-import type { Gpu, GpuStatus, TimeSeriesPoint } from "@/types";
+import type { Gpu, GpuStatus, TimeSeriesPoint, GpuHealthIssue, GpuProcess } from "@/types";
 
 // ── Jitter Utility ──────────────────────────────────────────────────────────
 
@@ -164,5 +164,78 @@ export function getGpuComparison(): GpuComparisonItem[] {
     memoryPercent: round(addJitter((gpu.memoryUsed / gpu.memoryTotal) * 100, 3), 1),
     temperature: round(addJitter(gpu.temperature, 3), 0),
     powerPercent: round(addJitter((gpu.powerUsage / gpu.powerLimit) * 100, 3), 1),
+  }));
+}
+
+// ── GPU Health Issues ──────────────────────────────────────────────────────
+
+export function getGpuHealthIssues(): GpuHealthIssue[] {
+  const now = new Date();
+  return [
+    {
+      id: 1,
+      gpuName: "GPU-2",
+      severity: "error",
+      message: "Temperature exceeding threshold (78\u00b0C > 75\u00b0C limit)",
+      timestamp: new Date(now.getTime() - 25 * 60 * 1000), // 25 min ago
+    },
+    {
+      id: 2,
+      gpuName: "GPU-2",
+      severity: "warning",
+      message: "Memory utilization approaching capacity (89.5%)",
+      timestamp: new Date(now.getTime() - 1.2 * 60 * 60 * 1000), // ~1h ago
+    },
+    {
+      id: 3,
+      gpuName: "GPU-0",
+      severity: "warning",
+      message: "ECC single-bit error count increased to 14 in last 24h",
+      timestamp: new Date(now.getTime() - 2.5 * 60 * 60 * 1000), // ~2.5h ago
+    },
+    {
+      id: 4,
+      gpuName: "GPU-1",
+      severity: "info",
+      message: "Driver update available: 535.129.03 \u2192 535.154.05",
+      timestamp: new Date(now.getTime() - 3.1 * 60 * 60 * 1000), // ~3h ago
+    },
+    {
+      id: 5,
+      gpuName: "GPU-3",
+      severity: "info",
+      message: "Power efficiency improved 3.2% after thermal throttle cleared",
+      timestamp: new Date(now.getTime() - 4.0 * 60 * 60 * 1000), // ~4h ago
+    },
+    {
+      id: 6,
+      gpuName: "GPU-0",
+      severity: "info",
+      message: "NVLink bandwidth test completed: 248.3 GB/s (nominal)",
+      timestamp: new Date(now.getTime() - 5.5 * 60 * 60 * 1000), // ~5.5h ago
+    },
+  ];
+}
+
+// ── GPU Processes ──────────────────────────────────────────────────────────
+
+const processSeedData: Omit<GpuProcess, "memoryUsed" | "gpuUtilization">[] = [
+  { pid: 48291, gpuName: "GPU-0", processName: "python3 train_model.py", type: "C" },
+  { pid: 48305, gpuName: "GPU-0", processName: "tensorboard", type: "G" },
+  { pid: 51023, gpuName: "GPU-1", processName: "python3 inference.py", type: "C" },
+  { pid: 51102, gpuName: "GPU-1", processName: "nvidia-smi monitor", type: "C" },
+  { pid: 53410, gpuName: "GPU-2", processName: "python3 fine_tune.py", type: "C" },
+  { pid: 53488, gpuName: "GPU-2", processName: "python3 data_preprocess.py", type: "C" },
+  { pid: 55102, gpuName: "GPU-3", processName: "python3 evaluate.py", type: "C" },
+];
+
+const processMemorySeeds = [31200, 450, 24500, 210, 32000, 8900, 18200];
+const processUtilSeeds = [72, 2, 65, 1, 82, 35, 48];
+
+export function getGpuProcesses(): GpuProcess[] {
+  return processSeedData.map((proc, i) => ({
+    ...proc,
+    memoryUsed: round(addJitter(processMemorySeeds[i], 5), 0),
+    gpuUtilization: round(addJitter(processUtilSeeds[i], 5), 1),
   }));
 }

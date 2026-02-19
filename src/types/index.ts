@@ -62,6 +62,23 @@ export interface Gpu {
   powerLimit: number;
 }
 
+export interface GpuHealthIssue {
+  id: number;
+  gpuName: string;
+  severity: "error" | "warning" | "info";
+  message: string;
+  timestamp: Date;
+}
+
+export interface GpuProcess {
+  pid: number;
+  gpuName: string;
+  processName: string;
+  memoryUsed: number; // in MB
+  gpuUtilization: number; // percentage
+  type: "C" | "G"; // Compute or Graphics
+}
+
 // ─── Ontology Types ─────────────────────────────────────────────────────────
 
 export interface OntologyRelation {
