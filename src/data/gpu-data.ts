@@ -239,3 +239,53 @@ export function getGpuProcesses(): GpuProcess[] {
     gpuUtilization: round(addJitter(processUtilSeeds[i], 5), 1),
   }));
 }
+
+// ── GPU Funnel Data ─────────────────────────────────────────────────────────
+
+export interface GpuFunnelStage {
+  label: string;
+  value: number;
+  color: string;
+}
+
+export function getGpuFunnelData(): GpuFunnelStage[] {
+  return [
+    { label: "Total GPUs", value: 4, color: "var(--color-chart-1)" },
+    { label: "Allocated", value: 3, color: "var(--color-chart-2)" },
+    { label: "Active", value: 2, color: "var(--color-chart-3)" },
+    { label: "Effective", value: 1, color: "var(--color-chart-4)" },
+  ];
+}
+
+// ── GPU Detail Data (DCGM Extended Metrics) ──────────────────────────────────
+
+export interface GpuDetailData {
+  gpuId: number;
+  smClock: number;       // MHz
+  memoryClock: number;   // MHz
+  pcieTxBandwidth: number; // GB/s
+  pcieRxBandwidth: number; // GB/s
+  eccSingleBit: number;
+  eccDoubleBit: number;
+}
+
+export function getGpuDetailData(gpuId: string): GpuDetailData {
+  const id = parseInt(gpuId, 10);
+  const seeds: Record<number, Omit<GpuDetailData, "gpuId">> = {
+    1: { smClock: 1410, memoryClock: 1215, pcieTxBandwidth: 22.4, pcieRxBandwidth: 21.8, eccSingleBit: 14, eccDoubleBit: 0 },
+    2: { smClock: 1395, memoryClock: 1215, pcieTxBandwidth: 21.9, pcieRxBandwidth: 22.1, eccSingleBit: 3, eccDoubleBit: 0 },
+    3: { smClock: 1380, memoryClock: 1215, pcieTxBandwidth: 20.5, pcieRxBandwidth: 19.8, eccSingleBit: 7, eccDoubleBit: 0 },
+    4: { smClock: 1410, memoryClock: 1215, pcieTxBandwidth: 22.0, pcieRxBandwidth: 21.5, eccSingleBit: 1, eccDoubleBit: 0 },
+  };
+
+  const seed = seeds[id] ?? seeds[1];
+  return {
+    gpuId: id,
+    smClock: round(addJitter(seed.smClock, 2), 0),
+    memoryClock: round(addJitter(seed.memoryClock, 1), 0),
+    pcieTxBandwidth: round(addJitter(seed.pcieTxBandwidth, 3), 1),
+    pcieRxBandwidth: round(addJitter(seed.pcieRxBandwidth, 3), 1),
+    eccSingleBit: seed.eccSingleBit,
+    eccDoubleBit: seed.eccDoubleBit,
+  };
+}
