@@ -18,10 +18,10 @@
 ### Authentication & Layout
 
 - [x] **AUTH-01**: Password Gate (세션 기반, configurable 비밀번호)
-- [ ] **AUTH-02**: AppSidebar (4그룹 네비게이션: Operations/Monitoring/Workspace/Administration)
-- [ ] **AUTH-03**: HeaderBar (브레드크럼, 검색, 테마 토글, 역할 인디케이터)
-- [ ] **AUTH-04**: Welcome Popup (첫 방문 한국어 안내, localStorage 기반)
-- [ ] **AUTH-05**: Command Palette (Cmd+K 검색/네비게이션)
+- [x] **AUTH-02**: AppSidebar (4그룹 네비게이션: Operations/Monitoring/Workspace/Administration)
+- [x] **AUTH-03**: HeaderBar (브레드크럼, 검색, 테마 토글, 역할 인디케이터)
+- [x] **AUTH-04**: Welcome Popup (첫 방문 한국어 안내, localStorage 기반)
+- [x] **AUTH-05**: Command Palette (Cmd+K 검색/네비게이션)
 - [x] **AUTH-06**: 라우팅 6개 페이지 (/, /monitoring/dgraph, /monitoring/gpu, /workspace/studio, /workspace/query, /admin/users)
 
 ### Ontology Dashboard
@@ -153,10 +153,10 @@
 | FOUN-06 | Phase 1: Foundation & Data Layer | Complete |
 | FOUN-07 | Phase 1: Foundation & Data Layer | Complete |
 | AUTH-01 | Phase 2: Layout Shell | Complete |
-| AUTH-02 | Phase 2: Layout Shell | Pending |
-| AUTH-03 | Phase 2: Layout Shell | Pending |
-| AUTH-04 | Phase 2: Layout Shell | Pending |
-| AUTH-05 | Phase 2: Layout Shell | Pending |
+| AUTH-02 | Phase 2: Layout Shell | Complete |
+| AUTH-03 | Phase 2: Layout Shell | Complete |
+| AUTH-04 | Phase 2: Layout Shell | Complete |
+| AUTH-05 | Phase 2: Layout Shell | Complete |
 | AUTH-06 | Phase 2: Layout Shell | Complete |
 | DASH-01 | Phase 3: Ontology Dashboard | Pending |
 | DASH-02 | Phase 3: Ontology Dashboard | Pending |

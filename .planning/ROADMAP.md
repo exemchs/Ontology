@@ -12,8 +12,8 @@ SK Siltron FAB POC를 위한 eXemble Ontology Platform 구축. 기존 Next.js 16
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation & Data Layer** - CSS토큰, D3유틸, 타입, 데이터 스키마/시드, UX기반
-- [ ] **Phase 2: Layout Shell** - PasswordGate, Sidebar, Header, CommandPalette, 라우팅
+- [x] **Phase 1: Foundation & Data Layer** - CSS토큰, D3유틸, 타입, 데이터 스키마/시드, UX기반
+- [x] **Phase 2: Layout Shell** - PasswordGate, Sidebar, Header, CommandPalette, 라우팅
 - [ ] **Phase 3: Ontology Dashboard** - 대시보드 7종 D3차트 + 메트릭카드 (차트패턴 검증)
 - [ ] **Phase 4: DGraph Monitoring** - Force토폴로지, 파티클, 드래그/줌, 산점도, 샤드차트
 - [ ] **Phase 5: GPU Monitoring** - GPU카드, 멀티라인, 히트맵, 리즈라인, 비교차트
@@ -35,10 +35,10 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 4 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — shadcn/ui + D3 설치, exem-ui CSS 토큰 시스템, 다크/라이트 테마
-- [ ] 01-02-PLAN.md — TypeScript 도메인 타입 정의, Supabase 스키마 + 시드 데이터
-- [ ] 01-03-PLAN.md — D3 차트 유틸리티 3종, 로딩/빈 상태 UX 컴포넌트
-- [ ] 01-04-PLAN.md — 클라이언트 데이터 파일 5종, PII 마스킹 시스템
+- [x] 01-01-PLAN.md — shadcn/ui + D3 설치, exem-ui CSS 토큰 시스템, 다크/라이트 테마
+- [x] 01-02-PLAN.md — TypeScript 도메인 타입 정의, Supabase 스키마 + 시드 데이터
+- [x] 01-03-PLAN.md — D3 차트 유틸리티 3종, 로딩/빈 상태 UX 컴포넌트
+- [x] 01-04-PLAN.md — 클라이언트 데이터 파일 5종, PII 마스킹 시스템
 
 ### Phase 2: Layout Shell
 **Goal**: 사용자가 비밀번호로 진입하여 6개 페이지를 사이드바로 탐색할 수 있는 완전한 앱 셸
@@ -52,8 +52,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — Auth 인프라 + Password Gate (D3 그래프) + 라우팅 스켈레톤 6페이지
-- [ ] 02-02-PLAN.md — AppSidebar + HeaderBar + Welcome Popup + Command Palette
+- [x] 02-01-PLAN.md — Auth 인프라 + Password Gate (D3 그래프) + 라우팅 스켈레톤 6페이지
+- [x] 02-02-PLAN.md — AppSidebar + HeaderBar + Welcome Popup + Command Palette
 
 ### Phase 3: Ontology Dashboard
 **Goal**: 랜딩 페이지에서 클러스터 상태, 리소스, 쿼리 트렌드, 온톨로지 관계를 한눈에 파악할 수 있다
@@ -139,8 +139,8 @@ Critical path: Phase 1 -> Phase 2 -> Phase 4 (DGraph, highest risk)
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Data Layer | 0/4 | Planned | - |
-| 2. Layout Shell | 0/2 | Planned | - |
+| 1. Foundation & Data Layer | 4/4 | Complete | 2026-02-19 |
+| 2. Layout Shell | 2/2 | Complete | 2026-02-19 |
 | 3. Ontology Dashboard | 0/? | Not started | - |
 | 4. DGraph Monitoring | 0/? | Not started | - |
 | 5. GPU Monitoring | 0/3 | Planned | - |

@@ -5,21 +5,21 @@
 See: .planning/PROJECT.md (updated 2026-02-19)
 
 **Core value:** 반도체 FAB의 그래프 DB 운영, 온톨로지 관계, 인프라를 통합 대시보드에서 D3.js로 시각화하고, RBAC 기반 PII 데이터 거버넌스를 시연한다.
-**Current focus:** Phase 2 - Layout Shell
+**Current focus:** Phase 2 - Layout Shell (Complete)
 
 ## Current Position
 
-Phase: 2 of 7 (Layout Shell)
-Plan: 1 of 2 in current phase
-Status: In Progress
-Last activity: 2026-02-19 — Completed 02-01-PLAN.md
+Phase: 2 of 7 (Layout Shell) - COMPLETE
+Plan: 2 of 2 in current phase
+Status: Phase Complete
+Last activity: 2026-02-19 — Completed 02-02-PLAN.md
 
-Progress: [█████░░░░░] 18%
+Progress: [██████░░░░] 25%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
+- Total plans completed: 6
 - Average duration: 3min
 - Total execution time: 0.2 hours
 
@@ -28,13 +28,14 @@ Progress: [█████░░░░░] 18%
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-foundation-data-layer | 4/4 | 12min | 3min |
-| 02-layout-shell | 1/2 | 2min | 2min |
+| 02-layout-shell | 2/2 | 4min | 2min |
 
 **Recent Trend:**
-- Last 5 plans: 02-01 (2min), 01-04 (3min), 01-03 (2min), 01-02 (2min), 01-01 (5min)
+- Last 5 plans: 02-02 (2min), 02-01 (2min), 01-04 (3min), 01-03 (2min), 01-02 (2min)
 - Trend: Accelerating
 
 *Updated after each plan completion*
+| Phase 02 P02 | 2min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -61,6 +62,9 @@ Recent decisions affecting current work:
 - [02-01]: D3 graph uses CSS variable colors for automatic theme integration
 - [02-01]: Deleted root page.tsx to avoid conflict with (authenticated) route group
 - [02-01]: Auth guard renders null during redirect to prevent FOUC
+- [02-02]: useSidebar().state for collapse detection instead of CSS-only approach
+- [02-02]: Welcome popup uses onOpenChange for any-dismissal tracking (Escape + overlay + button)
+- [02-02]: Command palette Actions group with theme toggle alongside navigation groups
 
 ### Pending Todos
 
@@ -74,5 +78,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-19
-Stopped at: Completed 02-01-PLAN.md
-Resume file: .planning/phases/02-layout-shell/02-01-SUMMARY.md
+Stopped at: Completed 02-02-PLAN.md (Phase 02 complete)
+Resume file: .planning/phases/02-layout-shell/02-02-SUMMARY.md
