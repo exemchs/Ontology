@@ -59,6 +59,8 @@ Progress: [███████████████████████
 | Phase 08 P03 | 3min | 2 tasks | 7 files |
 | Phase 08 P06 | 4min | 2 tasks | 9 files |
 | Phase 08 P01 | 5min | 3 tasks | 12 files |
+| Phase 08 P04 | 4min | 2 tasks | 6 files |
+| Phase 08 P05 | 5min | 3 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -172,6 +174,14 @@ Recent decisions affecting current work:
 - [08-06]: forwardRef + useImperativeHandle exposes insertText on QueryEditor for SchemaExplorer click-to-insert
 - [08-06]: autocompletion override (not addToOptions) since cm6-graphql completion was not conflicting
 - [08-06]: SchemaExplorer as fixed 220px left sidebar for compact tree navigation
+- [08-01]: react-grid-layout v1.5.0 installed (v2.2.2 specified in plan does not exist)
+- [08-01]: localStorage for layout persistence (not Supabase) since POC has no real auth users
+- [08-01]: Module-scope data calls in DashboardGrid for static generation compatibility
+- [08-01]: Widget Registry pattern maps 13 widget IDs to types/titles/props for declarative grid composition
+
+- [08-04]: ErrorTimeline as React list (not D3) for scrollable content with severity badges
+- [08-04]: QPS normalized to 0-100 against 2000 q/s ceiling for AlphaComparisonBar visual comparison
+- [08-04]: DgraphHeatmapCell uses distinct interface (hour/queryType/count) from GpuHeatmapCell
 
 ### Pending Todos
 
@@ -185,5 +195,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-20
-Stopped at: Completed 08-06-PLAN.md
-Resume file: .planning/phases/08-product-ux-refinement/08-06-SUMMARY.md
+Stopped at: Completed 08-01-PLAN.md
+Resume file: .planning/phases/08-product-ux-refinement/08-01-SUMMARY.md
