@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-19)
 
 **Core value:** 반도체 FAB의 그래프 DB 운영, 온톨로지 관계, 인프라를 통합 대시보드에서 D3.js로 시각화하고, RBAC 기반 PII 데이터 거버넌스를 시연한다.
-**Current focus:** Phase 5 - GPU Monitoring (Complete)
+**Current focus:** Phase 6 - Ontology Studio & User Management
 
 ## Current Position
 
-Phase: 5 of 7 (GPU Monitoring)
-Plan: 3 of 3 in current phase
-Status: Phase 05 Complete
-Last activity: 2026-02-19 — Completed 05-03-PLAN.md
+Phase: 6 of 7 (Ontology Studio & User Mgmt)
+Plan: 2 of 3 in current phase
+Status: Executing Phase 06
+Last activity: 2026-02-19 — Completed 06-02-PLAN.md
 
-Progress: [███████████████████] 76%
+Progress: [█████████████████████] 86%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 16
+- Total plans completed: 18
 - Average duration: 3min
-- Total execution time: 0.8 hours
+- Total execution time: 0.9 hours
 
 **By Phase:**
 
@@ -34,8 +34,8 @@ Progress: [███████████████████] 76%
 | 05-gpu-monitoring | 3/3 | 7min | 2.3min |
 
 **Recent Trend:**
-- Last 5 plans: 05-03 (2min), 05-02 (2min), 05-01 (3min), 04-03 (3min), 04-02 (3min)
-- Trend: Stable (accelerating)
+- Last 5 plans: 06-02 (3min), 06-01 (3min), 05-03 (2min), 05-02 (2min), 05-01 (3min)
+- Trend: Stable
 
 *Updated after each plan completion*
 | Phase 04 P01 | 3min | 2 tasks | 2 files |
@@ -45,6 +45,7 @@ Progress: [███████████████████] 76%
 | Phase 05 P01 | 3min | 3 tasks | 13 files |
 | Phase 05 P02 | 3min | 2 tasks | 2 files |
 | Phase 05 P03 | 2min | 2 tasks | 2 files |
+| Phase 06 P01 | 3min | 3 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -116,6 +117,10 @@ Recent decisions affecting current work:
 - [05-03]: Ridgeline KDE bandwidth=7 with 50 evaluation points for smooth density curves
 - [05-03]: Ridgeline fill-opacity 0.6 with chart series CSS variables for theme integration
 - [05-03]: isClient useState pattern for SSR guard instead of bare ref check
+- [06-01]: RoleContext defaults to super_admin for full-access demo start
+- [06-01]: Inbound relations derived by scanning all types for edges targeting selected type
+- [06-01]: Route updated at (authenticated)/workspace/studio (existing route group, not top-level)
+- [06-01]: TypeEditDialog save closes without persistence (POC)
 
 ### Pending Todos
 
@@ -129,5 +134,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-19
-Stopped at: Completed 05-03-PLAN.md (Phase 05 complete)
-Resume file: .planning/phases/05-gpu-monitoring/05-03-SUMMARY.md
+Stopped at: Completed 06-01-PLAN.md
+Resume file: .planning/phases/06-ontology-studio-user-mgmt/06-01-SUMMARY.md
