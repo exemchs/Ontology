@@ -14,6 +14,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { breadcrumbMap } from "@/lib/navigation";
+import { NamespaceSelector } from "@/components/layout/NamespaceSelector";
 
 export function HeaderBar() {
   const pathname = usePathname();
@@ -38,8 +39,9 @@ export function HeaderBar() {
         </Breadcrumb>
       )}
 
-      {/* Right side: Cmd+K hint */}
-      <div className="ml-auto">
+      {/* Right side: namespace + Cmd+K hint */}
+      <div className="ml-auto flex items-center gap-2">
+        <NamespaceSelector />
         <Button
           variant="outline"
           size="sm"
