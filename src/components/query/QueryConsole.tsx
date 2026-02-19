@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useMemo, useRef } from "react";
-import { Play, Loader2, Download } from "lucide-react";
+import { Play, Loader2, Download, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { QueryEditor, type QueryEditorHandle } from "@/components/query/QueryEditor";
 import { SchemaExplorer } from "@/components/query/SchemaExplorer";
@@ -17,6 +17,7 @@ import {
 import { TableView } from "@/components/query/views/TableView";
 import { ForceGraphView } from "@/components/query/views/ForceGraphView";
 import { PiiDemo } from "@/components/query/pii/PiiDemo";
+import { ChatbotPanel } from "@/components/query/ChatbotPanel";
 import { Separator } from "@/components/ui/separator";
 import {
   Collapsible,
@@ -66,6 +67,7 @@ export function QueryConsole() {
   const [graphView, setGraphView] = useState<GraphViewType>("graph");
   const [isExecuting, setIsExecuting] = useState(false);
   const [hiddenTypes, setHiddenTypes] = useState<string[]>([]);
+  const [showChatbot, setShowChatbot] = useState(false);
   const editorRef = useRef<QueryEditorHandle>(null);
 
   const handleSchemaInsert = useCallback((text: string) => {
@@ -180,6 +182,15 @@ export function QueryConsole() {
             <div className="flex-1" />
             <QueryHistory onSelect={handleInsertQuery} />
             <Button
+              variant="outline"
+              size="sm"
+              className="h-7 gap-1 text-xs"
+              onClick={() => setShowChatbot((prev) => !prev)}
+            >
+              <MessageCircle className="size-3.5" />
+              Natural Language
+            </Button>
+            <Button
               size="sm"
               className="h-7 gap-1 text-xs"
               onClick={handleRunQuery}
@@ -283,6 +294,12 @@ export function QueryConsole() {
           </CollapsibleContent>
         </Collapsible>
       </div>
+
+      {/* Floating chatbot panel */}
+      <ChatbotPanel
+        isOpen={showChatbot}
+        onToggle={() => setShowChatbot((prev) => !prev)}
+      />
     </div>
   );
 }
