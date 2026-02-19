@@ -1,9 +1,11 @@
+import type { Metadata } from "next";
+import { QueryConsole } from "@/components/query/QueryConsole";
+
+export const metadata: Metadata = {
+  title: "Query Console | eXemble Ontology Platform",
+  description: "Execute GraphQL and DQL queries against the Dgraph cluster",
+};
+
 export default function QueryPage() {
-  return (
-    <div className="flex flex-1 items-center justify-center">
-      <h1 className="text-2xl font-semibold text-muted-foreground">
-        Query Console
-      </h1>
-    </div>
-  );
+  return <QueryConsole />;
 }
