@@ -50,6 +50,10 @@ interface OntologyGraphProps {
   onSelectType?: (type: OntologyType) => void;
   edgeFilter: "all" | "outbound" | "inbound";
   className?: string;
+  onZoomChange?: (
+    transform: { x: number; y: number; k: number },
+    nodes: { x: number; y: number; name: string }[]
+  ) => void;
 }
 
 // ── Graph Data Builder ────────────────────────────────────────────────────
@@ -191,6 +195,7 @@ export function OntologyGraph({
   onSelectType,
   edgeFilter,
   className,
+  onZoomChange,
 }: OntologyGraphProps) {
   const uniqueId = useId().replace(/:/g, "");
   const containerRef = useRef<HTMLDivElement>(null);
@@ -204,6 +209,10 @@ export function OntologyGraph({
 
   // Store mode in ref for access inside D3 callbacks without re-running main effect
   const modeRef = useRef(mode);
+
+  // Store onZoomChange in ref for D3 callback access
+  const onZoomChangeRef = useRef(onZoomChange);
+  onZoomChangeRef.current = onZoomChange;
 
   // ── Mode switch effect ────────────────────────────────────────────────
 
@@ -551,6 +560,16 @@ export function OntologyGraph({
           const idx = (d as GraphLink & { _arcIndex: number })._arcIndex ?? 0;
           return arcPath(s.x, s.y, t.x, t.y, idx);
         });
+
+        // Update minimap with current node positions during simulation
+        if (onZoomChangeRef.current) {
+          const nodePositions = graphData.nodes.map((n) => ({
+            x: n.x,
+            y: n.y,
+            name: n.name,
+          }));
+          onZoomChangeRef.current({ x: 0, y: 0, k: 1 }, nodePositions);
+        }
       });
 
       // ── Drag Behavior (Force mode only) ──────────────────────────────
@@ -586,6 +605,19 @@ export function OntologyGraph({
         .scaleExtent([0.3, 3])
         .on("zoom", (event: D3ZoomEvent<SVGSVGElement, unknown>) => {
           g.attr("transform", event.transform.toString());
+          // Notify minimap of zoom change
+          if (onZoomChangeRef.current) {
+            const t = event.transform;
+            const nodePositions = graphData.nodes.map((n) => ({
+              x: n.x,
+              y: n.y,
+              name: n.name,
+            }));
+            onZoomChangeRef.current(
+              { x: t.x, y: t.y, k: t.k },
+              nodePositions
+            );
+          }
         });
 
       svg.call(zoomBehavior);
