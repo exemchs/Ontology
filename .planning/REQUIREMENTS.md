@@ -59,7 +59,7 @@
 - [x] **STUD-01**: 타입 리스트 (6개: Equipment/Process/Wafer/Recipe/Defect/MaintenanceRecord)
 - [x] **STUD-02**: 타입 상세 패널 (Predicates, Relations, Statistics)
 - [x] **STUD-03**: D3 온톨로지 그래프 (Force/Radial/Hierarchy 3모드, 양방향 엣지, 줌/팬)
-- [ ] **STUD-04**: D3 타입 분포 바 차트 (Records/Queries, Stacked/Grouped 토글)
+- [x] **STUD-04**: D3 타입 분포 바 차트 (Records/Queries, Stacked/Grouped 토글)
 - [x] **STUD-05**: 타입 편집 다이얼로그 + 엣지 필터 (all/outbound/inbound)
 
 ### Query Console
@@ -89,9 +89,9 @@
 
 ### User Management
 
-- [ ] **USER-01**: 유저 테이블 (username, email, role badge, last login — Supabase API)
-- [ ] **USER-02**: 4종 역할 배지 (color-coded: red/blue/gray/outline)
-- [ ] **USER-03**: 역할 설명 Tooltip (PII 접근 권한 요약)
+- [x] **USER-01**: 유저 테이블 (username, email, role badge, last login — Supabase API)
+- [x] **USER-02**: 4종 역할 배지 (color-coded: red/blue/gray/outline)
+- [x] **USER-03**: 역할 설명 Tooltip (PII 접근 권한 요약)
 
 ### Data Layer
 
@@ -183,11 +183,11 @@
 | STUD-01 | Phase 6: Ontology Studio & User Management | Complete |
 | STUD-02 | Phase 6: Ontology Studio & User Management | Complete |
 | STUD-03 | Phase 6: Ontology Studio & User Management | Complete |
-| STUD-04 | Phase 6: Ontology Studio & User Management | Pending |
+| STUD-04 | Phase 6: Ontology Studio & User Management | Complete |
 | STUD-05 | Phase 6: Ontology Studio & User Management | Complete |
-| USER-01 | Phase 6: Ontology Studio & User Management | Pending |
-| USER-02 | Phase 6: Ontology Studio & User Management | Pending |
-| USER-03 | Phase 6: Ontology Studio & User Management | Pending |
+| USER-01 | Phase 6: Ontology Studio & User Management | Complete |
+| USER-02 | Phase 6: Ontology Studio & User Management | Complete |
+| USER-03 | Phase 6: Ontology Studio & User Management | Complete |
 | QURY-01 | Phase 7: Query Console & RBAC | Pending |
 | QURY-02 | Phase 7: Query Console & RBAC | Pending |
 | QURY-03 | Phase 7: Query Console & RBAC | Pending |
