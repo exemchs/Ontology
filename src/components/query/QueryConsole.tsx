@@ -10,6 +10,13 @@ import { QueryHistory } from "@/components/query/QueryHistory";
 import { ResultTabs, type ResultTab } from "@/components/query/ResultTabs";
 import { ResultViewBar, type ViewType } from "@/components/query/ResultViewBar";
 import { TableView } from "@/components/query/views/TableView";
+import { ForceGraphView } from "@/components/query/views/ForceGraphView";
+import { TreemapView } from "@/components/query/views/TreemapView";
+import { ArcDiagramView } from "@/components/query/views/ArcDiagramView";
+import { ScatterView } from "@/components/query/views/ScatterView";
+import { DistributionView } from "@/components/query/views/DistributionView";
+import { PiiDemo } from "@/components/query/pii/PiiDemo";
+import { Separator } from "@/components/ui/separator";
 import type { QueryType } from "@/types";
 
 // ── Mock result generator ─────────────────────────────────────────────────
@@ -140,12 +147,23 @@ export function QueryConsole() {
           <>
             <ResultViewBar activeView={activeView} onViewChange={setActiveView} />
             <div className="flex-1 overflow-auto p-2">
-              {activeView === "table" ? (
+              {activeView === "table" && (
                 <TableView data={activeTab.data} />
-              ) : (
-                <div className="flex items-center justify-center h-32 text-sm text-muted-foreground">
-                  {activeView.charAt(0).toUpperCase() + activeView.slice(1)} view coming soon (Plan 02)
-                </div>
+              )}
+              {activeView === "graph" && (
+                <ForceGraphView data={activeTab.data} />
+              )}
+              {activeView === "treemap" && (
+                <TreemapView data={activeTab.data} />
+              )}
+              {activeView === "arc" && (
+                <ArcDiagramView data={activeTab.data} />
+              )}
+              {activeView === "scatter" && (
+                <ScatterView data={activeTab.data} />
+              )}
+              {activeView === "distribution" && (
+                <DistributionView data={activeTab.data} />
               )}
             </div>
           </>
@@ -155,6 +173,12 @@ export function QueryConsole() {
             Select a template or write a query, then click Run Query
           </div>
         )}
+      </div>
+
+      {/* PII Masking Demo section */}
+      <Separator />
+      <div className="p-4 overflow-auto">
+        <PiiDemo />
       </div>
     </div>
   );
