@@ -13,6 +13,7 @@ import {
   Network,
   Workflow,
   Terminal,
+  Upload,
   Users,
 } from "lucide-react";
 
@@ -47,6 +48,7 @@ export const navigationGroups: NavGroup[] = [
     items: [
       { title: "Ontology Studio", url: "/workspace/studio", icon: Workflow },
       { title: "Query Console", url: "/workspace/query", icon: Terminal },
+      { title: "Data Import", url: "/workspace/import", icon: Upload },
     ],
   },
   {
@@ -64,6 +66,7 @@ export const breadcrumbMap: Record<string, { group: string; page: string }> = {
   "/monitoring/dgraph": { group: "Monitoring", page: "Graph Cluster" },
   "/workspace/studio": { group: "Workspace", page: "Ontology Studio" },
   "/workspace/query": { group: "Workspace", page: "Query Console" },
+  "/workspace/import": { group: "Workspace", page: "Data Import" },
   "/admin/users": { group: "Admin", page: "User Management" },
 };
 
