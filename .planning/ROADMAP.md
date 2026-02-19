@@ -64,10 +64,13 @@ Plans:
   2. CPU/Memory/Disk 게이지가 270도 아크로 렌더되고 80% 이상일 때 글로우 효과가 나타난다
   3. 듀얼 라인 차트에서 hourly/daily 토글이 동작하고 D3 코드 다이어그램에서 호버 시 관계가 하이라이트된다
   4. 모든 D3 차트가 200ms 이내에 렌더되고 다크/라이트 테마 전환에 반응한다
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] 03-01: TBD
+- [x] 03-01-PLAN.md — d3-sankey/accordion 설치, 데이터 함수 확장, 대시보드 레이아웃 + MetricCard + RecentAlerts
+- [ ] 03-02-PLAN.md — TBD
+- [ ] 03-03-PLAN.md — TBD
+- [ ] 03-04-PLAN.md — TBD
 
 ### Phase 4: DGraph Monitoring
 **Goal**: 12노드 Dgraph 클러스터의 토폴로지, 노드 상태, 쿼리 패턴, 샤드 분포를 인터랙티브하게 탐색할 수 있다
@@ -141,7 +144,7 @@ Critical path: Phase 1 -> Phase 2 -> Phase 4 (DGraph, highest risk)
 |-------|----------------|--------|-----------|
 | 1. Foundation & Data Layer | 4/4 | Complete | 2026-02-19 |
 | 2. Layout Shell | 2/2 | Complete | 2026-02-19 |
-| 3. Ontology Dashboard | 0/? | Not started | - |
+| 3. Ontology Dashboard | 1/4 | In Progress | - |
 | 4. DGraph Monitoring | 0/? | Not started | - |
 | 5. GPU Monitoring | 0/3 | Planned | - |
 | 6. Ontology Studio & User Management | 0/? | Not started | - |

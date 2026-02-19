@@ -26,13 +26,13 @@
 
 ### Ontology Dashboard
 
-- [ ] **DASH-01**: 메트릭 카드 4종 (총 노드, 관계, 쿼리율, 가동시간)
+- [x] **DASH-01**: 메트릭 카드 4종 (총 노드, 관계, 쿼리율, 가동시간)
 - [ ] **DASH-02**: D3 리소스 게이지 3종 (CPU/Memory/Disk — 270도 아크, 80% 임계 글로우)
 - [ ] **DASH-03**: D3 듀얼 라인 차트 (Agent Request Rate + Graph Query QPS, hourly/daily 토글)
 - [ ] **DASH-04**: D3 코드 다이어그램 (6개 온톨로지 타입 간 관계, 호버 하이라이트)
 - [ ] **DASH-05**: D3 노드 산점도 (Latency x Throughput, 글로우 효과)
 - [ ] **DASH-06**: D3 리소스 바 차트 (Stacked/Grouped 토글, CPU/Memory/Disk)
-- [ ] **DASH-07**: Recent Alerts 목록
+- [x] **DASH-07**: Recent Alerts 목록
 
 ### DGraph Monitoring
 
@@ -159,13 +159,13 @@
 | AUTH-04 | Phase 2: Layout Shell | Complete |
 | AUTH-05 | Phase 2: Layout Shell | Complete |
 | AUTH-06 | Phase 2: Layout Shell | Complete |
-| DASH-01 | Phase 3: Ontology Dashboard | Pending |
+| DASH-01 | Phase 3: Ontology Dashboard | Complete |
 | DASH-02 | Phase 3: Ontology Dashboard | Pending |
 | DASH-03 | Phase 3: Ontology Dashboard | Pending |
 | DASH-04 | Phase 3: Ontology Dashboard | Pending |
 | DASH-05 | Phase 3: Ontology Dashboard | Pending |
 | DASH-06 | Phase 3: Ontology Dashboard | Pending |
-| DASH-07 | Phase 3: Ontology Dashboard | Pending |
+| DASH-07 | Phase 3: Ontology Dashboard | Complete |
 | DGRP-01 | Phase 4: DGraph Monitoring | Pending |
 | DGRP-02 | Phase 4: DGraph Monitoring | Pending |
 | DGRP-03 | Phase 4: DGraph Monitoring | Pending |
