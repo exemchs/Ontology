@@ -3,14 +3,18 @@
 import { ChartSkeleton } from "@/components/charts/shared/ChartSkeleton";
 import { MetricCard } from "@/components/charts/dashboard/MetricCard";
 import { RecentAlerts } from "@/components/charts/dashboard/RecentAlerts";
+import { ResourceGauge } from "@/components/charts/dashboard/ResourceGauge";
+import { DualLineChart } from "@/components/charts/dashboard/DualLineChart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   getDashboardMetrics,
   getDashboardAlerts,
+  getDashboardGauges,
 } from "@/data/dashboard-data";
 
 const metrics = getDashboardMetrics();
 const alerts = getDashboardAlerts();
+const gauges = getDashboardGauges();
 
 export default function DashboardPage() {
   return (
@@ -32,15 +36,15 @@ export default function DashboardPage() {
         ))}
       </div>
 
-      {/* Row 2: Resource Gauges (3 placeholders) */}
+      {/* Row 2: Resource Gauges */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        {["CPU Gauge", "Memory Gauge", "Disk Gauge"].map((label) => (
-          <Card key={label}>
+        {gauges.map((gauge) => (
+          <Card key={gauge.label}>
             <CardHeader>
-              <CardTitle className="text-sm">{label}</CardTitle>
+              <CardTitle className="text-sm">{gauge.label} Usage</CardTitle>
             </CardHeader>
             <CardContent>
-              <ChartSkeleton className="min-h-[300px]" />
+              <ResourceGauge data={gauge} className="min-h-[250px]" />
             </CardContent>
           </Card>
         ))}
@@ -50,10 +54,10 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm">Dual Line Chart</CardTitle>
+            <CardTitle className="text-sm">Request & Query Rates</CardTitle>
           </CardHeader>
           <CardContent>
-            <ChartSkeleton className="min-h-[300px]" />
+            <DualLineChart className="min-h-[300px]" />
           </CardContent>
         </Card>
         <Card>
