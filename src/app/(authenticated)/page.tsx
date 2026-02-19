@@ -62,14 +62,7 @@ export default function DashboardPage() {
             <DualLineChart className="min-h-[300px]" />
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm">Ontology Relations</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ChartSkeleton className="min-h-[300px]" />
-          </CardContent>
-        </Card>
+        <OntologyRelationChart />
       </div>
 
       {/* Row 4: Node Scatter Plot + Resource Bar Chart */}
