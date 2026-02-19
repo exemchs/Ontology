@@ -3,6 +3,11 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/layout/app-sidebar";
+import { HeaderBar } from "@/components/layout/header-bar";
+import { WelcomePopup } from "@/components/layout/welcome-popup";
+import { CommandPalette } from "@/components/layout/command-palette";
 
 export default function AuthenticatedLayout({
   children,
@@ -30,6 +35,16 @@ export default function AuthenticatedLayout({
   // Not authenticated -- render nothing while redirecting
   if (!isAuthenticated) return null;
 
-  // Authenticated -- render children directly (Plan 02 will add Sidebar + Header)
-  return <main className="flex h-screen flex-col">{children}</main>;
+  // Authenticated -- full app shell with sidebar layout
+  return (
+    <SidebarProvider defaultOpen={true}>
+      <AppSidebar />
+      <SidebarInset>
+        <HeaderBar />
+        <main className="flex-1 overflow-auto p-6">{children}</main>
+      </SidebarInset>
+      <WelcomePopup />
+      <CommandPalette />
+    </SidebarProvider>
+  );
 }
