@@ -98,6 +98,13 @@ export function UserTable() {
         createdAt: "",
       }));
 
+      // Sort admins first for visual grouping
+      mapped.sort((a, b) => {
+        const aAdmin = a.role === "super_admin" ? 0 : 1;
+        const bAdmin = b.role === "super_admin" ? 0 : 1;
+        return aAdmin - bAdmin;
+      });
+
       setUsers(mapped);
       setLoading(false);
     }
@@ -146,7 +153,10 @@ export function UserTable() {
       </TableHeader>
       <TableBody>
         {users.map((user) => (
-          <TableRow key={user.id}>
+          <TableRow
+            key={user.id}
+            className={cn(user.role === "super_admin" && "bg-primary/[0.03]")}
+          >
             <TableCell className="font-medium">{user.username}</TableCell>
             <TableCell className="text-muted-foreground">
               {user.email}
