@@ -134,3 +134,25 @@ export function getTypeDistribution(): TypeDistributionItem[] {
     color: distributionColors[i] ?? "var(--color-chart-1)",
   }));
 }
+
+// ── Schema Statistics ────────────────────────────────────────────────────────
+
+export interface SchemaStats {
+  totalTypes: number;
+  totalRelations: number;
+  avgPredicatesPerType: number;
+  relationDensity: number;
+}
+
+export function getSchemaStats(types?: OntologyType[]): SchemaStats {
+  const t = types ?? getOntologyTypes();
+  const totalTypes = t.length;
+  const totalRelations = t.reduce((sum, type) => sum + type.relations.length, 0);
+  const avgPredicatesPerType =
+    totalTypes > 0
+      ? t.reduce((sum, type) => sum + type.predicates.length, 0) / totalTypes
+      : 0;
+  const relationDensity = totalTypes > 0 ? totalRelations / totalTypes : 0;
+
+  return { totalTypes, totalRelations, avgPredicatesPerType, relationDensity };
+}
