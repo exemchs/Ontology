@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-19)
 
 **Core value:** 반도체 FAB의 그래프 DB 운영, 온톨로지 관계, 인프라를 통합 대시보드에서 D3.js로 시각화하고, RBAC 기반 PII 데이터 거버넌스를 시연한다.
-**Current focus:** Phase 3 - Ontology Dashboard (In Progress)
+**Current focus:** Phase 3 - Ontology Dashboard (Complete)
 
 ## Current Position
 
-Phase: 3 of 7 (Ontology Dashboard) - IN PROGRESS
-Plan: 2 of 4 in current phase
-Status: Plan 03-02 Complete
-Last activity: 2026-02-19 — Completed 03-02-PLAN.md
+Phase: 3 of 7 (Ontology Dashboard) - COMPLETE
+Plan: 4 of 4 in current phase
+Status: Plan 03-04 Complete
+Last activity: 2026-02-19 — Completed 03-04-PLAN.md
 
-Progress: [████████░░] 35%
+Progress: [██████████] 45%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
+- Total plans completed: 10
 - Average duration: 3min
-- Total execution time: 0.3 hours
+- Total execution time: 0.4 hours
 
 **By Phase:**
 
@@ -29,14 +29,15 @@ Progress: [████████░░] 35%
 |-------|-------|-------|----------|
 | 01-foundation-data-layer | 4/4 | 12min | 3min |
 | 02-layout-shell | 2/2 | 4min | 2min |
-| 03-ontology-dashboard | 2/4 | 6min | 3min |
+| 03-ontology-dashboard | 4/4 | 14min | 3.5min |
 
 **Recent Trend:**
-- Last 5 plans: 03-02 (4min), 03-01 (2min), 02-02 (2min), 02-01 (2min), 01-04 (3min)
+- Last 5 plans: 03-04 (4min), 03-03 (4min), 03-02 (4min), 03-01 (2min), 02-02 (2min)
 - Trend: Stable
 
 *Updated after each plan completion*
-| Phase 03 P02 | 4min | 2 tasks | 3 files |
+| Phase 03 P03 | 4min | 2 tasks | 3 files |
+| Phase 03 P04 | 4min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -74,6 +75,14 @@ Recent decisions affecting current work:
 - [03-02]: Gauge glow uses feGaussianBlur stdDeviation=3.5 + feComposite with useId() for unique filter IDs
 - [03-02]: DualLineChart uses simple toggle buttons instead of shadcn Tabs (not installed)
 - [03-02]: D3 arc gauge pattern: startAngle=-3PI/4, endAngle=3PI/4 for 270-degree bottom-gap arc
+- [03-03]: SVG glow filter uses feGaussianBlur(stdDeviation=4) + feMerge applied to ALL scatter circles
+- [03-03]: Scatter status colors: healthy=chart1, warning=chart4, error=chart8
+- [03-03]: Bar chart forEach over d3.stack() series avoids TypeScript parentNode issues with EnterElement
+- [03-03]: Stacked/Grouped toggle uses full re-render for POC simplicity
+- [03-04]: Force Graph as default view per user decision
+- [03-04]: Sankey-only direction filter (Chord/Force have none) per user decision
+- [03-04]: OntologyRelationChart wraps its own Card for self-contained layout with toggle
+- [03-04]: ChartSkeleton import removed from page.tsx since all placeholders replaced
 
 ### Pending Todos
 
@@ -87,5 +96,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-19
-Stopped at: Completed 03-02-PLAN.md
-Resume file: .planning/phases/03-ontology-dashboard/03-02-SUMMARY.md
+Stopped at: Completed 03-04-PLAN.md (Phase 3 complete)
+Resume file: .planning/phases/03-ontology-dashboard/03-04-SUMMARY.md
