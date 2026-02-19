@@ -12,7 +12,7 @@ See: .planning/PROJECT.md (updated 2026-02-19)
 Phase: 8 of 8 (Product UX Refinement)
 Plan: 7 of 8 in current phase (08-07 done)
 Status: Executing Phase 08
-Last activity: 2026-02-20 — Completed 08-07-PLAN.md
+Last activity: 2026-02-20 — Completed 08-03-PLAN.md
 
 Progress: [████████████████████████░░░░] 87%
 
@@ -55,6 +55,8 @@ Progress: [███████████████████████
 | Phase 07 P02 | 3min | 2 tasks | 7 files |
 | Phase 07 P03 | 3min | 2 tasks | 5 files |
 | Phase 08 P02 | 2min | 2 tasks | 3 files |
+| Phase 08 P07 | 2min | 2 tasks | 4 files |
+| Phase 08 P03 | 3min | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -157,6 +159,13 @@ Recent decisions affecting current work:
 - [08-02]: Installed shadcn Popover component as new UI dependency for notification dropdown
 - [08-02]: Warning severity badge uses custom amber styling (consistent with Phase 3 pattern)
 - [08-02]: Role badge color mapping: destructive=super_admin, blue=service_app, secondary=data_analyst, outline=auditor
+- [08-07]: AdminGate component for non-admin role restriction on Access Control and Menu Config tabs
+- [08-07]: All 4 tabs visible to all roles; admin-only tabs show access restriction message for non-super_admin
+- [08-07]: UserTable sorts super_admin users to top with subtle bg-primary highlight
+- [08-03]: CSS clip-path trapezoid approach for funnel chart (simpler than D3 SVG, per research)
+- [08-03]: GpuCard extended with onClick + checkbox for dual interaction (detail vs comparison)
+- [08-03]: Comparison filtering: when 2+ GPUs selected, GpuComparisonBar filters to selected subset
+- [08-03]: GpuDetailPanel renders DCGM extended metrics from getGpuDetailData
 
 ### Pending Todos
 
@@ -170,5 +179,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-20
-Stopped at: Completed 08-02-PLAN.md
-Resume file: .planning/phases/08-product-ux-refinement/08-02-SUMMARY.md
+Stopped at: Completed 08-03-PLAN.md
+Resume file: .planning/phases/08-product-ux-refinement/08-03-SUMMARY.md
