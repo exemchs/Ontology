@@ -8,7 +8,7 @@ import { DualLineChart } from "@/components/charts/dashboard/DualLineChart";
 import { NodeScatterPlot } from "@/components/charts/dashboard/NodeScatterPlot";
 import { ResourceBarChart } from "@/components/charts/dashboard/ResourceBarChart";
 import { OntologyRelationChart } from "@/components/charts/dashboard/OntologyRelationChart";
-import { ResourceGauge } from "@/components/charts/dashboard/ResourceGauge";
+import { CollapsibleResourcePanel } from "@/components/ds/CollapsibleResourcePanel";
 import { RecentAlerts } from "@/components/charts/dashboard/RecentAlerts";
 import {
   Card,
@@ -83,19 +83,11 @@ export default function DashboardPage() {
         ))}
       </div>
 
-      {/* Gauges */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        {gauges.map((gauge) => (
-          <Card key={gauge.label} className="border-border/40">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm">{gauge.label} Usage</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ResourceGauge data={gauge} className="aspect-square max-h-[200px]" />
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      {/* System Resources (collapsible) */}
+      <CollapsibleResourcePanel
+        gauges={gauges}
+        storageKey="dashboard-resource-collapsed"
+      />
 
       {/* Charts Row 1 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
