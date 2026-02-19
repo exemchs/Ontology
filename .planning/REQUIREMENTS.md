@@ -10,7 +10,7 @@
 - [ ] **FOUN-01**: 프로젝트에 D3.js v7 + shadcn/ui 17종 설치 및 초기화
 - [ ] **FOUN-02**: exem-ui CSS 토큰 시스템 구축 (primitive + semantic + chart series 8색)
 - [ ] **FOUN-03**: 다크/라이트 테마 시스템 (ThemeProvider, CSS variables)
-- [ ] **FOUN-04**: TypeScript 타입 정의 (Role, PiiLevel, OntologyType, ClusterNode 등)
+- [x] **FOUN-04**: TypeScript 타입 정의 (Role, PiiLevel, OntologyType, ClusterNode 등)
 - [ ] **FOUN-05**: D3 차트 공통 유틸리티 (cleanupD3Svg, destroyedRef, ResizeObserver 패턴)
 - [ ] **FOUN-06**: D3 차트 테마 유틸리티 (CSS variable 기반 색상 resolve)
 - [ ] **FOUN-07**: D3 Tooltip 공통 컴포넌트
@@ -94,8 +94,8 @@
 
 ### Data Layer
 
-- [ ] **DATA-01**: Supabase 스키마 (clusters/nodes/gpus/metrics/ontology_types/queries/alerts/users 8테이블)
-- [ ] **DATA-02**: 시드 데이터 (SKS-FAB1-PROD, 12노드, 4GPU, 6 온톨로지 타입, 5 유저)
+- [x] **DATA-01**: Supabase 스키마 (clusters/nodes/gpus/metrics/ontology_types/queries/alerts/users 8테이블)
+- [x] **DATA-02**: 시드 데이터 (SKS-FAB1-PROD, 12노드, 4GPU, 6 온톨로지 타입, 5 유저)
 - [ ] **DATA-03**: 클라이언트 하드코딩 데이터 (dashboard/dgraph/gpu/studio/query 메트릭)
 - [ ] **DATA-04**: PII 데모 데이터 (FAB + General 시나리오)
 
@@ -148,7 +148,7 @@
 | FOUN-01 | Phase 1: Foundation & Data Layer | Pending |
 | FOUN-02 | Phase 1: Foundation & Data Layer | Pending |
 | FOUN-03 | Phase 1: Foundation & Data Layer | Pending |
-| FOUN-04 | Phase 1: Foundation & Data Layer | Pending |
+| FOUN-04 | Phase 1: Foundation & Data Layer | Complete |
 | FOUN-05 | Phase 1: Foundation & Data Layer | Pending |
 | FOUN-06 | Phase 1: Foundation & Data Layer | Pending |
 | FOUN-07 | Phase 1: Foundation & Data Layer | Pending |
@@ -205,8 +205,8 @@
 | RBAC-06 | Phase 7: Query Console & RBAC | Pending |
 | RBAC-07 | Phase 7: Query Console & RBAC | Pending |
 | RBAC-08 | Phase 7: Query Console & RBAC | Pending |
-| DATA-01 | Phase 1: Foundation & Data Layer | Pending |
-| DATA-02 | Phase 1: Foundation & Data Layer | Pending |
+| DATA-01 | Phase 1: Foundation & Data Layer | Complete |
+| DATA-02 | Phase 1: Foundation & Data Layer | Complete |
 | DATA-03 | Phase 1: Foundation & Data Layer | Pending |
 | DATA-04 | Phase 1: Foundation & Data Layer | Pending |
 | UX-01 | Phase 1: Foundation & Data Layer | Pending |
