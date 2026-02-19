@@ -267,3 +267,213 @@ export function getDashboardAlerts(): Alert[] {
     },
   ];
 }
+
+// =============================================================================
+// NOC Dashboard Widget Data (Phase 08)
+// =============================================================================
+
+// ── Signal Widget Data ────────────────────────────────────────────────────────
+
+export interface DashboardSignalData {
+  dgraphTarget: { value: number; status: "healthy" | "warning" | "error" };
+  alphaAlive: { value: number; status: "healthy" | "warning" | "error" };
+}
+
+export function getDashboardSignalData(): DashboardSignalData {
+  return {
+    dgraphTarget: { value: 3, status: "healthy" },
+    alphaAlive: { value: 4, status: "healthy" },
+  };
+}
+
+// ── Sparkline Widget Data ─────────────────────────────────────────────────────
+
+export interface SparklineData {
+  label: string;
+  value: number;
+  unit: string;
+  data: { time: string; value: number }[];
+}
+
+function generateSparklinePoints(
+  points: number,
+  baseValue: number,
+  jitterPercent: number
+): { time: string; value: number }[] {
+  const now = Date.now();
+  return Array.from({ length: points }, (_, i) => {
+    const time = new Date(now - (points - 1 - i) * 60 * 1000).toISOString();
+    const sinWave = Math.sin((i / points) * Math.PI * 3) * baseValue * 0.1;
+    const value = Math.round(addJitter(baseValue + sinWave, jitterPercent));
+    return { time, value: Math.max(0, value) };
+  });
+}
+
+export function getDashboardSparklineData(): { qps: SparklineData; tps: SparklineData } {
+  return {
+    qps: {
+      label: "Queries/sec",
+      value: Math.round(addJitter(1247, 5)),
+      unit: "q/s",
+      data: generateSparklinePoints(60, 1247, 8),
+    },
+    tps: {
+      label: "Transactions/sec",
+      value: Math.round(addJitter(842, 5)),
+      unit: "t/s",
+      data: generateSparklinePoints(60, 842, 8),
+    },
+  };
+}
+
+// ── Threshold Widget Data ─────────────────────────────────────────────────────
+
+export interface ThresholdData {
+  data: { time: string; value: number }[];
+  warningThreshold: number;
+  criticalThreshold: number;
+}
+
+export function getDashboardThresholdData(): ThresholdData {
+  const now = Date.now();
+  const points = 60;
+  const data = Array.from({ length: points }, (_, i) => {
+    const time = new Date(now - (points - 1 - i) * 60 * 1000).toISOString();
+    // Base around 120ms with occasional spikes
+    const base = 120 + Math.sin((i / points) * Math.PI * 4) * 40;
+    const spike = Math.random() > 0.92 ? addJitter(300, 30) : 0;
+    const value = round(Math.max(10, addJitter(base + spike, 10)), 1);
+    return { time, value };
+  });
+
+  return {
+    data,
+    warningThreshold: 200,
+    criticalThreshold: 500,
+  };
+}
+
+// ── Metric Card Widget Data ─────────────────────────────────────────────────
+
+export interface MetricCardData {
+  label: string;
+  value: string | number;
+  trend: "up" | "down" | "flat";
+  trendValue: string;
+}
+
+export function getDashboardMetricCards(): {
+  pending: MetricCardData;
+  raft: MetricCardData;
+  errors: MetricCardData;
+  cache: MetricCardData;
+} {
+  return {
+    pending: {
+      label: "Pending Queries",
+      value: Math.round(addJitter(12, 30)),
+      trend: "down",
+      trendValue: "-3",
+    },
+    raft: {
+      label: "Raft Leader Changes",
+      value: Math.round(addJitter(2, 50)),
+      trend: "flat",
+      trendValue: "0",
+    },
+    errors: {
+      label: "Errors/sec",
+      value: round(addJitter(0.8, 40), 1),
+      trend: "down",
+      trendValue: "-0.2",
+    },
+    cache: {
+      label: "Cache Hit Rate",
+      value: `${round(addJitter(94.2, 1), 1)}%`,
+      trend: "up",
+      trendValue: "+0.5%",
+    },
+  };
+}
+
+// ── Trend Widget Data ─────────────────────────────────────────────────────────
+
+export interface TrendSeriesData {
+  name: string;
+  data: { time: string; value: number }[];
+}
+
+function generateTrendPoints(
+  points: number,
+  baseValue: number,
+  jitterPercent: number,
+  trendSlope: number = 0
+): { time: string; value: number }[] {
+  const now = Date.now();
+  return Array.from({ length: points }, (_, i) => {
+    const time = new Date(now - (points - 1 - i) * 5 * 60 * 1000).toISOString();
+    const trend = trendSlope * (i / points);
+    const value = round(Math.max(0, addJitter(baseValue + trend, jitterPercent)), 1);
+    return { time, value };
+  });
+}
+
+export function getDashboardTrendData(): {
+  disk: TrendSeriesData[];
+  memory: TrendSeriesData[];
+} {
+  return {
+    disk: [
+      {
+        name: "Used",
+        data: generateTrendPoints(24, 58, 3, 5),
+      },
+      {
+        name: "Reserved",
+        data: generateTrendPoints(24, 72, 2, 2),
+      },
+    ],
+    memory: [
+      {
+        name: "Alpha RSS",
+        data: generateTrendPoints(24, 4200, 5, 300),
+      },
+      {
+        name: "Cache",
+        data: generateTrendPoints(24, 2800, 4, 100),
+      },
+    ],
+  };
+}
+
+// ── GPU Summary Widget Data ────────────────────────────────────────────────
+
+export interface GpuSummaryData {
+  active: number;
+  idle: number;
+  error: number;
+}
+
+export function getDashboardGpuSummary(): GpuSummaryData {
+  return {
+    active: 6,
+    idle: 2,
+    error: 1,
+  };
+}
+
+// ── Daily Summary Widget Data ──────────────────────────────────────────────
+
+export interface DailySummaryData {
+  queryCountChange: number;
+  errorCount: number;
+  errorCountYesterday: number;
+}
+
+export function getDashboardDailySummary(): DailySummaryData {
+  return {
+    queryCountChange: Math.round(addJitter(12, 30)),
+    errorCount: Math.round(addJitter(23, 20)),
+    errorCountYesterday: 31,
+  };
+}
