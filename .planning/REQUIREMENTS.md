@@ -11,9 +11,9 @@
 - [x] **FOUN-02**: exem-ui CSS 토큰 시스템 구축 (primitive + semantic + chart series 8색)
 - [x] **FOUN-03**: 다크/라이트 테마 시스템 (ThemeProvider, CSS variables)
 - [x] **FOUN-04**: TypeScript 타입 정의 (Role, PiiLevel, OntologyType, ClusterNode 등)
-- [ ] **FOUN-05**: D3 차트 공통 유틸리티 (cleanupD3Svg, destroyedRef, ResizeObserver 패턴)
-- [ ] **FOUN-06**: D3 차트 테마 유틸리티 (CSS variable 기반 색상 resolve)
-- [ ] **FOUN-07**: D3 Tooltip 공통 컴포넌트
+- [x] **FOUN-05**: D3 차트 공통 유틸리티 (cleanupD3Svg, destroyedRef, ResizeObserver 패턴)
+- [x] **FOUN-06**: D3 차트 테마 유틸리티 (CSS variable 기반 색상 resolve)
+- [x] **FOUN-07**: D3 Tooltip 공통 컴포넌트
 
 ### Authentication & Layout
 
@@ -101,9 +101,9 @@
 
 ### Polish & UX
 
-- [ ] **UX-01**: D3 차트 로딩 상태 (스켈레톤 또는 스피너)
-- [ ] **UX-02**: D3 차트 빈 상태 (데이터 없을 때 메시지)
-- [ ] **UX-03**: data-testid 속성 (인터랙티브 요소)
+- [x] **UX-01**: D3 차트 로딩 상태 (스켈레톤 또는 스피너)
+- [x] **UX-02**: D3 차트 빈 상태 (데이터 없을 때 메시지)
+- [x] **UX-03**: data-testid 속성 (인터랙티브 요소)
 
 ## v2 Requirements
 
@@ -149,9 +149,9 @@
 | FOUN-02 | Phase 1: Foundation & Data Layer | Complete |
 | FOUN-03 | Phase 1: Foundation & Data Layer | Complete |
 | FOUN-04 | Phase 1: Foundation & Data Layer | Complete |
-| FOUN-05 | Phase 1: Foundation & Data Layer | Pending |
-| FOUN-06 | Phase 1: Foundation & Data Layer | Pending |
-| FOUN-07 | Phase 1: Foundation & Data Layer | Pending |
+| FOUN-05 | Phase 1: Foundation & Data Layer | Complete |
+| FOUN-06 | Phase 1: Foundation & Data Layer | Complete |
+| FOUN-07 | Phase 1: Foundation & Data Layer | Complete |
 | AUTH-01 | Phase 2: Layout Shell | Pending |
 | AUTH-02 | Phase 2: Layout Shell | Pending |
 | AUTH-03 | Phase 2: Layout Shell | Pending |
@@ -209,9 +209,9 @@
 | DATA-02 | Phase 1: Foundation & Data Layer | Complete |
 | DATA-03 | Phase 1: Foundation & Data Layer | Pending |
 | DATA-04 | Phase 1: Foundation & Data Layer | Pending |
-| UX-01 | Phase 1: Foundation & Data Layer | Pending |
-| UX-02 | Phase 1: Foundation & Data Layer | Pending |
-| UX-03 | Phase 1: Foundation & Data Layer | Pending |
+| UX-01 | Phase 1: Foundation & Data Layer | Complete |
+| UX-02 | Phase 1: Foundation & Data Layer | Complete |
+| UX-03 | Phase 1: Foundation & Data Layer | Complete |
 
 **Coverage:**
 - v1 requirements: 67 total
