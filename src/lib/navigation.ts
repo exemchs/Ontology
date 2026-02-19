@@ -30,15 +30,15 @@ export interface NavGroup {
 
 export const navigationGroups: NavGroup[] = [
   {
-    label: "Operations",
+    label: "Overview",
     items: [
-      { title: "Overview", url: "/", icon: LayoutDashboard },
-      { title: "GPU Monitoring", url: "/monitoring/gpu", icon: Cpu },
+      { title: "Dashboard", url: "/", icon: LayoutDashboard },
     ],
   },
   {
     label: "Monitoring",
     items: [
+      { title: "GPU Monitoring", url: "/monitoring/gpu", icon: Cpu },
       { title: "Graph Cluster", url: "/monitoring/dgraph", icon: Network },
     ],
   },
@@ -50,7 +50,7 @@ export const navigationGroups: NavGroup[] = [
     ],
   },
   {
-    label: "Administration",
+    label: "Admin",
     items: [
       { title: "User Management", url: "/admin/users", icon: Users },
     ],
@@ -59,12 +59,12 @@ export const navigationGroups: NavGroup[] = [
 
 // Breadcrumb mapping: route -> { group label, page title }
 export const breadcrumbMap: Record<string, { group: string; page: string }> = {
-  "/": { group: "Operations", page: "Overview" },
+  "/": { group: "Overview", page: "Dashboard" },
+  "/monitoring/gpu": { group: "Monitoring", page: "GPU Monitoring" },
   "/monitoring/dgraph": { group: "Monitoring", page: "Graph Cluster" },
-  "/monitoring/gpu": { group: "Operations", page: "GPU Monitoring" },
   "/workspace/studio": { group: "Workspace", page: "Ontology Studio" },
   "/workspace/query": { group: "Workspace", page: "Query Console" },
-  "/admin/users": { group: "Administration", page: "User Management" },
+  "/admin/users": { group: "Admin", page: "User Management" },
 };
 
 // Flat array of all nav items (for command palette search)

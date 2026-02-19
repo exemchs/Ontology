@@ -31,7 +31,7 @@ export function ResultTabs({
 }: ResultTabsProps) {
   if (tabs.length === 0) {
     return (
-      <div className="flex items-center justify-center h-12 border-b text-sm text-muted-foreground">
+      <div className="flex items-center justify-center h-10 border-b text-sm text-muted-foreground">
         Run a query to see results here
       </div>
     );
@@ -43,7 +43,7 @@ export function ResultTabs({
         <div
           key={tab.id}
           className={cn(
-            "flex items-center gap-1.5 px-3 py-2 text-xs cursor-pointer border-b-2 transition-colors shrink-0",
+            "flex items-center gap-1.5 px-2.5 py-1.5 text-xs cursor-pointer border-b-2 transition-colors shrink-0",
             activeTabId === tab.id
               ? "border-primary text-foreground"
               : "border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground/30"

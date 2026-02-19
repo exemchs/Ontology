@@ -17,11 +17,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { RoleBadge } from "@/components/users/RoleBadge";
 import { RoleTooltip } from "@/components/users/RoleTooltip";
 import { useRole } from "@/contexts/RoleContext";
 import { createClient } from "@/utils/supabase/client";
+import { cn } from "@/lib/utils";
 import type { Role, User } from "@/types";
+
+// ── Role Color Dots ──────────────────────────────────────────────────────
+
+const ROLE_DOT_COLORS: Record<Role, string> = {
+  super_admin: "bg-red-500",
+  service_app: "bg-blue-500",
+  data_analyst: "bg-gray-400 dark:bg-gray-500",
+  auditor: "bg-muted-foreground",
+};
 
 // ── Role Options ──────────────────────────────────────────────────────────
 
@@ -143,28 +152,28 @@ export function UserTable() {
               {user.email}
             </TableCell>
             <TableCell>
-              <div className="flex items-center gap-2">
-                <RoleTooltip role={user.role}>
-                  <RoleBadge role={user.role} />
-                </RoleTooltip>
+              <RoleTooltip role={user.role}>
                 <Select
                   value={user.role}
                   onValueChange={(value) =>
                     handleRoleChange(user.id, value as Role)
                   }
                 >
-                  <SelectTrigger size="sm" className="h-7 w-[130px] text-xs">
+                  <SelectTrigger size="sm" className="h-7 w-[140px] text-xs">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     {ROLE_OPTIONS.map((opt) => (
                       <SelectItem key={opt.value} value={opt.value}>
-                        {opt.label}
+                        <span className="flex items-center gap-1.5">
+                          <span className={cn("w-2 h-2 rounded-full shrink-0", ROLE_DOT_COLORS[opt.value])} />
+                          {opt.label}
+                        </span>
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-              </div>
+              </RoleTooltip>
             </TableCell>
             <TableCell className="text-muted-foreground text-sm">
               {formatRelativeTime(user.lastLogin)}

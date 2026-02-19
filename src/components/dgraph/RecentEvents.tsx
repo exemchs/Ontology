@@ -54,7 +54,7 @@ export function RecentEvents({ className }: RecentEventsProps) {
   const events = useMemo(() => getDgraphEvents(), []);
 
   return (
-    <ScrollArea className={className} style={{ maxHeight: 420 }} data-testid="recent-events">
+    <ScrollArea className={className} data-testid="recent-events">
       <div className="space-y-2 pr-2">
         {events.map((event) => (
           <div

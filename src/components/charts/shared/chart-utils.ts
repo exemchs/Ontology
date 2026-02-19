@@ -1,4 +1,5 @@
 import { select } from "d3-selection";
+import "d3-transition";
 
 /**
  * Clean up all SVG content from a container, interrupting D3 transitions first.

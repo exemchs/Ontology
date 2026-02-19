@@ -6,8 +6,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { StatusDot } from "@/components/ds/StatusDot";
 import type { Alert } from "@/types";
 
 function formatRelativeTime(isoString: string | null): string {
@@ -22,14 +22,14 @@ function formatRelativeTime(isoString: string | null): string {
   return `${days}d ago`;
 }
 
-function severityVariant(severity: Alert["severity"]) {
+function severityToStatus(severity: Alert["severity"]): "healthy" | "warning" | "critical" {
   switch (severity) {
     case "error":
-      return "destructive" as const;
+      return "critical";
     case "warning":
-      return undefined; // custom styling
+      return "warning";
     case "info":
-      return "secondary" as const;
+      return "healthy";
   }
 }
 
@@ -39,9 +39,9 @@ interface RecentAlertsProps {
 
 export function RecentAlerts({ alerts }: RecentAlertsProps) {
   return (
-    <Card data-testid="recent-alerts">
-      <CardHeader>
-        <CardTitle>Recent Alerts</CardTitle>
+    <Card className="border-border/40" data-testid="recent-alerts">
+      <CardHeader className="pb-2">
+        <CardTitle className="text-sm">Recent Alerts</CardTitle>
       </CardHeader>
       <CardContent>
         <Accordion type="single" collapsible>
@@ -49,40 +49,28 @@ export function RecentAlerts({ alerts }: RecentAlertsProps) {
             <AccordionItem key={alert.id} value={`alert-${alert.id}`}>
               <AccordionTrigger className="hover:no-underline">
                 <div className="flex flex-1 items-center gap-3">
-                  <Badge
-                    variant={severityVariant(alert.severity)}
-                    className={
-                      alert.severity === "warning"
-                        ? "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400"
-                        : undefined
-                    }
-                  >
-                    {alert.severity}
-                  </Badge>
-                  <span className="flex-1 text-left">{alert.title}</span>
+                  <StatusDot
+                    status={severityToStatus(alert.severity)}
+                    label={alert.severity}
+                  />
+                  <span className="flex-1 text-left text-sm">{alert.title}</span>
                   {alert.resolvedAt && (
-                    <span className="text-xs text-muted-foreground">
+                    <span className="text-xs text-muted-foreground tabular-nums">
                       {formatRelativeTime(alert.resolvedAt)}
                     </span>
                   )}
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                <div className="space-y-2 pl-2">
-                  <p className="text-sm text-muted-foreground">
+                <div className="space-y-2 pl-5">
+                  <p className="text-xs text-muted-foreground">
                     {alert.nodeId ? `Node #${alert.nodeId}` : "Cluster-wide"}
                   </p>
                   <p className="text-sm">{alert.message}</p>
-                  <Badge
-                    variant={alert.resolved ? "default" : "destructive"}
-                    className={
-                      alert.resolved
-                        ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-                        : undefined
-                    }
-                  >
-                    {alert.resolved ? "Resolved" : "Active"}
-                  </Badge>
+                  <StatusDot
+                    status={alert.resolved ? "healthy" : "critical"}
+                    label={alert.resolved ? "Resolved" : "Active"}
+                  />
                 </div>
               </AccordionContent>
             </AccordionItem>

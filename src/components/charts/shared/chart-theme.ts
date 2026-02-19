@@ -37,8 +37,6 @@ export interface ChartColors {
 /**
  * Resolve a single CSS variable to its computed color string.
  * Automatically prepends "--" if missing.
- *
- * @param cssVar - CSS variable name (e.g., "color-chart-1" or "--color-chart-1")
  */
 export function resolveColor(cssVar: string): string {
   const varName = cssVar.startsWith("--") ? cssVar : `--${cssVar}`;
@@ -50,9 +48,6 @@ export function resolveColor(cssVar: string): string {
 /**
  * Resolve all chart-relevant CSS variables to concrete color strings.
  * Call this inside useEffect or event handlers — it reads the live DOM.
- *
- * The resolved values reflect the current theme (light or dark)
- * because CSS variables update when the .dark class toggles.
  */
 export function getChartColors(): ChartColors {
   return {
@@ -65,24 +60,23 @@ export function getChartColors(): ChartColors {
     chart7: resolveColor("--chart-7"),
     chart8: resolveColor("--chart-8"),
 
-    text: resolveColor("--color-text-primary"),
-    textSecondary: resolveColor("--color-text-secondary"),
+    text: resolveColor("--foreground"),
+    textSecondary: resolveColor("--muted-foreground"),
 
-    border: resolveColor("--color-border-primary"),
-    background: resolveColor("--color-elevation-elevation-0"),
+    border: resolveColor("--border"),
+    background: resolveColor("--background"),
 
-    axisLine: resolveColor("--color-chart-axis-line"),
-    tickLine: resolveColor("--color-chart-tick"),
-    gridLine: resolveColor("--color-chart-axis-line"),
+    axisLine: resolveColor("--border"),
+    tickLine: resolveColor("--border"),
+    gridLine: resolveColor("--border"),
 
-    tooltipBg: resolveColor("--color-material-tooltip"),
-    tooltipText: resolveColor("--color-mono-white"),
+    tooltipBg: resolveColor("--popover"),
+    tooltipText: resolveColor("--popover-foreground"),
   };
 }
 
 /**
  * Check whether the current theme is light mode.
- * Returns true if the <html> element does NOT have the "dark" class.
  */
 export function isLightTheme(): boolean {
   return !document.documentElement.classList.contains("dark");

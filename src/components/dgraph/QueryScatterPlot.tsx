@@ -241,22 +241,22 @@ export function QueryScatterPlot({ className }: QueryScatterPlotProps) {
 
   return (
     <div ref={containerRef} className={cn("w-full", className)}>
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-4 text-xs text-muted-foreground">
-          <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: "var(--chart-1)" }} />
-            GraphQL
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: "var(--chart-2)" }} />
-            DQL
-          </span>
-        </div>
+      <div className="flex items-center justify-end gap-4 mb-2">
         {filteredCount !== null && (
           <span className="text-xs text-muted-foreground">
             Selected: {filteredCount} / 50
           </span>
         )}
+        <div className="flex items-center gap-4 text-xs text-muted-foreground">
+          <span className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: "var(--chart-1)" }} />
+            GraphQL
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: "var(--chart-2)" }} />
+            DQL
+          </span>
+        </div>
       </div>
       <svg ref={svgRef} className="w-full" style={{ height: 300 }} data-testid="query-scatter-plot" />
     </div>

@@ -72,9 +72,12 @@ export interface ForceData {
 
 /**
  * Build force-directed graph data from ontology types.
- * Nodes from types, links from all relations.
+ * Supports direction filtering: "outbound" (direct), "inbound" (reversed), "all" (both).
  */
-export function buildForceData(types: OntologyType[]): ForceData {
+export function buildForceData(
+  types: OntologyType[],
+  direction: "all" | "inbound" | "outbound" = "all"
+): ForceData {
   const colors = [
     "var(--chart-1)",
     "var(--chart-2)",
@@ -91,16 +94,41 @@ export function buildForceData(types: OntologyType[]): ForceData {
     color: colors[i] ?? "var(--chart-1)",
   }));
 
+  const nodeIds = new Set(nodes.map((n) => n.id));
   const links: ForceLink[] = [];
-  types.forEach((type) => {
-    type.relations.forEach((rel) => {
-      links.push({
-        source: type.name,
-        target: rel.target,
-        label: rel.name,
+
+  if (direction === "outbound" || direction === "all") {
+    types.forEach((type) => {
+      type.relations.forEach((rel) => {
+        if (nodeIds.has(rel.target)) {
+          links.push({
+            source: type.name,
+            target: rel.target,
+            label: rel.name,
+          });
+        }
       });
     });
-  });
+  }
+
+  if (direction === "inbound" || direction === "all") {
+    types.forEach((type) => {
+      type.relations.forEach((rel) => {
+        if (nodeIds.has(rel.target)) {
+          const reversed = { source: rel.target, target: type.name, label: rel.name };
+          // Avoid duplicating links already added in outbound pass
+          if (direction === "all") {
+            const exists = links.some(
+              (l) => l.source === reversed.source && l.target === reversed.target && l.label === reversed.label
+            );
+            if (!exists) links.push(reversed);
+          } else {
+            links.push(reversed);
+          }
+        }
+      });
+    });
+  }
 
   return { nodes, links };
 }

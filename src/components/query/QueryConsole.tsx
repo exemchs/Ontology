@@ -17,6 +17,12 @@ import { ScatterView } from "@/components/query/views/ScatterView";
 import { DistributionView } from "@/components/query/views/DistributionView";
 import { PiiDemo } from "@/components/query/pii/PiiDemo";
 import { Separator } from "@/components/ui/separator";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { ChevronDown } from "lucide-react";
 import type { QueryType } from "@/types";
 
 // ── Mock result generator ─────────────────────────────────────────────────
@@ -104,11 +110,11 @@ export function QueryConsole() {
   const activeTab = tabs.find((t) => t.id === activeTabId);
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full bg-background">
       {/* Editor area */}
-      <div className="flex flex-col gap-2 p-4 border-b">
+      <div className="flex flex-col gap-1.5 p-3 border-b border-border/40">
         {/* Toolbar */}
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-1.5 flex-wrap">
           <QueryModeToggle mode={queryMode} onModeChange={setQueryMode} />
           <TemplateSelector mode={queryMode} onSelect={handleInsertQuery} />
           <div className="flex-1" />
@@ -177,9 +183,17 @@ export function QueryConsole() {
 
       {/* PII Masking Demo section */}
       <Separator />
-      <div className="p-4 overflow-auto">
-        <PiiDemo />
-      </div>
+      <Collapsible defaultOpen={false}>
+        <CollapsibleTrigger className="flex w-full items-center justify-between p-3 text-sm font-medium hover:bg-muted/50 transition-colors">
+          PII Masking Demo
+          <ChevronDown className="size-4 text-muted-foreground transition-transform [[data-state=open]>&]:rotate-180" />
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <div className="px-3 pb-3 overflow-auto">
+            <PiiDemo />
+          </div>
+        </CollapsibleContent>
+      </Collapsible>
     </div>
   );
 }

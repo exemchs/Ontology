@@ -31,13 +31,28 @@ export function AppSidebar() {
   const isCollapsed = state === "collapsed";
 
   return (
-    <Sidebar collapsible="icon" className="border-r">
+    <Sidebar collapsible="icon" className="border-r border-sidebar-border/40">
       {/* Logo area */}
-      <SidebarHeader>
-        <div className="flex h-8 items-center px-2">
-          <span className="text-lg font-bold text-primary">
-            {isCollapsed ? "eX" : "eXemble"}
-          </span>
+      <SidebarHeader className="pb-0">
+        <div className="flex h-7 items-center px-2">
+          {isCollapsed ? (
+            <span className="text-lg font-bold text-primary">eX</span>
+          ) : (
+            <>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/logos/logo-dark.png"
+                alt="eXemble"
+                className="hidden dark:block h-6 w-auto"
+              />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/logos/logo-light.png"
+                alt="eXemble"
+                className="block dark:hidden h-6 w-auto"
+              />
+            </>
+          )}
         </div>
       </SidebarHeader>
 
@@ -69,21 +84,23 @@ export function AppSidebar() {
       </SidebarContent>
 
       {/* Footer: theme toggle + logout */}
-      <SidebarFooter>
-        {/* Theme toggle */}
-        <div className="flex items-center justify-between px-2 py-1">
-          <Sun className="size-4 shrink-0 text-muted-foreground" />
+      <SidebarFooter className="gap-1">
+        {/* Theme toggle — compact single row */}
+        <div className="flex items-center gap-2 px-2 py-0.5">
+          <Sun className="size-3.5 shrink-0 text-muted-foreground" />
           {!isCollapsed && (
-            <Switch
-              size="sm"
-              checked={theme === "dark"}
-              onCheckedChange={(checked) =>
-                setTheme(checked ? "dark" : "light")
-              }
-              aria-label="Toggle dark mode"
-            />
+            <>
+              <Switch
+                size="sm"
+                checked={theme === "dark"}
+                onCheckedChange={(checked) =>
+                  setTheme(checked ? "dark" : "light")
+                }
+                aria-label="Toggle dark mode"
+              />
+              <Moon className="size-3.5 shrink-0 text-muted-foreground" />
+            </>
           )}
-          <Moon className="size-4 shrink-0 text-muted-foreground" />
         </div>
 
         {/* Logout */}
@@ -91,10 +108,10 @@ export function AppSidebar() {
           variant="ghost"
           size="sm"
           onClick={logout}
-          className="w-full justify-start gap-2"
+          className="w-full justify-start gap-2 h-8"
         >
-          <LogOut className="size-4" />
-          {!isCollapsed && <span>로그아웃</span>}
+          <LogOut className="size-3.5" />
+          {!isCollapsed && <span className="text-xs">로그아웃</span>}
         </Button>
       </SidebarFooter>
     </Sidebar>

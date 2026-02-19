@@ -17,7 +17,7 @@ import {
 } from "@/components/charts/shared/chart-utils";
 import type { ScatterPoint } from "@/types";
 
-export function NodeScatterPlot() {
+export function NodeScatterPlot({ className }: { className?: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const { resolvedTheme } = useTheme();
   const filterId = `scatter-glow-${useId().replace(/:/g, "")}`;
@@ -226,7 +226,8 @@ export function NodeScatterPlot() {
     <div
       ref={containerRef}
       data-testid="node-scatter-plot"
-      className="min-h-[300px] w-full"
+      className={className}
+      style={{ width: "100%", minHeight: 300 }}
     />
   );
 }

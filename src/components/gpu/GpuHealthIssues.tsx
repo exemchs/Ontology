@@ -6,7 +6,15 @@ import {
   CardContent,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { StatusDot } from "@/components/ds/StatusDot";
 import type { GpuHealthIssue } from "@/types";
 
 interface GpuHealthIssuesProps {
@@ -28,13 +36,11 @@ function formatRelativeTime(timestamp: Date): string {
   return `${diffDays}d ago`;
 }
 
-const severityStyles: Record<string, string> = {
-  error:
-    "bg-red-500/15 text-red-700 border-red-300 dark:text-red-400 dark:border-red-800",
-  warning:
-    "bg-amber-500/15 text-amber-700 border-amber-300 dark:text-amber-400 dark:border-amber-800",
-  info: "bg-blue-500/15 text-blue-700 border-blue-300 dark:text-blue-400 dark:border-blue-800",
-};
+function severityToStatus(severity: string): "healthy" | "warning" | "critical" {
+  if (severity === "error") return "critical";
+  if (severity === "warning") return "warning";
+  return "healthy";
+}
 
 export function GpuHealthIssues({ issues }: GpuHealthIssuesProps) {
   const sorted = [...issues]
@@ -42,34 +48,40 @@ export function GpuHealthIssues({ issues }: GpuHealthIssuesProps) {
     .slice(0, 6);
 
   return (
-    <Card data-testid="gpu-health-issues">
-      <CardHeader>
-        <CardTitle>Health Issues</CardTitle>
+    <Card className="border-border/40" data-testid="gpu-health-issues">
+      <CardHeader className="pb-2">
+        <CardTitle className="text-sm">Health Issues</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-col gap-3">
-          {sorted.map((issue) => (
-            <div key={issue.id} className="flex items-start gap-3">
-              <Badge
-                variant="outline"
-                className={`shrink-0 ${severityStyles[issue.severity]}`}
-              >
-                {issue.severity}
-              </Badge>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm leading-tight">{issue.message}</p>
-                <div className="flex items-center gap-2 mt-1">
-                  <span className="text-xs text-muted-foreground">
-                    {issue.gpuName}
-                  </span>
-                  <span className="text-xs text-muted-foreground">
-                    {formatRelativeTime(issue.timestamp)}
-                  </span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Severity</TableHead>
+              <TableHead>GPU</TableHead>
+              <TableHead>Message</TableHead>
+              <TableHead>Time</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {sorted.map((issue) => (
+              <TableRow key={issue.id}>
+                <TableCell>
+                  <StatusDot
+                    status={severityToStatus(issue.severity)}
+                    label={issue.severity}
+                  />
+                </TableCell>
+                <TableCell className="text-xs">{issue.gpuName}</TableCell>
+                <TableCell className="text-sm max-w-[280px]">
+                  {issue.message}
+                </TableCell>
+                <TableCell className="text-xs text-muted-foreground tabular-nums whitespace-nowrap">
+                  {formatRelativeTime(issue.timestamp)}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </CardContent>
     </Card>
   );

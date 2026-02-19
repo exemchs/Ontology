@@ -26,12 +26,12 @@ const nodeCounts: Record<string, number> = {
 };
 
 const nodeColors: Record<string, string> = {
-  Equipment: "var(--color-blue-04)",
-  Process: "var(--color-cyan-04)",
-  Wafer: "var(--color-sky-04)",
-  Recipe: "var(--color-teal-04)",
-  Defect: "var(--color-indigo-04)",
-  MaintenanceRecord: "var(--color-blue-03)",
+  Equipment: "#50a2ff",
+  Process: "#00d3f2",
+  Wafer: "#00bbff",
+  Recipe: "#00d5be",
+  Defect: "#7c86ff",
+  MaintenanceRecord: "#8dc5ff",
 };
 
 function buildNodes(): GraphNode[] {
@@ -43,7 +43,7 @@ function buildNodes(): GraphNode[] {
     // Normalize radius to 15-35px range
     const t = max === min ? 0.5 : (count - min) / (max - min);
     const radius = 15 + t * 20;
-    return { id, radius, color: nodeColors[id] ?? "var(--color-blue-04)" };
+    return { id, radius, color: nodeColors[id] ?? "#50a2ff" };
   });
 }
 
@@ -123,7 +123,7 @@ export function LoginGraph() {
       .data(links)
       .enter()
       .append("line")
-      .attr("stroke", "var(--color-gray-06)")
+      .attr("stroke", "#4a5565")
       .attr("stroke-width", 1.2)
       .attr("stroke-opacity", 0.35);
 

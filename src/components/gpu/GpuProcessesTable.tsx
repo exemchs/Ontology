@@ -35,9 +35,9 @@ const typeStyles: Record<string, string> = {
 
 export function GpuProcessesTable({ processes }: GpuProcessesTableProps) {
   return (
-    <Card data-testid="gpu-processes-table">
-      <CardHeader>
-        <CardTitle>GPU Processes</CardTitle>
+    <Card className="border-border/40" data-testid="gpu-processes-table">
+      <CardHeader className="pb-2">
+        <CardTitle className="text-sm">GPU Processes</CardTitle>
       </CardHeader>
       <CardContent>
         <Table>

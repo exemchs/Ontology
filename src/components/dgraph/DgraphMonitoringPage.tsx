@@ -8,6 +8,7 @@ import {
   type DgraphNode,
 } from "@/data/dgraph-data";
 
+import { PageShell } from "@/components/ds/PageShell";
 import { ClusterTopology } from "@/components/dgraph/ClusterTopology";
 import { QueryScatterPlot } from "@/components/dgraph/QueryScatterPlot";
 import { ShardBarChart } from "@/components/dgraph/ShardBarChart";
@@ -18,7 +19,6 @@ import { RecentEvents } from "@/components/dgraph/RecentEvents";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -29,31 +29,22 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 
-// ── Types ────────────────────────────────────────────────────────────────────
-
 interface PopoverState {
   node: DgraphNode;
   x: number;
   y: number;
 }
 
-// ── Component ────────────────────────────────────────────────────────────────
-
 export default function DgraphMonitoringPage() {
-  // Shared state
   const [popoverState, setPopoverState] = useState<PopoverState | null>(null);
   const [detailNode, setDetailNode] = useState<DgraphNode | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
 
-  // Data (loaded once)
   const nodes = useMemo(() => getDgraphNodes(), []);
   const links = useMemo(() => getDgraphLinks(), []);
 
-  // ── Event Handlers ────────────────────────────────────────────────────────
-
   const handleNodeClick = useCallback(
     (node: DgraphNode, screenX: number, screenY: number) => {
-      // ClusterTopology passes null-ish node to signal close
       if (!node || !node.id) {
         setPopoverState(null);
         return;
@@ -78,53 +69,44 @@ export default function DgraphMonitoringPage() {
     setDetailNode(null);
   }, []);
 
-  // ── Render ────────────────────────────────────────────────────────────────
-
   return (
-    <div className="flex flex-col gap-4 p-4">
-      {/* Page header */}
-      <div>
-        <h1 className="text-2xl font-bold">DGraph Monitoring</h1>
-        <p className="text-sm text-muted-foreground">
-          12-node cluster topology, query patterns, and shard distribution
-        </p>
-      </div>
-
+    <PageShell
+      title="DGraph Monitoring"
+      description="12-node cluster topology, query patterns, and shard distribution"
+    >
       {/* Top row: Topology + Events */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <Card className="lg:col-span-2">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3" style={{ minHeight: 500 }}>
+        <Card className="border-border/40 lg:col-span-2 overflow-hidden">
           <CardHeader className="pb-2">
-            <CardTitle className="text-base">Cluster Topology</CardTitle>
+            <CardTitle className="text-sm">Cluster Topology</CardTitle>
           </CardHeader>
-          <CardContent className="p-0 relative" style={{ height: 500 }}>
+          <CardContent className="p-0 relative" style={{ height: 460 }}>
             <ClusterTopology onNodeClick={handleNodeClick} />
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-base">Recent Events</CardTitle>
+        <Card className="border-border/40 overflow-hidden flex flex-col">
+          <CardHeader className="pb-2 shrink-0">
+            <CardTitle className="text-sm">Recent Events</CardTitle>
           </CardHeader>
-          <CardContent>
-            <RecentEvents />
+          <CardContent className="flex-1 min-h-0">
+            <RecentEvents className="h-full" />
           </CardContent>
         </Card>
       </div>
 
       {/* Bottom row: Scatter + Shard */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <Card>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+        <Card className="border-border/40">
           <CardHeader className="pb-2">
-            <CardTitle className="text-base">Query Performance</CardTitle>
-            <CardDescription>Latency vs Throughput -- brush to filter</CardDescription>
+            <CardTitle className="text-sm">Query Performance</CardTitle>
           </CardHeader>
           <CardContent>
             <QueryScatterPlot />
           </CardContent>
         </Card>
-        <Card>
+        <Card className="border-border/40">
           <CardHeader className="pb-2">
-            <CardTitle className="text-base">Shard Distribution</CardTitle>
-            <CardDescription>Predicate sizes by group</CardDescription>
+            <CardTitle className="text-sm">Shard Distribution</CardTitle>
           </CardHeader>
           <CardContent>
             <ShardBarChart />
@@ -132,7 +114,7 @@ export default function DgraphMonitoringPage() {
         </Card>
       </div>
 
-      {/* Popover (fixed position, rendered when node clicked) */}
+      {/* Popover */}
       {popoverState && (
         <NodePopover
           node={popoverState.node}
@@ -143,7 +125,7 @@ export default function DgraphMonitoringPage() {
         />
       )}
 
-      {/* Side panel Sheet (Tier 2 detail) */}
+      {/* Side panel Sheet */}
       <Sheet
         open={sheetOpen}
         onOpenChange={(open) => {
@@ -163,6 +145,6 @@ export default function DgraphMonitoringPage() {
           )}
         </SheetContent>
       </Sheet>
-    </div>
+    </PageShell>
   );
 }

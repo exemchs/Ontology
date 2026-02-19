@@ -19,6 +19,7 @@ import { zoom as d3Zoom, type ZoomBehavior, type D3ZoomEvent, zoomIdentity } fro
 import "d3-transition"; // Side-effect import to extend Selection with .transition()
 
 import type { OntologyType } from "@/types";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cleanupD3Svg, createDebouncedResizeObserver } from "@/components/charts/shared/chart-utils";
 import { getChartColors, resolveColor } from "@/components/charts/shared/chart-theme";
 import { createTooltip } from "@/components/charts/shared/chart-tooltip";
@@ -640,26 +641,19 @@ export function OntologyGraph({
       className={cn("relative w-full h-full min-h-[300px]", className)}
       data-testid="ontology-graph"
     >
-      {/* Mode toggle bar */}
-      <div className="absolute top-3 left-3 z-10 flex items-center gap-1 rounded-md border bg-background/80 backdrop-blur-sm p-1">
-        {(["force", "radial", "hierarchy"] as GraphMode[]).map((m) => (
-          <button
-            key={m}
-            onClick={() => setMode(m)}
-            className={cn(
-              "px-3 py-1 text-xs font-medium rounded-sm transition-colors",
-              mode === m
-                ? "bg-primary text-primary-foreground"
-                : "text-muted-foreground hover:text-foreground hover:bg-muted"
-            )}
-          >
-            {m.charAt(0).toUpperCase() + m.slice(1)}
-          </button>
-        ))}
+      {/* Mode toggle */}
+      <div className="absolute top-3 left-3 z-10">
+        <Tabs value={mode} onValueChange={(v) => setMode(v as GraphMode)}>
+          <TabsList className="h-7 bg-background/80 backdrop-blur-sm">
+            <TabsTrigger value="force" className="text-xs px-2">Force</TabsTrigger>
+            <TabsTrigger value="radial" className="text-xs px-2">Radial</TabsTrigger>
+            <TabsTrigger value="hierarchy" className="text-xs px-2">Hierarchy</TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
 
       {/* SVG canvas */}
-      <svg ref={svgRef} className="w-full h-full" />
+      <svg ref={svgRef} className="absolute inset-0 w-full h-full" />
     </div>
   );
 }

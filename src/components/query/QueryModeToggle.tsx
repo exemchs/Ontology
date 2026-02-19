@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { QueryType } from "@/types";
 
 interface QueryModeToggleProps {
@@ -10,23 +10,15 @@ interface QueryModeToggleProps {
 
 export function QueryModeToggle({ mode, onModeChange }: QueryModeToggleProps) {
   return (
-    <div className="flex gap-1 rounded-md border p-0.5">
-      <Button
-        variant={mode === "graphql" ? "default" : "ghost"}
-        size="sm"
-        onClick={() => onModeChange("graphql")}
-        className="h-7 px-3 text-xs"
-      >
-        GraphQL
-      </Button>
-      <Button
-        variant={mode === "dql" ? "default" : "ghost"}
-        size="sm"
-        onClick={() => onModeChange("dql")}
-        className="h-7 px-3 text-xs"
-      >
-        DQL
-      </Button>
-    </div>
+    <Tabs value={mode} onValueChange={(v) => onModeChange(v as QueryType)}>
+      <TabsList className="h-7">
+        <TabsTrigger value="graphql" className="text-xs px-2">
+          GraphQL
+        </TabsTrigger>
+        <TabsTrigger value="dql" className="text-xs px-2">
+          DQL
+        </TabsTrigger>
+      </TabsList>
+    </Tabs>
   );
 }

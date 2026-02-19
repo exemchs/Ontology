@@ -39,9 +39,9 @@ export default function AuthenticatedLayout({
   return (
     <SidebarProvider defaultOpen={true}>
       <AppSidebar />
-      <SidebarInset>
+      <SidebarInset className="min-w-0">
         <HeaderBar />
-        <main className="flex-1 overflow-auto p-6">{children}</main>
+        <main className="flex-1 overflow-auto">{children}</main>
       </SidebarInset>
       <WelcomePopup />
       <CommandPalette />

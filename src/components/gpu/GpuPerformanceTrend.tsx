@@ -1,30 +1,18 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { useTheme } from "next-themes";
-import { select } from "d3-selection";
-import { scaleTime, scaleLinear } from "d3-scale";
-import { axisBottom, axisLeft } from "d3-axis";
-import { line, curveMonotoneX } from "d3-shape";
-import { extent } from "d3-array";
+import { useMemo, useState, useCallback } from "react";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid } from "recharts";
 import { timeFormat } from "d3-time-format";
 
-import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { ChartSkeleton } from "@/components/charts/shared/ChartSkeleton";
-import { cleanupD3Svg, createDebouncedResizeObserver } from "@/components/charts/shared/chart-utils";
-import { getChartColors } from "@/components/charts/shared/chart-theme";
-import { createTooltip } from "@/components/charts/shared/chart-tooltip";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent,
+} from "@/components/ui/chart";
+import { gpuConfig } from "@/lib/chart-configs";
 import type { GpuTimeSeries, GpuMetricType } from "@/data/gpu-data";
-
-// ── Metric display config ──────────────────────────────────────────────────
-
-const METRIC_LABELS: Record<GpuMetricType, string> = {
-  utilization: "Utilization",
-  temperature: "Temperature",
-  power: "Power",
-  memory: "Memory",
-};
 
 const METRIC_UNITS: Record<GpuMetricType, string> = {
   utilization: "%",
@@ -33,313 +21,118 @@ const METRIC_UNITS: Record<GpuMetricType, string> = {
   memory: "GB",
 };
 
-// Chart color keys indexed 1-4 for GPU-0 through GPU-3
-const GPU_COLOR_KEYS = ["chart1", "chart2", "chart3", "chart4"] as const;
-
-// ── Component ──────────────────────────────────────────────────────────────
+const GPU_KEYS = ["GPU-0", "GPU-1", "GPU-2", "GPU-3"] as const;
 
 interface GpuPerformanceTrendProps {
   series: GpuTimeSeries[];
+  activeMetric?: GpuMetricType;
+  className?: string;
 }
 
-export function GpuPerformanceTrend({ series }: GpuPerformanceTrendProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { resolvedTheme } = useTheme();
-  const [activeMetric, setActiveMetric] = useState<GpuMetricType>("utilization");
-  const [visibleGpus, setVisibleGpus] = useState<Set<string>>(() => {
-    const names = new Set<string>();
-    series.forEach((s) => names.add(s.gpuName));
-    return names;
-  });
-  const [isClient, setIsClient] = useState(false);
+export function GpuPerformanceTrend({
+  series,
+  activeMetric = "utilization",
+  className,
+}: GpuPerformanceTrendProps) {
+  const [hiddenGpus, setHiddenGpus] = useState<Set<string>>(new Set());
 
-  // SSR guard
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  const formatTime = useMemo(() => timeFormat("%H:%M"), []);
 
-  // Stable GPU name list (order matches seed data)
-  const gpuNames = Array.from(new Set(series.map((s) => s.gpuName)));
+  const data = useMemo(() => {
+    const metricSeries = series.filter((s) => s.metric === activeMetric);
+    if (!metricSeries.length) return [];
 
-  // ── D3 rendering ────────────────────────────────────────────────────────
-
-  useEffect(() => {
-    if (!isClient) return;
-    const container = containerRef.current;
-    if (!container || series.length === 0) return;
-
-    let destroyed = false;
-    const tooltip = createTooltip();
-    const formatTime = timeFormat("%H:%M");
-
-    function render() {
-      if (destroyed || !container) return;
-      cleanupD3Svg(container);
-
-      const { width, height } = container.getBoundingClientRect();
-      if (width === 0 || height === 0) return;
-
-      const colors = getChartColors();
-      const margin = { top: 40, right: 20, bottom: 40, left: 50 };
-      const innerW = width - margin.left - margin.right;
-      const innerH = height - margin.top - margin.bottom;
-      if (innerW <= 0 || innerH <= 0) return;
-
-      // Filter series by active metric
-      const metricSeries = series.filter((s) => s.metric === activeMetric);
-      if (metricSeries.length === 0) return;
-
-      // ── Scales ──────────────────────────────────────────────────────────
-
-      // X: time extent across ALL series of this metric
-      const allTimes = metricSeries.flatMap((s) => s.data.map((d) => d.time));
-      const timeExtent = extent(allTimes) as [Date, Date];
-      const xScale = scaleTime().domain(timeExtent).range([0, innerW]);
-
-      // Y: FIXED domain from ALL series (not just visible) to prevent scale jump
-      const allValues = metricSeries.flatMap((s) => s.data.map((d) => d.value));
-      const yExtent = extent(allValues) as [number, number];
-      const yPadding = (yExtent[1] - yExtent[0]) * 0.1 || 5;
-      const yScale = scaleLinear()
-        .domain([Math.max(0, yExtent[0] - yPadding), yExtent[1] + yPadding])
-        .nice()
-        .range([innerH, 0]);
-
-      // ── SVG setup ───────────────────────────────────────────────────────
-
-      const svg = select(container)
-        .append("svg")
-        .attr("width", width)
-        .attr("height", height);
-
-      const g = svg
-        .append("g")
-        .attr("transform", `translate(${margin.left},${margin.top})`);
-
-      // ── Grid lines ──────────────────────────────────────────────────────
-
-      const yTicks = yScale.ticks(5);
-      g.selectAll(".grid-line")
-        .data(yTicks)
-        .enter()
-        .append("line")
-        .attr("class", "grid-line")
-        .attr("x1", 0)
-        .attr("x2", innerW)
-        .attr("y1", (d) => yScale(d))
-        .attr("y2", (d) => yScale(d))
-        .attr("stroke", colors.gridLine)
-        .attr("stroke-opacity", 0.1);
-
-      // ── Axes ────────────────────────────────────────────────────────────
-
-      // X axis
-      const xAxis = axisBottom(xScale)
-        .ticks(6)
-        .tickFormat((d) => formatTime(d as Date));
-
-      g.append("g")
-        .attr("transform", `translate(0,${innerH})`)
-        .call(xAxis)
-        .call((sel) => {
-          sel.select(".domain").attr("stroke", colors.axisLine);
-          sel.selectAll(".tick line").attr("stroke", colors.tickLine);
-          sel.selectAll(".tick text")
-            .attr("fill", colors.textSecondary)
-            .attr("font-size", "11px");
-        });
-
-      // Y axis
-      const yAxis = axisLeft(yScale).ticks(5);
-      g.append("g")
-        .call(yAxis)
-        .call((sel) => {
-          sel.select(".domain").attr("stroke", colors.axisLine);
-          sel.selectAll(".tick line").attr("stroke", colors.tickLine);
-          sel.selectAll(".tick text")
-            .attr("fill", colors.textSecondary)
-            .attr("font-size", "11px");
-        });
-
-      // Y-axis unit label
-      g.append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("x", -innerH / 2)
-        .attr("y", -38)
-        .attr("text-anchor", "middle")
-        .attr("fill", colors.textSecondary)
-        .attr("font-size", "11px")
-        .text(METRIC_UNITS[activeMetric]);
-
-      // ── Line generator ──────────────────────────────────────────────────
-
-      const lineGenerator = line<{ time: Date; value: number }>()
-        .x((d) => xScale(d.time))
-        .y((d) => yScale(d.value))
-        .curve(curveMonotoneX);
-
-      // ── Draw lines (only visible GPUs) ──────────────────────────────────
-
+    const refSeries = metricSeries[0];
+    return refSeries.data.map((point, i) => {
+      const row: Record<string, number> = { time: point.time.getTime() };
       metricSeries.forEach((s) => {
-        const gpuIndex = gpuNames.indexOf(s.gpuName);
-        const colorKey = GPU_COLOR_KEYS[gpuIndex] ?? "chart1";
-        const color = colors[colorKey];
-        const isVisible = visibleGpus.has(s.gpuName);
-
-        if (!isVisible) return;
-
-        // Line path
-        g.append("path")
-          .datum(s.data)
-          .attr("fill", "none")
-          .attr("stroke", color)
-          .attr("stroke-width", 2)
-          .attr("d", lineGenerator);
-
-        // Hover circles
-        g.selectAll(`.dot-${gpuIndex}`)
-          .data(s.data)
-          .enter()
-          .append("circle")
-          .attr("class", `dot-${gpuIndex}`)
-          .attr("cx", (d) => xScale(d.time))
-          .attr("cy", (d) => yScale(d.value))
-          .attr("r", 3)
-          .attr("fill", color)
-          .attr("opacity", 0)
-          .attr("cursor", "pointer")
-          .on("mouseenter", function (event: MouseEvent, d) {
-            select(this).attr("opacity", 1).attr("r", 5);
-            tooltip.show(
-              `<strong>${s.gpuName}</strong><br/>${formatTime(d.time)}<br/>${d.value.toFixed(1)} ${METRIC_UNITS[activeMetric]}`,
-              event,
-            );
-          })
-          .on("mousemove", function (event: MouseEvent, d) {
-            tooltip.show(
-              `<strong>${s.gpuName}</strong><br/>${formatTime(d.time)}<br/>${d.value.toFixed(1)} ${METRIC_UNITS[activeMetric]}`,
-              event,
-            );
-          })
-          .on("mouseleave", function () {
-            select(this).attr("opacity", 0).attr("r", 3);
-            tooltip.hide();
-          });
+        row[s.gpuName] = s.data[i]?.value ?? 0;
       });
-
-      // ── Legend (SVG, top-left of chart area) ──────────────────────────────
-
-      const legendG = svg
-        .append("g")
-        .attr("transform", `translate(${margin.left}, ${margin.top - 12})`);
-
-      gpuNames.forEach((name, i) => {
-        const colorKey = GPU_COLOR_KEYS[i] ?? "chart1";
-        const color = colors[colorKey];
-        const isVisible = visibleGpus.has(name);
-        const xOffset = i * 90;
-
-        const itemG = legendG
-          .append("g")
-          .attr("transform", `translate(${xOffset}, 0)`)
-          .attr("cursor", "pointer")
-          .attr("opacity", isVisible ? 1 : 0.3)
-          .on("click", () => {
-            setVisibleGpus((prev) => {
-              const next = new Set(prev);
-              if (next.has(name)) {
-                // Don't allow hiding all GPUs
-                if (next.size > 1) next.delete(name);
-              } else {
-                next.add(name);
-              }
-              return next;
-            });
-          });
-
-        // Short colored line
-        itemG
-          .append("line")
-          .attr("x1", 0)
-          .attr("x2", 16)
-          .attr("y1", 0)
-          .attr("y2", 0)
-          .attr("stroke", color)
-          .attr("stroke-width", 2);
-
-        // GPU name text
-        itemG
-          .append("text")
-          .attr("x", 20)
-          .attr("y", 0)
-          .attr("dy", "0.35em")
-          .attr("fill", colors.text)
-          .attr("font-size", "11px")
-          .text(name);
-      });
-    }
-
-    render();
-
-    const observer = createDebouncedResizeObserver(() => {
-      if (!destroyed) render();
+      return row;
     });
-    observer.observe(container);
+  }, [series, activeMetric]);
 
-    return () => {
-      destroyed = true;
-      observer.disconnect();
-      tooltip.destroy();
-      cleanupD3Svg(container);
-    };
-  }, [isClient, series, activeMetric, visibleGpus, resolvedTheme, gpuNames]);
+  const gpuNames = useMemo(() => {
+    const names = new Set<string>();
+    series
+      .filter((s) => s.metric === activeMetric)
+      .forEach((s) => names.add(s.gpuName));
+    return Array.from(names);
+  }, [series, activeMetric]);
 
-  // ── SSR fallback ──────────────────────────────────────────────────────
+  const handleLegendClick = useCallback(
+    (dataKey: string) => {
+      setHiddenGpus((prev) => {
+        const next = new Set(prev);
+        if (next.has(dataKey)) {
+          next.delete(dataKey);
+        } else {
+          // Keep at least one visible
+          if (gpuNames.length - next.size > 1) {
+            next.add(dataKey);
+          }
+        }
+        return next;
+      });
+    },
+    [gpuNames]
+  );
 
-  if (!isClient) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Performance Trends</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ChartSkeleton />
-        </CardContent>
-      </Card>
-    );
-  }
+  if (!data.length) return null;
 
-  // ── Render ────────────────────────────────────────────────────────────
+  const unit = METRIC_UNITS[activeMetric];
 
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle>Performance Trends</CardTitle>
-        <Tabs
-          value={activeMetric}
-          onValueChange={(v) => setActiveMetric(v as GpuMetricType)}
-        >
-          <TabsList>
-            {(Object.keys(METRIC_LABELS) as GpuMetricType[]).map((metric) => (
-              <TabsTrigger key={metric} value={metric}>
-                {METRIC_LABELS[metric]}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
-      </CardHeader>
-      <CardContent>
-        {/* Shared chart area for all metric tabs */}
-        <Tabs value={activeMetric}>
-          <TabsContent value={activeMetric}>
-            <div
-              ref={containerRef}
-              className="w-full h-[350px]"
-              data-testid="gpu-performance-trend"
+    <ChartContainer config={gpuConfig} className={className}>
+      <LineChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
+        <CartesianGrid vertical={false} strokeDasharray="3 3" />
+        <XAxis
+          dataKey="time"
+          tickFormatter={(v) => formatTime(new Date(v))}
+          tickLine={false}
+          axisLine={false}
+          tickMargin={8}
+        />
+        <YAxis
+          tickLine={false}
+          axisLine={false}
+          tickMargin={4}
+          tickFormatter={(v) => `${v}${unit}`}
+        />
+        <ChartTooltip
+          content={
+            <ChartTooltipContent
+              labelFormatter={(_, payload) => {
+                const ts = payload?.[0]?.payload?.time;
+                return ts ? formatTime(new Date(ts)) : "";
+              }}
             />
-          </TabsContent>
-        </Tabs>
-      </CardContent>
-    </Card>
+          }
+        />
+        <ChartLegend
+          content={
+            <ChartLegendContent
+              className="cursor-pointer"
+            />
+          }
+          onClick={(e) => {
+            if (e && e.dataKey) handleLegendClick(e.dataKey as string);
+          }}
+        />
+        {gpuNames.map((name) => (
+          <Line
+            key={name}
+            type="monotone"
+            dataKey={name}
+            stroke={`var(--color-${name})`}
+            strokeWidth={2}
+            dot={false}
+            activeDot={{ r: 4 }}
+            hide={hiddenGpus.has(name)}
+            strokeOpacity={hiddenGpus.has(name) ? 0.2 : 1}
+          />
+        ))}
+      </LineChart>
+    </ChartContainer>
   );
 }

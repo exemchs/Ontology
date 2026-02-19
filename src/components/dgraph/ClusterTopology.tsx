@@ -123,11 +123,11 @@ export function ClusterTopology({ onNodeClick, className }: ClusterTopologyProps
     function getStatusColor(status: string): string {
       switch (status) {
         case "healthy":
-          return resolveColor("--color-text-success");
+          return resolveColor("--status-healthy");
         case "warning":
-          return resolveColor("--color-text-warning");
+          return resolveColor("--status-warning");
         case "error":
-          return resolveColor("--color-text-critical");
+          return resolveColor("--status-critical");
         default:
           return colors.textSecondary;
       }
@@ -278,6 +278,13 @@ export function ClusterTopology({ onNodeClick, className }: ClusterTopologyProps
     // ── Tick Handler ─────────────────────────────────────────────────
 
     simulation.on("tick", () => {
+      // Clamp nodes within SVG bounds (with padding for node radius)
+      const pad = ALPHA_RADIUS + 6;
+      nodeDatums.forEach((d) => {
+        d.x = Math.max(pad, Math.min(width - pad, d.x ?? width / 2));
+        d.y = Math.max(pad, Math.min(height - pad, d.y ?? height / 2));
+      });
+
       linkLines
         .attr("x1", (d) => ((d.source as NodeDatum).x ?? 0))
         .attr("y1", (d) => ((d.source as NodeDatum).y ?? 0))
@@ -419,9 +426,9 @@ export function ClusterTopology({ onNodeClick, className }: ClusterTopologyProps
       {/* Layout toggle */}
       <div className="absolute top-3 left-3 z-10 flex items-center gap-2">
         <Tabs value={layout} onValueChange={(v) => setLayout(v as "force" | "radial")}>
-          <TabsList className="h-8">
-            <TabsTrigger value="force" className="text-xs px-3">Force</TabsTrigger>
-            <TabsTrigger value="radial" className="text-xs px-3">Radial</TabsTrigger>
+          <TabsList className="h-7">
+            <TabsTrigger value="force" className="text-xs px-2">Force</TabsTrigger>
+            <TabsTrigger value="radial" className="text-xs px-2">Radial</TabsTrigger>
           </TabsList>
         </Tabs>
       </div>

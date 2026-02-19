@@ -8,8 +8,7 @@ import {
   ScatterChart,
   BarChart3,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export type ViewType =
   | "table"
@@ -35,22 +34,17 @@ const viewOptions: { type: ViewType; icon: React.ElementType; label: string }[] 
 
 export function ResultViewBar({ activeView, onViewChange }: ResultViewBarProps) {
   return (
-    <div className="flex items-center gap-0.5 px-2 py-1 border-b">
-      {viewOptions.map(({ type, icon: Icon, label }) => (
-        <Button
-          key={type}
-          variant={activeView === type ? "secondary" : "ghost"}
-          size="xs"
-          onClick={() => onViewChange(type)}
-          className={cn(
-            "gap-1 text-[10px]",
-            activeView === type && "font-medium"
-          )}
-        >
-          <Icon className="size-3" />
-          {label}
-        </Button>
-      ))}
+    <div className="px-2 py-0.5 border-b">
+      <Tabs value={activeView} onValueChange={(v) => onViewChange(v as ViewType)}>
+        <TabsList className="h-7">
+          {viewOptions.map(({ type, icon: Icon, label }) => (
+            <TabsTrigger key={type} value={type} className="text-xs px-2 gap-1">
+              <Icon className="size-3" />
+              {label}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
     </div>
   );
 }

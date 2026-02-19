@@ -16,6 +16,38 @@ import { resolveColor, getChartColors } from "@/components/charts/shared/chart-t
 import { createTooltip } from "@/components/charts/shared/chart-tooltip";
 import { cleanupD3Svg } from "@/components/charts/shared/chart-utils";
 
+/** Remove back-edges that create cycles (d3-sankey requires a DAG). */
+function breakCycles(links: SankeyLinkData[], nodeCount: number): SankeyLinkData[] {
+  const adj = new Map<number, Set<number>>();
+  for (const l of links) {
+    if (!adj.has(l.source)) adj.set(l.source, new Set());
+    adj.get(l.source)!.add(l.target);
+  }
+
+  const visited = new Set<number>();
+  const inStack = new Set<number>();
+  const backEdges = new Set<string>();
+
+  function dfs(node: number) {
+    visited.add(node);
+    inStack.add(node);
+    for (const neighbor of adj.get(node) || []) {
+      if (inStack.has(neighbor)) {
+        backEdges.add(`${node}->${neighbor}`);
+      } else if (!visited.has(neighbor)) {
+        dfs(neighbor);
+      }
+    }
+    inStack.delete(node);
+  }
+
+  for (let i = 0; i < nodeCount; i++) {
+    if (!visited.has(i)) dfs(i);
+  }
+
+  return links.filter((l) => !backEdges.has(`${l.source}->${l.target}`));
+}
+
 interface OntologySankeyViewProps {
   data: SankeyData;
   width: number;
@@ -76,7 +108,8 @@ export function OntologySankeyView({
 
     // Deep copy data for sankey (it mutates)
     const sankeyNodes = data.nodes.map((n) => ({ ...n }));
-    const sankeyLinks = filteredLinks.map((l) => ({ ...l }));
+    const acyclicLinks = breakCycles(filteredLinks, data.nodes.length);
+    const sankeyLinks = acyclicLinks.map((l) => ({ ...l }));
 
     // Sankey layout
     const sankeyLayout = sankey<SankeyNodeData, SankeyLinkData>()

@@ -12,6 +12,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
 import { breadcrumbMap } from "@/lib/navigation";
 
 export function HeaderBar() {
@@ -19,7 +20,7 @@ export function HeaderBar() {
   const crumb = breadcrumbMap[pathname];
 
   return (
-    <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4">
+    <header className="flex h-12 shrink-0 items-center gap-2 border-b border-border/40 px-4">
       {/* Left side: sidebar trigger + breadcrumb */}
       <SidebarTrigger />
       <Separator orientation="vertical" className="mr-2 h-4" />
@@ -39,8 +40,9 @@ export function HeaderBar() {
 
       {/* Right side: Cmd+K hint */}
       <div className="ml-auto">
-        <button
-          type="button"
+        <Button
+          variant="outline"
+          size="sm"
           onClick={() => {
             document.dispatchEvent(
               new KeyboardEvent("keydown", {
@@ -50,10 +52,10 @@ export function HeaderBar() {
               })
             );
           }}
-          className="inline-flex items-center gap-1 rounded border bg-muted px-1.5 py-0.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+          className="h-7 gap-1 px-2 text-xs text-muted-foreground"
         >
-          <kbd className="font-mono text-xs">⌘K</kbd>
-        </button>
+          <kbd className="font-mono text-[10px]">⌘K</kbd>
+        </Button>
       </div>
     </header>
   );
