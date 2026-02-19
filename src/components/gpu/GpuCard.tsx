@@ -1,12 +1,16 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Cpu, Thermometer, HardDrive, Zap } from "lucide-react";
 import { StatusDot } from "@/components/ds/StatusDot";
 import type { Gpu } from "@/types";
 
 interface GpuCardProps {
   gpu: Gpu;
+  onClick?: () => void;
+  selected?: boolean;
+  onSelectToggle?: (checked: boolean) => void;
 }
 
 function MetricBar({
@@ -49,18 +53,34 @@ function MetricBar({
   );
 }
 
-export function GpuCard({ gpu }: GpuCardProps) {
+export function GpuCard({ gpu, onClick, selected, onSelectToggle }: GpuCardProps) {
   const memoryPercent = (gpu.memoryUsed / gpu.memoryTotal) * 100;
   const powerPercent = (gpu.powerUsage / gpu.powerLimit) * 100;
   const status: "healthy" | "warning" | "critical" =
     gpu.status === "error" ? "critical" : gpu.status === "warning" ? "warning" : "healthy";
 
   return (
-    <Card className="border-border/40 p-3 gap-2.5" data-testid={`gpu-card-${gpu.id}`}>
+    <Card
+      className={`border-border/40 p-3 gap-2.5 cursor-pointer transition-colors hover:border-primary/40 ${selected ? "ring-2 ring-primary/30" : ""}`}
+      data-testid={`gpu-card-${gpu.id}`}
+      onClick={onClick}
+    >
       <div className="flex items-start justify-between">
-        <div className="flex flex-col">
-          <span className="font-semibold text-sm">{gpu.name}</span>
-          <span className="text-xs text-muted-foreground">{gpu.model}</span>
+        <div className="flex items-center gap-2">
+          {onSelectToggle && (
+            <Checkbox
+              checked={selected}
+              onCheckedChange={(checked) => {
+                onSelectToggle(!!checked);
+              }}
+              onClick={(e) => e.stopPropagation()}
+              className="shrink-0"
+            />
+          )}
+          <div className="flex flex-col">
+            <span className="font-semibold text-sm">{gpu.name}</span>
+            <span className="text-xs text-muted-foreground">{gpu.model}</span>
+          </div>
         </div>
         <StatusDot status={status} label={gpu.status} />
       </div>
