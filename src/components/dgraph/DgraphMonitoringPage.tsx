@@ -15,6 +15,10 @@ import { ShardBarChart } from "@/components/dgraph/ShardBarChart";
 import { NodePopover } from "@/components/dgraph/NodePopover";
 import { NodeDetailPanel } from "@/components/dgraph/NodeDetailPanel";
 import { RecentEvents } from "@/components/dgraph/RecentEvents";
+import { LatencyHistogram } from "@/components/dgraph/LatencyHistogram";
+import { QueryHeatmap } from "@/components/dgraph/QueryHeatmap";
+import { ErrorTimeline } from "@/components/dgraph/ErrorTimeline";
+import { AlphaComparisonBar } from "@/components/dgraph/AlphaComparisonBar";
 
 import {
   Card,
@@ -71,7 +75,7 @@ export default function DgraphMonitoringPage() {
 
   return (
     <PageShell
-      title="DGraph Monitoring"
+      title="Graph Cluster"
       description="12-node cluster topology, query patterns, and shard distribution"
     >
       {/* Top row: Topology + Events */}
@@ -110,6 +114,51 @@ export default function DgraphMonitoringPage() {
           </CardHeader>
           <CardContent>
             <ShardBarChart />
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Analytics row: Latency + Heatmap */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+        <Card className="border-border/40">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm">Latency Distribution</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <LatencyHistogram />
+          </CardContent>
+        </Card>
+        <Card className="border-border/40">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm">Query Pattern Heatmap</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <QueryHeatmap />
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Comparison row: Alpha Comparison + Error Log */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+        <Card className="border-border/40">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm">Alpha Resource Comparison</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <AlphaComparisonBar />
+          </CardContent>
+        </Card>
+        <Card className="border-border/40">
+          <CardHeader className="pb-2">
+            <div className="flex items-center gap-2">
+              <CardTitle className="text-sm">Error Log</CardTitle>
+              <span className="text-[10px] bg-muted text-muted-foreground rounded-full px-2 py-0.5">
+                15 entries
+              </span>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <ErrorTimeline />
           </CardContent>
         </Card>
       </div>
