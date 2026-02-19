@@ -68,11 +68,11 @@
 - [x] **QURY-02**: 템플릿 셀렉터 + 저장된 쿼리 목록
 - [x] **QURY-03**: 쿼리 히스토리 (Supabase API 기반)
 - [x] **QURY-04**: 멀티탭 결과 (최대 5탭, 실행시간 배지)
-- [ ] **QURY-05**: D3 Force Graph (Bipartite 장비-위치 그래프)
-- [ ] **QURY-06**: D3 Treemap (장비 타입별 그룹)
-- [ ] **QURY-07**: D3 Arc Diagram (Equipment -> Bay 연결)
-- [ ] **QURY-08**: D3 Query Scatter (Location x Complexity, Brush 선택)
-- [ ] **QURY-09**: D3 Query Distribution (Location x Type, Stacked/Grouped)
+- [x] **QURY-05**: D3 Force Graph (Bipartite 장비-위치 그래프)
+- [x] **QURY-06**: D3 Treemap (장비 타입별 그룹)
+- [x] **QURY-07**: D3 Arc Diagram (Equipment -> Bay 연결)
+- [x] **QURY-08**: D3 Query Scatter (Location x Complexity, Brush 선택)
+- [x] **QURY-09**: D3 Query Distribution (Location x Type, Stacked/Grouped)
 - [x] **QURY-10**: Table View (결과 테이블)
 
 ### RBAC & PII Masking
@@ -192,11 +192,11 @@
 | QURY-02 | Phase 7: Query Console & RBAC | Complete |
 | QURY-03 | Phase 7: Query Console & RBAC | Complete |
 | QURY-04 | Phase 7: Query Console & RBAC | Complete |
-| QURY-05 | Phase 7: Query Console & RBAC | Pending |
-| QURY-06 | Phase 7: Query Console & RBAC | Pending |
-| QURY-07 | Phase 7: Query Console & RBAC | Pending |
-| QURY-08 | Phase 7: Query Console & RBAC | Pending |
-| QURY-09 | Phase 7: Query Console & RBAC | Pending |
+| QURY-05 | Phase 7: Query Console & RBAC | Complete |
+| QURY-06 | Phase 7: Query Console & RBAC | Complete |
+| QURY-07 | Phase 7: Query Console & RBAC | Complete |
+| QURY-08 | Phase 7: Query Console & RBAC | Complete |
+| QURY-09 | Phase 7: Query Console & RBAC | Complete |
 | QURY-10 | Phase 7: Query Console & RBAC | Complete |
 | RBAC-01 | Phase 7: Query Console & RBAC | Complete |
 | RBAC-02 | Phase 7: Query Console & RBAC | Complete |
