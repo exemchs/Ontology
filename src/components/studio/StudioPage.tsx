@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { TypeList } from "@/components/studio/TypeList";
 import { TypeDetail, type EdgeFilter } from "@/components/studio/TypeDetail";
 import { TypeEditDialog } from "@/components/studio/TypeEditDialog";
+import { OntologyGraph } from "@/components/charts/studio/OntologyGraph";
+import { TypeDistributionChart } from "@/components/charts/studio/TypeDistributionChart";
 import { getOntologyTypes } from "@/data/studio-data";
 import type { OntologyType } from "@/types";
 
@@ -43,33 +45,19 @@ export function StudioPage() {
 
       {/* Right Panel (~65%) */}
       <div className="flex flex-1 flex-col gap-4">
-        {/* OntologyGraph Placeholder (~60%) */}
-        <Card className="flex flex-[6] items-center justify-center border-dashed">
-          <CardContent className="flex flex-col items-center gap-2">
-            <p className="text-muted-foreground text-sm font-medium">
-              OntologyGraph
-            </p>
-            <p className="text-muted-foreground/60 text-xs">
-              Force / Radial / Hierarchy modes (Plan 02)
-            </p>
-            {selectedType && (
-              <p className="text-muted-foreground/40 mt-1 text-xs">
-                Selected: {selectedType.name} | Filter: {edgeFilter}
-              </p>
-            )}
-          </CardContent>
+        {/* OntologyGraph (~60%) */}
+        <Card className="flex-[6] overflow-hidden">
+          <OntologyGraph
+            types={types}
+            selectedType={selectedType}
+            onSelectType={setSelectedType}
+            edgeFilter={edgeFilter}
+          />
         </Card>
 
-        {/* TypeDistributionChart Placeholder (~40%) */}
-        <Card className="flex flex-[4] items-center justify-center border-dashed">
-          <CardContent className="flex flex-col items-center gap-2">
-            <p className="text-muted-foreground text-sm font-medium">
-              TypeDistributionChart
-            </p>
-            <p className="text-muted-foreground/60 text-xs">
-              Stacked / Grouped bar chart (Plan 02)
-            </p>
-          </CardContent>
+        {/* TypeDistributionChart (~40%) */}
+        <Card className="flex-[4] overflow-hidden">
+          <TypeDistributionChart />
         </Card>
       </div>
 
