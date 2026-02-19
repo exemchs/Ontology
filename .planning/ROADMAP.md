@@ -32,11 +32,13 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. D3 테스트 차트가 ResizeObserver로 반응형 리사이즈되고 언마운트 시 메모리 누수 없이 정리된다
   4. Supabase 8개 테이블에 시드 데이터가 존재하고 클라이언트에서 조회 가능하다
   5. 하드코딩 데이터 파일(dashboard/dgraph/gpu/studio/query)이 TypeScript 타입과 함께 임포트 가능하다
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] 01-01: TBD
-- [ ] 01-02: TBD
+- [ ] 01-01-PLAN.md — shadcn/ui + D3 설치, exem-ui CSS 토큰 시스템, 다크/라이트 테마
+- [ ] 01-02-PLAN.md — TypeScript 도메인 타입 정의, Supabase 스키마 + 시드 데이터
+- [ ] 01-03-PLAN.md — D3 차트 유틸리티 3종, 로딩/빈 상태 UX 컴포넌트
+- [ ] 01-04-PLAN.md — 클라이언트 데이터 파일 5종, PII 마스킹 시스템
 
 ### Phase 2: Layout Shell
 **Goal**: 사용자가 비밀번호로 진입하여 6개 페이지를 사이드바로 탐색할 수 있는 완전한 앱 셸
@@ -134,7 +136,7 @@ Critical path: Phase 1 -> Phase 2 -> Phase 4 (DGraph, highest risk)
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Data Layer | 0/? | Not started | - |
+| 1. Foundation & Data Layer | 0/4 | Planned | - |
 | 2. Layout Shell | 0/? | Not started | - |
 | 3. Ontology Dashboard | 0/? | Not started | - |
 | 4. DGraph Monitoring | 0/? | Not started | - |
