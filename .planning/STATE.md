@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-02-19)
 ## Current Position
 
 Phase: 8 of 8 (Product UX Refinement)
-Plan: 7 of 8 in current phase (08-07 done)
+Plan: 8 of 8 in current phase (08-06 done)
 Status: Executing Phase 08
-Last activity: 2026-02-20 — Completed 08-03-PLAN.md
+Last activity: 2026-02-20 — Completed 08-01-PLAN.md
 
-Progress: [████████████████████████░░░░] 87%
+Progress: [██████████████████████████░░] 100%
 
 ## Performance Metrics
 
@@ -34,10 +34,10 @@ Progress: [███████████████████████
 | 05-gpu-monitoring | 3/3 | 7min | 2.3min |
 | 06-ontology-studio-user-mgmt | 3/3 | 9min | 3min |
 | 07-query-console-rbac | 3/3 | 9min | 3min |
-| 08-product-ux-refinement | 7/8 | 14min | 2min |
+| 08-product-ux-refinement | 8/8 | 18min | 2.3min |
 
 **Recent Trend:**
-- Last 5 plans: 08-07 (2min), 08-06 (2min), 08-05 (2min), 08-04 (2min), 08-03 (2min)
+- Last 5 plans: 08-06 (4min), 08-03 (3min), 08-07 (2min), 08-05 (2min), 08-04 (2min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -57,6 +57,8 @@ Progress: [███████████████████████
 | Phase 08 P02 | 2min | 2 tasks | 3 files |
 | Phase 08 P07 | 2min | 2 tasks | 4 files |
 | Phase 08 P03 | 3min | 2 tasks | 7 files |
+| Phase 08 P06 | 4min | 2 tasks | 9 files |
+| Phase 08 P01 | 5min | 3 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -166,6 +168,10 @@ Recent decisions affecting current work:
 - [08-03]: GpuCard extended with onClick + checkbox for dual interaction (detail vs comparison)
 - [08-03]: Comparison filtering: when 2+ GPUs selected, GpuComparisonBar filters to selected subset
 - [08-03]: GpuDetailPanel renders DCGM extended metrics from getGpuDetailData
+- [08-06]: GraphPanelViewSelector repurposed as graph header with type filter toggles instead of view switcher
+- [08-06]: forwardRef + useImperativeHandle exposes insertText on QueryEditor for SchemaExplorer click-to-insert
+- [08-06]: autocompletion override (not addToOptions) since cm6-graphql completion was not conflicting
+- [08-06]: SchemaExplorer as fixed 220px left sidebar for compact tree navigation
 
 ### Pending Todos
 
@@ -179,5 +185,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-20
-Stopped at: Completed 08-03-PLAN.md
-Resume file: .planning/phases/08-product-ux-refinement/08-03-SUMMARY.md
+Stopped at: Completed 08-06-PLAN.md
+Resume file: .planning/phases/08-product-ux-refinement/08-06-SUMMARY.md
