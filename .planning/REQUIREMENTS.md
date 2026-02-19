@@ -58,7 +58,7 @@
 
 - [x] **STUD-01**: 타입 리스트 (6개: Equipment/Process/Wafer/Recipe/Defect/MaintenanceRecord)
 - [x] **STUD-02**: 타입 상세 패널 (Predicates, Relations, Statistics)
-- [ ] **STUD-03**: D3 온톨로지 그래프 (Force/Radial/Hierarchy 3모드, 양방향 엣지, 줌/팬)
+- [x] **STUD-03**: D3 온톨로지 그래프 (Force/Radial/Hierarchy 3모드, 양방향 엣지, 줌/팬)
 - [ ] **STUD-04**: D3 타입 분포 바 차트 (Records/Queries, Stacked/Grouped 토글)
 - [x] **STUD-05**: 타입 편집 다이얼로그 + 엣지 필터 (all/outbound/inbound)
 
@@ -182,7 +182,7 @@
 | GPU-07 | Phase 5: GPU Monitoring | Complete |
 | STUD-01 | Phase 6: Ontology Studio & User Management | Complete |
 | STUD-02 | Phase 6: Ontology Studio & User Management | Complete |
-| STUD-03 | Phase 6: Ontology Studio & User Management | Pending |
+| STUD-03 | Phase 6: Ontology Studio & User Management | Complete |
 | STUD-04 | Phase 6: Ontology Studio & User Management | Pending |
 | STUD-05 | Phase 6: Ontology Studio & User Management | Complete |
 | USER-01 | Phase 6: Ontology Studio & User Management | Pending |

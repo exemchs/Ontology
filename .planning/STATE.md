@@ -46,6 +46,7 @@ Progress: [█████████████████████] 86%
 | Phase 05 P02 | 3min | 2 tasks | 2 files |
 | Phase 05 P03 | 2min | 2 tasks | 2 files |
 | Phase 06 P01 | 3min | 3 tasks | 6 files |
+| Phase 06 P02 | 3min | 1 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -121,6 +122,11 @@ Recent decisions affecting current work:
 - [06-01]: Inbound relations derived by scanning all types for edges targeting selected type
 - [06-01]: Route updated at (authenticated)/workspace/studio (existing route group, not top-level)
 - [06-01]: TypeEditDialog save closes without persistence (POC)
+- [06-02]: Drag only in Force mode (disabled in Radial/Hierarchy where positions are fixed)
+- [06-02]: Arc sweep alternates by link index (idx % 2) for bidirectional edge visual separation
+- [06-02]: SVGSVGElement cast for d3-selection to avoid null-union TS errors
+- [06-02]: Mode ref pattern: modeRef synced from state for D3 callback access without effect re-run
+- [06-02]: Node radius: sqrt(nodeCount) * 0.15 + 15, clamped 15-40px
 
 ### Pending Todos
 
@@ -134,5 +140,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-19
-Stopped at: Completed 06-01-PLAN.md
-Resume file: .planning/phases/06-ontology-studio-user-mgmt/06-01-SUMMARY.md
+Stopped at: Completed 06-02-PLAN.md
+Resume file: .planning/phases/06-ontology-studio-user-mgmt/06-02-SUMMARY.md
