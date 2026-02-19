@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useRef } from "react";
 import { Play, Loader2, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { QueryEditor } from "@/components/query/QueryEditor";
+import { QueryEditor, type QueryEditorHandle } from "@/components/query/QueryEditor";
+import { SchemaExplorer } from "@/components/query/SchemaExplorer";
 import { QueryModeToggle } from "@/components/query/QueryModeToggle";
 import { TemplateSelector } from "@/components/query/TemplateSelector";
 import { QueryHistory } from "@/components/query/QueryHistory";
@@ -65,6 +66,11 @@ export function QueryConsole() {
   const [graphView, setGraphView] = useState<GraphViewType>("graph");
   const [isExecuting, setIsExecuting] = useState(false);
   const [hiddenTypes, setHiddenTypes] = useState<string[]>([]);
+  const editorRef = useRef<QueryEditorHandle>(null);
+
+  const handleSchemaInsert = useCallback((text: string) => {
+    editorRef.current?.insertText(text);
+  }, []);
 
   const handleRunQuery = useCallback(() => {
     if (!queryText.trim() || isExecuting) return;
@@ -157,36 +163,44 @@ export function QueryConsole() {
   }, [activeTab]);
 
   return (
-    <div className="flex flex-col h-full bg-background">
-      {/* Editor area */}
-      <div className="flex flex-col gap-1.5 p-3 border-b border-border/40">
-        {/* Toolbar */}
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <QueryModeToggle mode={queryMode} onModeChange={setQueryMode} />
-          <TemplateSelector mode={queryMode} onSelect={handleInsertQuery} />
-          <div className="flex-1" />
-          <QueryHistory onSelect={handleInsertQuery} />
-          <Button
-            size="sm"
-            className="h-7 gap-1 text-xs"
-            onClick={handleRunQuery}
-            disabled={!queryText.trim() || isExecuting}
-          >
-            {isExecuting ? (
-              <Loader2 className="size-3.5 animate-spin" />
-            ) : (
-              <Play className="size-3.5" />
-            )}
-            {isExecuting ? "Running..." : "Run Query"}
-          </Button>
-        </div>
-        {/* CodeMirror Editor */}
-        <QueryEditor
-          value={queryText}
-          onChange={setQueryText}
-          mode={queryMode}
-        />
+    <div className="flex h-full bg-background">
+      {/* Left: Schema Explorer */}
+      <div className="w-[220px] shrink-0">
+        <SchemaExplorer onInsert={handleSchemaInsert} />
       </div>
+
+      {/* Right: Editor + Results */}
+      <div className="flex flex-col flex-1 min-w-0">
+        {/* Editor area */}
+        <div className="flex flex-col gap-1.5 p-3 border-b border-border/40">
+          {/* Toolbar */}
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <QueryModeToggle mode={queryMode} onModeChange={setQueryMode} />
+            <TemplateSelector mode={queryMode} onSelect={handleInsertQuery} />
+            <div className="flex-1" />
+            <QueryHistory onSelect={handleInsertQuery} />
+            <Button
+              size="sm"
+              className="h-7 gap-1 text-xs"
+              onClick={handleRunQuery}
+              disabled={!queryText.trim() || isExecuting}
+            >
+              {isExecuting ? (
+                <Loader2 className="size-3.5 animate-spin" />
+              ) : (
+                <Play className="size-3.5" />
+              )}
+              {isExecuting ? "Running..." : "Run Query"}
+            </Button>
+          </div>
+          {/* CodeMirror Editor */}
+          <QueryEditor
+            ref={editorRef}
+            value={queryText}
+            onChange={setQueryText}
+            mode={queryMode}
+          />
+        </div>
 
       {/* Results area */}
       <div className="flex flex-col flex-1 min-h-0">
@@ -255,19 +269,20 @@ export function QueryConsole() {
         )}
       </div>
 
-      {/* PII Masking Demo section */}
-      <Separator />
-      <Collapsible defaultOpen={false}>
-        <CollapsibleTrigger className="flex w-full items-center justify-between p-3 text-sm font-medium hover:bg-muted/50 transition-colors">
-          PII Masking Demo
-          <ChevronDown className="size-4 text-muted-foreground transition-transform [[data-state=open]>&]:rotate-180" />
-        </CollapsibleTrigger>
-        <CollapsibleContent>
-          <div className="px-3 pb-3 overflow-auto">
-            <PiiDemo />
-          </div>
-        </CollapsibleContent>
-      </Collapsible>
+        {/* PII Masking Demo section */}
+        <Separator />
+        <Collapsible defaultOpen={false}>
+          <CollapsibleTrigger className="flex w-full items-center justify-between p-3 text-sm font-medium hover:bg-muted/50 transition-colors">
+            PII Masking Demo
+            <ChevronDown className="size-4 text-muted-foreground transition-transform [[data-state=open]>&]:rotate-180" />
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <div className="px-3 pb-3 overflow-auto">
+              <PiiDemo />
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+      </div>
     </div>
   );
 }
