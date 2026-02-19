@@ -22,15 +22,15 @@
 - [ ] **AUTH-03**: HeaderBar (브레드크럼, 검색, 테마 토글, 역할 인디케이터)
 - [ ] **AUTH-04**: Welcome Popup (첫 방문 한국어 안내, localStorage 기반)
 - [ ] **AUTH-05**: Command Palette (Cmd+K 검색/네비게이션)
-- [ ] **AUTH-06**: 라우팅 6개 페이지 (/,  /monitoring/dgraph, /monitoring/gpu, /workspace/studio, /workspace/query, /admin/users)
+- [ ] **AUTH-06**: 라우팅 6개 페이지 (/, /monitoring/dgraph, /monitoring/gpu, /workspace/studio, /workspace/query, /admin/users)
 
 ### Ontology Dashboard
 
 - [ ] **DASH-01**: 메트릭 카드 4종 (총 노드, 관계, 쿼리율, 가동시간)
-- [ ] **DASH-02**: D3 리소스 게이지 3종 (CPU/Memory/Disk — 270° 아크, 80% 임계 글로우)
+- [ ] **DASH-02**: D3 리소스 게이지 3종 (CPU/Memory/Disk — 270도 아크, 80% 임계 글로우)
 - [ ] **DASH-03**: D3 듀얼 라인 차트 (Agent Request Rate + Graph Query QPS, hourly/daily 토글)
 - [ ] **DASH-04**: D3 코드 다이어그램 (6개 온톨로지 타입 간 관계, 호버 하이라이트)
-- [ ] **DASH-05**: D3 노드 산점도 (Latency × Throughput, 글로우 효과)
+- [ ] **DASH-05**: D3 노드 산점도 (Latency x Throughput, 글로우 효과)
 - [ ] **DASH-06**: D3 리소스 바 차트 (Stacked/Grouped 토글, CPU/Memory/Disk)
 - [ ] **DASH-07**: Recent Alerts 목록
 
@@ -47,9 +47,9 @@
 ### GPU Monitoring
 
 - [ ] **GPU-01**: GPU 서머리 헤더 (총 GPU 수, 평균 사용률)
-- [ ] **GPU-02**: GPU 카드 4장 (A100 80GB×2 + A100 40GB×2, 상태/온도/사용률)
+- [ ] **GPU-02**: GPU 카드 4장 (A100 80GB x 2 + A100 40GB x 2, 상태/온도/사용률)
 - [ ] **GPU-03**: D3 성능 트렌드 멀티라인 (Utilization/Temperature/Power/Memory 탭, 범례 토글)
-- [ ] **GPU-04**: D3 히트맵 (GPU × Time, sequential color scale)
+- [ ] **GPU-04**: D3 히트맵 (GPU x Time, sequential color scale)
 - [ ] **GPU-05**: D3 리즈라인 차트 (4 GPU 밀도 패턴 비교, 수직 오프셋)
 - [ ] **GPU-06**: D3 GPU 비교 바 차트 (Grouped bars, 4 GPU 나란히)
 - [ ] **GPU-07**: Health Issues 목록 + Processes 테이블
@@ -70,9 +70,9 @@
 - [ ] **QURY-04**: 멀티탭 결과 (최대 5탭, 실행시간 배지)
 - [ ] **QURY-05**: D3 Force Graph (Bipartite 장비-위치 그래프)
 - [ ] **QURY-06**: D3 Treemap (장비 타입별 그룹)
-- [ ] **QURY-07**: D3 Arc Diagram (Equipment → Bay 연결)
-- [ ] **QURY-08**: D3 Query Scatter (Location × Complexity, Brush 선택)
-- [ ] **QURY-09**: D3 Query Distribution (Location × Type, Stacked/Grouped)
+- [ ] **QURY-07**: D3 Arc Diagram (Equipment -> Bay 연결)
+- [ ] **QURY-08**: D3 Query Scatter (Location x Complexity, Brush 선택)
+- [ ] **QURY-09**: D3 Query Distribution (Location x Type, Stacked/Grouped)
 - [ ] **QURY-10**: Table View (결과 테이블)
 
 ### RBAC & PII Masking
@@ -82,8 +82,8 @@
 - [ ] **RBAC-03**: 역할별 필드 마스킹 규칙 설정 (Plain/Masked/Anonymized/Denied)
 - [ ] **RBAC-04**: Role Selector (Query Console 내 Select 드롭다운)
 - [ ] **RBAC-05**: PII 데모 탭 2종 (FAB Equipment 8행 + General PII 5행)
-- [ ] **RBAC-06**: PII 테이블 (마스킹 셀 배경색 bg-amber/bg-red + 아이콘 🔒/🚫)
-- [ ] **RBAC-07**: 컬럼 헤더 PII 등급 배지 (🔴 높음 / 🟡 중간 / ⚪ 없음)
+- [ ] **RBAC-06**: PII 테이블 (마스킹 셀 배경색 bg-amber/bg-red + 아이콘)
+- [ ] **RBAC-07**: 컬럼 헤더 PII 등급 배지 (높음/중간/없음)
 - [ ] **RBAC-08**: 역할별 Info Banner (권한 요약 메시지)
 
 ### User Management
@@ -145,23 +145,79 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FOUN-01~07 | Phase 1 | Pending |
-| AUTH-01~06 | Phase 2 | Pending |
-| DASH-01~07 | Phase 3 | Pending |
-| DGRP-01~07 | Phase 4 | Pending |
-| GPU-01~07 | Phase 5 | Pending |
-| STUD-01~05 | Phase 6 | Pending |
-| QURY-01~10 | Phase 7 | Pending |
-| RBAC-01~08 | Phase 7 | Pending |
-| USER-01~03 | Phase 8 | Pending |
-| DATA-01~04 | Phase 1~2 | Pending |
-| UX-01~03 | Phase 1 | Pending |
+| FOUN-01 | Phase 1: Foundation & Data Layer | Pending |
+| FOUN-02 | Phase 1: Foundation & Data Layer | Pending |
+| FOUN-03 | Phase 1: Foundation & Data Layer | Pending |
+| FOUN-04 | Phase 1: Foundation & Data Layer | Pending |
+| FOUN-05 | Phase 1: Foundation & Data Layer | Pending |
+| FOUN-06 | Phase 1: Foundation & Data Layer | Pending |
+| FOUN-07 | Phase 1: Foundation & Data Layer | Pending |
+| AUTH-01 | Phase 2: Layout Shell | Pending |
+| AUTH-02 | Phase 2: Layout Shell | Pending |
+| AUTH-03 | Phase 2: Layout Shell | Pending |
+| AUTH-04 | Phase 2: Layout Shell | Pending |
+| AUTH-05 | Phase 2: Layout Shell | Pending |
+| AUTH-06 | Phase 2: Layout Shell | Pending |
+| DASH-01 | Phase 3: Ontology Dashboard | Pending |
+| DASH-02 | Phase 3: Ontology Dashboard | Pending |
+| DASH-03 | Phase 3: Ontology Dashboard | Pending |
+| DASH-04 | Phase 3: Ontology Dashboard | Pending |
+| DASH-05 | Phase 3: Ontology Dashboard | Pending |
+| DASH-06 | Phase 3: Ontology Dashboard | Pending |
+| DASH-07 | Phase 3: Ontology Dashboard | Pending |
+| DGRP-01 | Phase 4: DGraph Monitoring | Pending |
+| DGRP-02 | Phase 4: DGraph Monitoring | Pending |
+| DGRP-03 | Phase 4: DGraph Monitoring | Pending |
+| DGRP-04 | Phase 4: DGraph Monitoring | Pending |
+| DGRP-05 | Phase 4: DGraph Monitoring | Pending |
+| DGRP-06 | Phase 4: DGraph Monitoring | Pending |
+| DGRP-07 | Phase 4: DGraph Monitoring | Pending |
+| GPU-01 | Phase 5: GPU Monitoring | Pending |
+| GPU-02 | Phase 5: GPU Monitoring | Pending |
+| GPU-03 | Phase 5: GPU Monitoring | Pending |
+| GPU-04 | Phase 5: GPU Monitoring | Pending |
+| GPU-05 | Phase 5: GPU Monitoring | Pending |
+| GPU-06 | Phase 5: GPU Monitoring | Pending |
+| GPU-07 | Phase 5: GPU Monitoring | Pending |
+| STUD-01 | Phase 6: Ontology Studio & User Management | Pending |
+| STUD-02 | Phase 6: Ontology Studio & User Management | Pending |
+| STUD-03 | Phase 6: Ontology Studio & User Management | Pending |
+| STUD-04 | Phase 6: Ontology Studio & User Management | Pending |
+| STUD-05 | Phase 6: Ontology Studio & User Management | Pending |
+| USER-01 | Phase 6: Ontology Studio & User Management | Pending |
+| USER-02 | Phase 6: Ontology Studio & User Management | Pending |
+| USER-03 | Phase 6: Ontology Studio & User Management | Pending |
+| QURY-01 | Phase 7: Query Console & RBAC | Pending |
+| QURY-02 | Phase 7: Query Console & RBAC | Pending |
+| QURY-03 | Phase 7: Query Console & RBAC | Pending |
+| QURY-04 | Phase 7: Query Console & RBAC | Pending |
+| QURY-05 | Phase 7: Query Console & RBAC | Pending |
+| QURY-06 | Phase 7: Query Console & RBAC | Pending |
+| QURY-07 | Phase 7: Query Console & RBAC | Pending |
+| QURY-08 | Phase 7: Query Console & RBAC | Pending |
+| QURY-09 | Phase 7: Query Console & RBAC | Pending |
+| QURY-10 | Phase 7: Query Console & RBAC | Pending |
+| RBAC-01 | Phase 7: Query Console & RBAC | Pending |
+| RBAC-02 | Phase 7: Query Console & RBAC | Pending |
+| RBAC-03 | Phase 7: Query Console & RBAC | Pending |
+| RBAC-04 | Phase 7: Query Console & RBAC | Pending |
+| RBAC-05 | Phase 7: Query Console & RBAC | Pending |
+| RBAC-06 | Phase 7: Query Console & RBAC | Pending |
+| RBAC-07 | Phase 7: Query Console & RBAC | Pending |
+| RBAC-08 | Phase 7: Query Console & RBAC | Pending |
+| DATA-01 | Phase 1: Foundation & Data Layer | Pending |
+| DATA-02 | Phase 1: Foundation & Data Layer | Pending |
+| DATA-03 | Phase 1: Foundation & Data Layer | Pending |
+| DATA-04 | Phase 1: Foundation & Data Layer | Pending |
+| UX-01 | Phase 1: Foundation & Data Layer | Pending |
+| UX-02 | Phase 1: Foundation & Data Layer | Pending |
+| UX-03 | Phase 1: Foundation & Data Layer | Pending |
 
 **Coverage:**
-- v1 requirements: 66 total
-- Mapped to phases: 66
-- Unmapped: 0 ✓
+- v1 requirements: 67 total
+- Mapped to phases: 67
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-19*
-*Last updated: 2026-02-19 after initial definition*
+*Last updated: 2026-02-19 after roadmap creation (traceability updated)*
