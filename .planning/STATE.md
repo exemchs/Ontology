@@ -5,21 +5,21 @@
 See: .planning/PROJECT.md (updated 2026-02-19)
 
 **Core value:** 반도체 FAB의 그래프 DB 운영, 온톨로지 관계, 인프라를 통합 대시보드에서 D3.js로 시각화하고, RBAC 기반 PII 데이터 거버넌스를 시연한다.
-**Current focus:** Phase 6 - Ontology Studio & User Management
+**Current focus:** Phase 7 - Query Console & RBAC
 
 ## Current Position
 
-Phase: 6 of 7 (Ontology Studio & User Mgmt) -- COMPLETE
-Plan: 3 of 3 in current phase (all done)
-Status: Phase 06 Complete
-Last activity: 2026-02-19 — Completed 06-03-PLAN.md
+Phase: 7 of 7 (Query Console & RBAC)
+Plan: 1 of 3 in current phase (07-01 done)
+Status: Executing Phase 07
+Last activity: 2026-02-19 — Completed 07-01-PLAN.md
 
-Progress: [██████████████████████████] 95%
+Progress: [███████████████████████████] 96%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 19
+- Total plans completed: 20
 - Average duration: 3min
 - Total execution time: 1.0 hours
 
@@ -33,9 +33,10 @@ Progress: [███████████████████████
 | 04-dgraph-monitoring | 3/3 | 9min | 3min |
 | 05-gpu-monitoring | 3/3 | 7min | 2.3min |
 | 06-ontology-studio-user-mgmt | 3/3 | 9min | 3min |
+| 07-query-console-rbac | 1/3 | 3min | 3min |
 
 **Recent Trend:**
-- Last 5 plans: 06-03 (3min), 06-02 (3min), 06-01 (3min), 05-03 (2min), 05-02 (2min)
+- Last 5 plans: 07-01 (3min), 06-03 (3min), 06-02 (3min), 06-01 (3min), 05-03 (2min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -49,6 +50,7 @@ Progress: [███████████████████████
 | Phase 06 P01 | 3min | 3 tasks | 6 files |
 | Phase 06 P02 | 3min | 1 tasks | 1 files |
 | Phase 06 P03 | 3min | 3 tasks | 8 files |
+| Phase 07 P01 | 3min | 2 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -133,6 +135,12 @@ Recent decisions affecting current work:
 - [06-03]: UserTable role change updates both local array state and global RoleContext for cross-page role simulation
 - [06-03]: TooltipProvider added to root layout for global tooltip support
 - [06-03]: Role badge color mapping: red=super_admin, blue=service_app, gray=data_analyst, outline=auditor
+- [07-01]: CodeMirror 6 via @uiw/react-codemirror for React integration with 'use client' SSR guard
+- [07-01]: cm6-graphql for GraphQL syntax, @codemirror/lang-json for DQL syntax highlighting
+- [07-01]: Mock execution uses 200-800ms random delay to simulate network latency
+- [07-01]: ResultTab stores data[] inline for self-contained tab state
+- [07-01]: Custom div-based tab bar (not shadcn Tabs) for close button and badge support
+- [07-01]: FIFO eviction: oldest tab removed when exceeding 5 tab limit
 
 ### Pending Todos
 
@@ -146,5 +154,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-19
-Stopped at: Completed 06-03-PLAN.md (Phase 06 complete)
-Resume file: .planning/phases/06-ontology-studio-user-mgmt/06-03-SUMMARY.md
+Stopped at: Completed 07-01-PLAN.md
+Resume file: .planning/phases/07-query-console-rbac/07-01-SUMMARY.md

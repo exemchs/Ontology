@@ -64,16 +64,16 @@
 
 ### Query Console
 
-- [ ] **QURY-01**: 쿼리 에디터 (라인 넘버, GraphQL/DQL 모드 토글)
-- [ ] **QURY-02**: 템플릿 셀렉터 + 저장된 쿼리 목록
-- [ ] **QURY-03**: 쿼리 히스토리 (Supabase API 기반)
-- [ ] **QURY-04**: 멀티탭 결과 (최대 5탭, 실행시간 배지)
+- [x] **QURY-01**: 쿼리 에디터 (라인 넘버, GraphQL/DQL 모드 토글)
+- [x] **QURY-02**: 템플릿 셀렉터 + 저장된 쿼리 목록
+- [x] **QURY-03**: 쿼리 히스토리 (Supabase API 기반)
+- [x] **QURY-04**: 멀티탭 결과 (최대 5탭, 실행시간 배지)
 - [ ] **QURY-05**: D3 Force Graph (Bipartite 장비-위치 그래프)
 - [ ] **QURY-06**: D3 Treemap (장비 타입별 그룹)
 - [ ] **QURY-07**: D3 Arc Diagram (Equipment -> Bay 연결)
 - [ ] **QURY-08**: D3 Query Scatter (Location x Complexity, Brush 선택)
 - [ ] **QURY-09**: D3 Query Distribution (Location x Type, Stacked/Grouped)
-- [ ] **QURY-10**: Table View (결과 테이블)
+- [x] **QURY-10**: Table View (결과 테이블)
 
 ### RBAC & PII Masking
 
@@ -188,16 +188,16 @@
 | USER-01 | Phase 6: Ontology Studio & User Management | Complete |
 | USER-02 | Phase 6: Ontology Studio & User Management | Complete |
 | USER-03 | Phase 6: Ontology Studio & User Management | Complete |
-| QURY-01 | Phase 7: Query Console & RBAC | Pending |
-| QURY-02 | Phase 7: Query Console & RBAC | Pending |
-| QURY-03 | Phase 7: Query Console & RBAC | Pending |
-| QURY-04 | Phase 7: Query Console & RBAC | Pending |
+| QURY-01 | Phase 7: Query Console & RBAC | Complete |
+| QURY-02 | Phase 7: Query Console & RBAC | Complete |
+| QURY-03 | Phase 7: Query Console & RBAC | Complete |
+| QURY-04 | Phase 7: Query Console & RBAC | Complete |
 | QURY-05 | Phase 7: Query Console & RBAC | Pending |
 | QURY-06 | Phase 7: Query Console & RBAC | Pending |
 | QURY-07 | Phase 7: Query Console & RBAC | Pending |
 | QURY-08 | Phase 7: Query Console & RBAC | Pending |
 | QURY-09 | Phase 7: Query Console & RBAC | Pending |
-| QURY-10 | Phase 7: Query Console & RBAC | Pending |
+| QURY-10 | Phase 7: Query Console & RBAC | Complete |
 | RBAC-01 | Phase 7: Query Console & RBAC | Pending |
 | RBAC-02 | Phase 7: Query Console & RBAC | Pending |
 | RBAC-03 | Phase 7: Query Console & RBAC | Pending |
