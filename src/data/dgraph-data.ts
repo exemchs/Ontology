@@ -31,26 +31,33 @@ interface NodeSeed {
   cpuUsage: number;
   memoryUsage: number;
   diskUsage: number;
+  qps: number;
+}
+
+// ── Extended Node Type ────────────────────────────────────────────────────
+
+export interface DgraphNode extends ClusterNode {
+  qps: number;
 }
 
 const nodeSeeds: NodeSeed[] = [
-  { id: 1, name: "sks-zero-01", type: "zero", status: "healthy", host: "10.0.1.1", port: 5080, cpuUsage: 15.2, memoryUsage: 32.1, diskUsage: 28.5 },
-  { id: 2, name: "sks-zero-02", type: "zero", status: "healthy", host: "10.0.1.2", port: 5080, cpuUsage: 12.8, memoryUsage: 28.9, diskUsage: 25.3 },
-  { id: 3, name: "sks-zero-03", type: "zero", status: "healthy", host: "10.0.1.3", port: 5080, cpuUsage: 18.1, memoryUsage: 35.4, diskUsage: 30.1 },
-  { id: 4, name: "sks-alpha-01", type: "alpha", status: "healthy", host: "10.0.2.1", port: 7080, cpuUsage: 45.3, memoryUsage: 62.1, diskUsage: 55.8 },
-  { id: 5, name: "sks-alpha-02", type: "alpha", status: "healthy", host: "10.0.2.2", port: 7080, cpuUsage: 52.1, memoryUsage: 58.4, diskUsage: 48.2 },
-  { id: 6, name: "sks-alpha-03", type: "alpha", status: "warning", host: "10.0.2.3", port: 7080, cpuUsage: 78.9, memoryUsage: 85.2, diskUsage: 72.1 },
-  { id: 7, name: "sks-alpha-04", type: "alpha", status: "healthy", host: "10.0.2.4", port: 7080, cpuUsage: 38.7, memoryUsage: 54.3, diskUsage: 42.6 },
-  { id: 8, name: "sks-alpha-05", type: "alpha", status: "healthy", host: "10.0.2.5", port: 7080, cpuUsage: 41.2, memoryUsage: 49.8, diskUsage: 38.9 },
-  { id: 9, name: "sks-alpha-06", type: "alpha", status: "healthy", host: "10.0.2.6", port: 7080, cpuUsage: 35.6, memoryUsage: 52.7, diskUsage: 45.3 },
-  { id: 10, name: "sks-compute-01", type: "alpha", status: "healthy", host: "10.0.3.1", port: 7080, cpuUsage: 65.4, memoryUsage: 71.2, diskUsage: 58.4 },
-  { id: 11, name: "sks-compute-02", type: "alpha", status: "healthy", host: "10.0.3.2", port: 7080, cpuUsage: 58.9, memoryUsage: 68.5, diskUsage: 52.1 },
-  { id: 12, name: "sks-compute-03", type: "alpha", status: "error", host: "10.0.3.3", port: 7080, cpuUsage: 92.1, memoryUsage: 94.8, diskUsage: 88.5 },
+  { id: 1, name: "sks-zero-01", type: "zero", status: "healthy", host: "10.0.1.1", port: 5080, cpuUsage: 15.2, memoryUsage: 32.1, diskUsage: 28.5, qps: 320 },
+  { id: 2, name: "sks-zero-02", type: "zero", status: "healthy", host: "10.0.1.2", port: 5080, cpuUsage: 12.8, memoryUsage: 28.9, diskUsage: 25.3, qps: 280 },
+  { id: 3, name: "sks-zero-03", type: "zero", status: "healthy", host: "10.0.1.3", port: 5080, cpuUsage: 18.1, memoryUsage: 35.4, diskUsage: 30.1, qps: 350 },
+  { id: 4, name: "sks-alpha-01", type: "alpha", status: "healthy", host: "10.0.2.1", port: 7080, cpuUsage: 45.3, memoryUsage: 62.1, diskUsage: 55.8, qps: 1200 },
+  { id: 5, name: "sks-alpha-02", type: "alpha", status: "healthy", host: "10.0.2.2", port: 7080, cpuUsage: 52.1, memoryUsage: 58.4, diskUsage: 48.2, qps: 1450 },
+  { id: 6, name: "sks-alpha-03", type: "alpha", status: "warning", host: "10.0.2.3", port: 7080, cpuUsage: 78.9, memoryUsage: 85.2, diskUsage: 72.1, qps: 1800 },
+  { id: 7, name: "sks-alpha-04", type: "alpha", status: "healthy", host: "10.0.2.4", port: 7080, cpuUsage: 38.7, memoryUsage: 54.3, diskUsage: 42.6, qps: 980 },
+  { id: 8, name: "sks-alpha-05", type: "alpha", status: "healthy", host: "10.0.2.5", port: 7080, cpuUsage: 41.2, memoryUsage: 49.8, diskUsage: 38.9, qps: 1100 },
+  { id: 9, name: "sks-alpha-06", type: "alpha", status: "healthy", host: "10.0.2.6", port: 7080, cpuUsage: 35.6, memoryUsage: 52.7, diskUsage: 45.3, qps: 850 },
+  { id: 10, name: "sks-compute-01", type: "alpha", status: "healthy", host: "10.0.3.1", port: 7080, cpuUsage: 65.4, memoryUsage: 71.2, diskUsage: 58.4, qps: 2200 },
+  { id: 11, name: "sks-compute-02", type: "alpha", status: "healthy", host: "10.0.3.2", port: 7080, cpuUsage: 58.9, memoryUsage: 68.5, diskUsage: 52.1, qps: 1950 },
+  { id: 12, name: "sks-compute-03", type: "alpha", status: "error", host: "10.0.3.3", port: 7080, cpuUsage: 92.1, memoryUsage: 94.8, diskUsage: 88.5, qps: 50 },
 ];
 
 // ── Exported Functions ──────────────────────────────────────────────────────
 
-export function getDgraphNodes(): ClusterNode[] {
+export function getDgraphNodes(): DgraphNode[] {
   return nodeSeeds.map((seed) => ({
     id: seed.id,
     clusterId: 1,
@@ -62,6 +69,7 @@ export function getDgraphNodes(): ClusterNode[] {
     cpuUsage: round(addJitter(seed.cpuUsage, 3), 1),
     memoryUsage: round(addJitter(seed.memoryUsage, 3), 1),
     diskUsage: round(addJitter(seed.diskUsage, 3), 1),
+    qps: Math.round(addJitter(seed.qps, 8)),
   }));
 }
 
@@ -161,4 +169,116 @@ export function getDgraphQueries(): DgraphQueryPoint[] {
       type: isGraphql ? "graphql" : "dql",
     };
   });
+}
+
+// ── Event Log Data ────────────────────────────────────────────────────────
+
+export interface DgraphEvent {
+  id: string;
+  nodeId: number;
+  nodeName: string;
+  severity: "error" | "warning" | "info";
+  title: string;
+  message: string;
+  timestamp: string;
+}
+
+export function getDgraphEvents(): DgraphEvent[] {
+  const now = Date.now();
+
+  const events: DgraphEvent[] = [
+    {
+      id: "evt-001",
+      nodeId: 12,
+      nodeName: "sks-compute-03",
+      severity: "error",
+      title: "Memory threshold exceeded",
+      message: "sks-compute-03 memory usage exceeded 90% threshold (94.8%)",
+      timestamp: new Date(now - 3 * 60 * 1000).toISOString(),
+    },
+    {
+      id: "evt-002",
+      nodeId: 12,
+      nodeName: "sks-compute-03",
+      severity: "error",
+      title: "Node unresponsive",
+      message: "sks-compute-03 failed to respond to health check within 5s timeout",
+      timestamp: new Date(now - 8 * 60 * 1000).toISOString(),
+    },
+    {
+      id: "evt-003",
+      nodeId: 6,
+      nodeName: "sks-alpha-03",
+      severity: "warning",
+      title: "High CPU utilization",
+      message: "sks-alpha-03 high CPU utilization detected (78.9%)",
+      timestamp: new Date(now - 12 * 60 * 1000).toISOString(),
+    },
+    {
+      id: "evt-004",
+      nodeId: 9,
+      nodeName: "sks-alpha-06",
+      severity: "warning",
+      title: "Slow query detected",
+      message: "Slow query detected: 450ms on sks-alpha-06 (threshold: 200ms)",
+      timestamp: new Date(now - 18 * 60 * 1000).toISOString(),
+    },
+    {
+      id: "evt-005",
+      nodeId: 1,
+      nodeName: "sks-zero-01",
+      severity: "info",
+      title: "Raft consensus completed",
+      message: "Raft consensus completed for Group 1 - leader election stable",
+      timestamp: new Date(now - 25 * 60 * 1000).toISOString(),
+    },
+    {
+      id: "evt-006",
+      nodeId: 4,
+      nodeName: "sks-alpha-01",
+      severity: "info",
+      title: "Schema update applied",
+      message: "Schema update applied successfully - 3 predicates added to Equipment type",
+      timestamp: new Date(now - 35 * 60 * 1000).toISOString(),
+    },
+    {
+      id: "evt-007",
+      nodeId: 6,
+      nodeName: "sks-alpha-03",
+      severity: "warning",
+      title: "Disk I/O latency spike",
+      message: "sks-alpha-03 disk write latency exceeded 50ms (avg: 12ms)",
+      timestamp: new Date(now - 42 * 60 * 1000).toISOString(),
+    },
+    {
+      id: "evt-008",
+      nodeId: 2,
+      nodeName: "sks-zero-02",
+      severity: "info",
+      title: "Shard rebalance completed",
+      message: "Shard rebalance for Group 2 completed - 3 predicates moved",
+      timestamp: new Date(now - 55 * 60 * 1000).toISOString(),
+    },
+    {
+      id: "evt-009",
+      nodeId: 10,
+      nodeName: "sks-compute-01",
+      severity: "info",
+      title: "Backup snapshot created",
+      message: "Incremental backup snapshot created successfully (2.4 GB)",
+      timestamp: new Date(now - 78 * 60 * 1000).toISOString(),
+    },
+    {
+      id: "evt-010",
+      nodeId: 3,
+      nodeName: "sks-zero-03",
+      severity: "info",
+      title: "Cluster membership updated",
+      message: "Cluster membership table refreshed - 12 nodes active, 0 removed",
+      timestamp: new Date(now - 95 * 60 * 1000).toISOString(),
+    },
+  ];
+
+  // Already sorted by timestamp descending (newest first)
+  return events;
 }
