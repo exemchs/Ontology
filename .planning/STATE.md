@@ -5,21 +5,21 @@
 See: .planning/PROJECT.md (updated 2026-02-19)
 
 **Core value:** 반도체 FAB의 그래프 DB 운영, 온톨로지 관계, 인프라를 통합 대시보드에서 D3.js로 시각화하고, RBAC 기반 PII 데이터 거버넌스를 시연한다.
-**Current focus:** Phase 1 - Foundation & Data Layer
+**Current focus:** Phase 2 - Layout Shell
 
 ## Current Position
 
-Phase: 1 of 7 (Foundation & Data Layer)
-Plan: 4 of 4 in current phase (COMPLETE)
-Status: Phase Complete
-Last activity: 2026-02-19 — Completed 01-04-PLAN.md
+Phase: 2 of 7 (Layout Shell)
+Plan: 1 of 2 in current phase
+Status: In Progress
+Last activity: 2026-02-19 — Completed 02-01-PLAN.md
 
-Progress: [████░░░░░░] 14%
+Progress: [█████░░░░░] 18%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
+- Total plans completed: 5
 - Average duration: 3min
 - Total execution time: 0.2 hours
 
@@ -28,9 +28,10 @@ Progress: [████░░░░░░] 14%
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-foundation-data-layer | 4/4 | 12min | 3min |
+| 02-layout-shell | 1/2 | 2min | 2min |
 
 **Recent Trend:**
-- Last 5 plans: 01-04 (3min), 01-03 (2min), 01-02 (2min), 01-01 (5min)
+- Last 5 plans: 02-01 (2min), 01-04 (3min), 01-03 (2min), 01-02 (2min), 01-01 (5min)
 - Trend: Accelerating
 
 *Updated after each plan completion*
@@ -56,6 +57,10 @@ Recent decisions affecting current work:
 - [01-04]: Inline addJitter per data file (chart-utils not imported to avoid dependency on 01-03)
 - [01-04]: PII config uses PiiAction string enum with getMaskFn resolver (serializable config)
 - [01-04]: FAB PII: 8 fields, General PII: 6 fields, both with 4-role action matrices
+- [02-01]: eXemble logo as styled text for POC (no external SVG asset needed)
+- [02-01]: D3 graph uses CSS variable colors for automatic theme integration
+- [02-01]: Deleted root page.tsx to avoid conflict with (authenticated) route group
+- [02-01]: Auth guard renders null during redirect to prevent FOUC
 
 ### Pending Todos
 
@@ -69,5 +74,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-19
-Stopped at: Phase 2 context gathered
-Resume file: .planning/phases/02-layout-shell/02-CONTEXT.md
+Stopped at: Completed 02-01-PLAN.md
+Resume file: .planning/phases/02-layout-shell/02-01-SUMMARY.md
