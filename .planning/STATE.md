@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-19)
 
 **Core value:** 반도체 FAB의 그래프 DB 운영, 온톨로지 관계, 인프라를 통합 대시보드에서 D3.js로 시각화하고, RBAC 기반 PII 데이터 거버넌스를 시연한다.
-**Current focus:** Phase 4 - DGraph Monitoring (Complete)
+**Current focus:** Phase 5 - GPU Monitoring (In Progress)
 
 ## Current Position
 
-Phase: 4 of 7 (DGraph Monitoring) - COMPLETE
-Plan: 3 of 3 in current phase
-Status: Phase 04 Complete
-Last activity: 2026-02-19 — Completed 04-03-PLAN.md
+Phase: 5 of 7 (GPU Monitoring)
+Plan: 1 of 3 in current phase
+Status: Executing Phase 05
+Last activity: 2026-02-19 — Completed 05-01-PLAN.md
 
-Progress: [██████████████] 63%
+Progress: [████████████████] 67%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 13
+- Total plans completed: 14
 - Average duration: 3min
-- Total execution time: 0.6 hours
+- Total execution time: 0.7 hours
 
 **By Phase:**
 
@@ -31,9 +31,10 @@ Progress: [██████████████] 63%
 | 02-layout-shell | 2/2 | 4min | 2min |
 | 03-ontology-dashboard | 4/4 | 14min | 3.5min |
 | 04-dgraph-monitoring | 3/3 | 9min | 3min |
+| 05-gpu-monitoring | 1/3 | 3min | 3min |
 
 **Recent Trend:**
-- Last 5 plans: 04-03 (3min), 04-02 (3min), 04-01 (3min), 03-04 (4min), 03-03 (4min)
+- Last 5 plans: 05-01 (3min), 04-03 (3min), 04-02 (3min), 04-01 (3min), 03-04 (4min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -41,6 +42,7 @@ Progress: [██████████████] 63%
 | Phase 04 P02 | 3min | 2 tasks | 2 files |
 | Phase 04 P03 | 3min | 2 tasks | 5 files |
 | Phase 04 P01 | 4min | 2 tasks | 3 files |
+| Phase 05 P01 | 3min | 3 tasks | 13 files |
 
 ## Accumulated Context
 
@@ -99,6 +101,11 @@ Recent decisions affecting current work:
 - [04-03]: NodeDetailPanel renders inside Sheet managed by parent (content/container separation)
 - [04-03]: Route at (authenticated)/monitoring/dgraph/page.tsx (existing route group, not top-level)
 - [04-03]: DgraphMonitoringPage uses useCallback for all handlers to prevent re-render cascades
+- [05-01]: Status badge colors use variant=outline with custom className (bg-color/15 + text/border)
+- [05-01]: MetricBar temperature percentage normalized against 90C ceiling for visual bar
+- [05-01]: Health issue relative time formatter: minutes/hours/days display
+- [05-01]: Process memory formatted as GB when >= 1024 MB, else raw MB
+- [05-01]: D3 stub props use underscore prefix (_series, _data) to suppress unused warnings
 
 ### Pending Todos
 
@@ -112,5 +119,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-19
-Stopped at: Completed 04-03-PLAN.md (Phase 04 complete)
-Resume file: .planning/phases/04-dgraph-monitoring/04-03-SUMMARY.md
+Stopped at: Completed 05-01-PLAN.md
+Resume file: .planning/phases/05-gpu-monitoring/05-01-SUMMARY.md

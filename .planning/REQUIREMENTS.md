@@ -46,13 +46,13 @@
 
 ### GPU Monitoring
 
-- [ ] **GPU-01**: GPU 서머리 헤더 (총 GPU 수, 평균 사용률)
-- [ ] **GPU-02**: GPU 카드 4장 (A100 80GB x 2 + A100 40GB x 2, 상태/온도/사용률)
+- [x] **GPU-01**: GPU 서머리 헤더 (총 GPU 수, 평균 사용률)
+- [x] **GPU-02**: GPU 카드 4장 (A100 80GB x 2 + A100 40GB x 2, 상태/온도/사용률)
 - [ ] **GPU-03**: D3 성능 트렌드 멀티라인 (Utilization/Temperature/Power/Memory 탭, 범례 토글)
 - [ ] **GPU-04**: D3 히트맵 (GPU x Time, sequential color scale)
 - [ ] **GPU-05**: D3 리즈라인 차트 (4 GPU 밀도 패턴 비교, 수직 오프셋)
 - [ ] **GPU-06**: D3 GPU 비교 바 차트 (Grouped bars, 4 GPU 나란히)
-- [ ] **GPU-07**: Health Issues 목록 + Processes 테이블
+- [x] **GPU-07**: Health Issues 목록 + Processes 테이블
 
 ### Ontology Studio
 
@@ -173,13 +173,13 @@
 | DGRP-05 | Phase 4: DGraph Monitoring | Complete |
 | DGRP-06 | Phase 4: DGraph Monitoring | Complete |
 | DGRP-07 | Phase 4: DGraph Monitoring | Complete |
-| GPU-01 | Phase 5: GPU Monitoring | Pending |
-| GPU-02 | Phase 5: GPU Monitoring | Pending |
+| GPU-01 | Phase 5: GPU Monitoring | Complete |
+| GPU-02 | Phase 5: GPU Monitoring | Complete |
 | GPU-03 | Phase 5: GPU Monitoring | Pending |
 | GPU-04 | Phase 5: GPU Monitoring | Pending |
 | GPU-05 | Phase 5: GPU Monitoring | Pending |
 | GPU-06 | Phase 5: GPU Monitoring | Pending |
-| GPU-07 | Phase 5: GPU Monitoring | Pending |
+| GPU-07 | Phase 5: GPU Monitoring | Complete |
 | STUD-01 | Phase 6: Ontology Studio & User Management | Pending |
 | STUD-02 | Phase 6: Ontology Studio & User Management | Pending |
 | STUD-03 | Phase 6: Ontology Studio & User Management | Pending |
