@@ -149,14 +149,14 @@ Plans:
 **Plans**: 8 plans
 
 Plans:
-- [ ] 08-01-PLAN.md — Dashboard 위젯 시스템 + react-grid-layout 인프라
-- [ ] 08-02-PLAN.md — 헤더 바 AlertBell + 역할 배지
-- [ ] 08-03-PLAN.md — GPU Monitoring 확장 (퍼널/패널/임계값/비교)
-- [ ] 08-04-PLAN.md — Graph Cluster 확장 (히스토그램/히트맵/타임라인/Alpha비교)
-- [ ] 08-05-PLAN.md — Ontology Studio 확장 (트리뷰/미니맵/건강점수/Treemap)
-- [ ] 08-06-PLAN.md — Query Console 재구성 (뷰 정리/스키마탐색기/자동완성/내보내기)
-- [ ] 08-07-PLAN.md — User Management 4탭 재편
-- [ ] 08-08-PLAN.md — Dashboard 페이지 wiring + Query Console 챗봇
+- [x] 08-01-PLAN.md — Dashboard 위젯 시스템 + react-grid-layout 인프라
+- [x] 08-02-PLAN.md — 헤더 바 AlertBell + 역할 배지
+- [x] 08-03-PLAN.md — GPU Monitoring 확장 (퍼널/패널/임계값/비교)
+- [x] 08-04-PLAN.md — Graph Cluster 확장 (히스토그램/히트맵/타임라인/Alpha비교)
+- [x] 08-05-PLAN.md — Ontology Studio 확장 (트리뷰/미니맵/건강점수/Treemap)
+- [x] 08-06-PLAN.md — Query Console 재구성 (뷰 정리/스키마탐색기/자동완성/내보내기)
+- [x] 08-07-PLAN.md — User Management 4탭 재편
+- [x] 08-08-PLAN.md — Dashboard 페이지 wiring + Query Console 챗봇
 
 ## Progress
 
