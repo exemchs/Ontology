@@ -93,10 +93,12 @@ Plans:
   2. 성능 트렌드 멀티라인 차트에서 Utilization/Temperature/Power/Memory 탭 전환과 범례 토글이 동작한다
   3. 히트맵에서 GPU x Time 매트릭스가 sequential color scale로 렌더되고 호버 시 상세 값이 보인다
   4. 리즈라인 차트에서 4개 GPU의 밀도 패턴이 수직 오프셋으로 비교되고 비교 바 차트에서 4 GPU가 나란히 표시된다
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 05-01: TBD
+- [ ] 05-01-PLAN.md — 데이터 레이어 확장 + 페이지 레이아웃 + React 컴포넌트 (서머리, GPU 카드, 이슈/프로세스 테이블)
+- [ ] 05-02-PLAN.md — D3 멀티라인 성능 트렌드 차트 + D3 비교 바 차트
+- [ ] 05-03-PLAN.md — D3 히트맵 + D3 리즈라인 차트 (토글 전환)
 
 ### Phase 6: Ontology Studio & User Management
 **Goal**: 6개 온톨로지 타입의 스키마를 시각적으로 탐색/편집하고 시스템 사용자 역할을 관리할 수 있다
@@ -141,6 +143,6 @@ Critical path: Phase 1 -> Phase 2 -> Phase 4 (DGraph, highest risk)
 | 2. Layout Shell | 0/2 | Planned | - |
 | 3. Ontology Dashboard | 0/? | Not started | - |
 | 4. DGraph Monitoring | 0/? | Not started | - |
-| 5. GPU Monitoring | 0/? | Not started | - |
+| 5. GPU Monitoring | 0/3 | Planned | - |
 | 6. Ontology Studio & User Management | 0/? | Not started | - |
 | 7. Query Console & RBAC | 0/? | Not started | - |
