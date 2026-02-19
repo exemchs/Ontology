@@ -1,0 +1,164 @@
+// =============================================================================
+// eXemble Ontology Platform - DGraph Cluster Page Data
+// =============================================================================
+// Hardcoded data for the DGraph cluster topology visualization.
+// Node metrics, links for force simulation, shard distribution, query scatter.
+// =============================================================================
+
+import type { ClusterNode, NodeType, NodeStatus } from "@/types";
+
+// ── Jitter Utility ──────────────────────────────────────────────────────────
+
+function addJitter(value: number, percent: number = 5): number {
+  const range = value * (percent / 100);
+  return value + (Math.random() - 0.5) * 2 * range;
+}
+
+function round(value: number, decimals: number = 2): number {
+  const factor = Math.pow(10, decimals);
+  return Math.round(value * factor) / factor;
+}
+
+// ── Node Seed Data ──────────────────────────────────────────────────────────
+
+interface NodeSeed {
+  id: number;
+  name: string;
+  type: NodeType;
+  status: NodeStatus;
+  host: string;
+  port: number;
+  cpuUsage: number;
+  memoryUsage: number;
+  diskUsage: number;
+}
+
+const nodeSeeds: NodeSeed[] = [
+  { id: 1, name: "sks-zero-01", type: "zero", status: "healthy", host: "10.0.1.1", port: 5080, cpuUsage: 15.2, memoryUsage: 32.1, diskUsage: 28.5 },
+  { id: 2, name: "sks-zero-02", type: "zero", status: "healthy", host: "10.0.1.2", port: 5080, cpuUsage: 12.8, memoryUsage: 28.9, diskUsage: 25.3 },
+  { id: 3, name: "sks-zero-03", type: "zero", status: "healthy", host: "10.0.1.3", port: 5080, cpuUsage: 18.1, memoryUsage: 35.4, diskUsage: 30.1 },
+  { id: 4, name: "sks-alpha-01", type: "alpha", status: "healthy", host: "10.0.2.1", port: 7080, cpuUsage: 45.3, memoryUsage: 62.1, diskUsage: 55.8 },
+  { id: 5, name: "sks-alpha-02", type: "alpha", status: "healthy", host: "10.0.2.2", port: 7080, cpuUsage: 52.1, memoryUsage: 58.4, diskUsage: 48.2 },
+  { id: 6, name: "sks-alpha-03", type: "alpha", status: "warning", host: "10.0.2.3", port: 7080, cpuUsage: 78.9, memoryUsage: 85.2, diskUsage: 72.1 },
+  { id: 7, name: "sks-alpha-04", type: "alpha", status: "healthy", host: "10.0.2.4", port: 7080, cpuUsage: 38.7, memoryUsage: 54.3, diskUsage: 42.6 },
+  { id: 8, name: "sks-alpha-05", type: "alpha", status: "healthy", host: "10.0.2.5", port: 7080, cpuUsage: 41.2, memoryUsage: 49.8, diskUsage: 38.9 },
+  { id: 9, name: "sks-alpha-06", type: "alpha", status: "healthy", host: "10.0.2.6", port: 7080, cpuUsage: 35.6, memoryUsage: 52.7, diskUsage: 45.3 },
+  { id: 10, name: "sks-compute-01", type: "alpha", status: "healthy", host: "10.0.3.1", port: 7080, cpuUsage: 65.4, memoryUsage: 71.2, diskUsage: 58.4 },
+  { id: 11, name: "sks-compute-02", type: "alpha", status: "healthy", host: "10.0.3.2", port: 7080, cpuUsage: 58.9, memoryUsage: 68.5, diskUsage: 52.1 },
+  { id: 12, name: "sks-compute-03", type: "alpha", status: "error", host: "10.0.3.3", port: 7080, cpuUsage: 92.1, memoryUsage: 94.8, diskUsage: 88.5 },
+];
+
+// ── Exported Functions ──────────────────────────────────────────────────────
+
+export function getDgraphNodes(): ClusterNode[] {
+  return nodeSeeds.map((seed) => ({
+    id: seed.id,
+    clusterId: 1,
+    name: seed.name,
+    type: seed.type,
+    status: seed.status,
+    host: seed.host,
+    port: seed.port,
+    cpuUsage: round(addJitter(seed.cpuUsage, 3), 1),
+    memoryUsage: round(addJitter(seed.memoryUsage, 3), 1),
+    diskUsage: round(addJitter(seed.diskUsage, 3), 1),
+  }));
+}
+
+// ── Links for Force Simulation ──────────────────────────────────────────────
+
+export interface DgraphLink {
+  source: number;
+  target: number;
+  type: "zero-alpha" | "alpha-alpha" | "zero-zero";
+}
+
+export function getDgraphLinks(): DgraphLink[] {
+  return [
+    // Zero → Alpha connections (each zero manages some alphas)
+    { source: 1, target: 4, type: "zero-alpha" },
+    { source: 1, target: 5, type: "zero-alpha" },
+    { source: 1, target: 6, type: "zero-alpha" },
+    { source: 2, target: 7, type: "zero-alpha" },
+    { source: 2, target: 8, type: "zero-alpha" },
+    { source: 2, target: 9, type: "zero-alpha" },
+    { source: 3, target: 10, type: "zero-alpha" },
+    { source: 3, target: 11, type: "zero-alpha" },
+    { source: 3, target: 12, type: "zero-alpha" },
+    // Zero ↔ Zero (raft consensus)
+    { source: 1, target: 2, type: "zero-zero" },
+    { source: 2, target: 3, type: "zero-zero" },
+    { source: 1, target: 3, type: "zero-zero" },
+    // Alpha ↔ Alpha (data replication within groups)
+    { source: 4, target: 5, type: "alpha-alpha" },
+    { source: 5, target: 6, type: "alpha-alpha" },
+    { source: 7, target: 8, type: "alpha-alpha" },
+    { source: 8, target: 9, type: "alpha-alpha" },
+    { source: 10, target: 11, type: "alpha-alpha" },
+    { source: 11, target: 12, type: "alpha-alpha" },
+  ];
+}
+
+// ── Shard Bar Chart Data ────────────────────────────────────────────────────
+
+export interface DgraphShard {
+  group: string;
+  shards: { name: string; size: number }[];
+}
+
+export function getDgraphShards(): DgraphShard[] {
+  return [
+    {
+      group: "Group 1",
+      shards: [
+        { name: "Equipment", size: Math.round(addJitter(832, 3)) },
+        { name: "Process", size: Math.round(addJitter(24500, 3)) },
+        { name: "Recipe", size: Math.round(addJitter(310, 3)) },
+        { name: "Defect", size: Math.round(addJitter(8200, 3)) },
+      ],
+    },
+    {
+      group: "Group 2",
+      shards: [
+        { name: "Wafer", size: Math.round(addJitter(52000, 3)) },
+        { name: "Process", size: Math.round(addJitter(24500, 3)) },
+        { name: "Defect", size: Math.round(addJitter(24400, 3)) },
+        { name: "Maintenance", size: Math.round(addJitter(1910, 3)) },
+        { name: "Recipe", size: Math.round(addJitter(155, 3)) },
+      ],
+    },
+    {
+      group: "Group 3",
+      shards: [
+        { name: "Wafer", size: Math.round(addJitter(104000, 3)) },
+        { name: "Defect", size: Math.round(addJitter(16200, 3)) },
+        { name: "Maintenance", size: Math.round(addJitter(1910, 3)) },
+        { name: "Equipment", size: Math.round(addJitter(416, 3)) },
+      ],
+    },
+  ];
+}
+
+// ── Query Scatter Plot Data ─────────────────────────────────────────────────
+
+export interface DgraphQueryPoint {
+  id: string;
+  latency: number; // ms
+  throughput: number; // queries/sec
+  type: "graphql" | "dql";
+}
+
+export function getDgraphQueries(): DgraphQueryPoint[] {
+  return Array.from({ length: 50 }, (_, i) => {
+    const isGraphql = Math.random() > 0.4;
+    const baseLatency = isGraphql ? 45 : 120;
+    const baseThroughput = isGraphql ? 350 : 180;
+
+    return {
+      id: `q-${String(i + 1).padStart(3, "0")}`,
+      latency: round(addJitter(baseLatency, 40), 1),
+      throughput: round(addJitter(baseThroughput, 35), 0),
+      type: isGraphql ? "graphql" : "dql",
+    };
+  });
+}
