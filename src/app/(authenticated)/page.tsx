@@ -1,10 +1,12 @@
 "use client";
 
-import { ChartSkeleton } from "@/components/charts/shared/ChartSkeleton";
 import { MetricCard } from "@/components/charts/dashboard/MetricCard";
 import { RecentAlerts } from "@/components/charts/dashboard/RecentAlerts";
 import { ResourceGauge } from "@/components/charts/dashboard/ResourceGauge";
 import { DualLineChart } from "@/components/charts/dashboard/DualLineChart";
+import { NodeScatterPlot } from "@/components/charts/dashboard/NodeScatterPlot";
+import { ResourceBarChart } from "@/components/charts/dashboard/ResourceBarChart";
+import { OntologyRelationChart } from "@/components/charts/dashboard/OntologyRelationChart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   getDashboardMetrics,
@@ -77,7 +79,7 @@ export default function DashboardPage() {
             <CardTitle className="text-sm">Node Scatter Plot</CardTitle>
           </CardHeader>
           <CardContent>
-            <ChartSkeleton className="min-h-[300px]" />
+            <NodeScatterPlot />
           </CardContent>
         </Card>
         <Card>
@@ -85,7 +87,7 @@ export default function DashboardPage() {
             <CardTitle className="text-sm">Resource Bar Chart</CardTitle>
           </CardHeader>
           <CardContent>
-            <ChartSkeleton className="min-h-[300px]" />
+            <ResourceBarChart />
           </CardContent>
         </Card>
       </div>
