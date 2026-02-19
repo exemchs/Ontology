@@ -96,8 +96,8 @@
 
 - [x] **DATA-01**: Supabase 스키마 (clusters/nodes/gpus/metrics/ontology_types/queries/alerts/users 8테이블)
 - [x] **DATA-02**: 시드 데이터 (SKS-FAB1-PROD, 12노드, 4GPU, 6 온톨로지 타입, 5 유저)
-- [ ] **DATA-03**: 클라이언트 하드코딩 데이터 (dashboard/dgraph/gpu/studio/query 메트릭)
-- [ ] **DATA-04**: PII 데모 데이터 (FAB + General 시나리오)
+- [x] **DATA-03**: 클라이언트 하드코딩 데이터 (dashboard/dgraph/gpu/studio/query 메트릭)
+- [x] **DATA-04**: PII 데모 데이터 (FAB + General 시나리오)
 
 ### Polish & UX
 
@@ -207,8 +207,8 @@
 | RBAC-08 | Phase 7: Query Console & RBAC | Pending |
 | DATA-01 | Phase 1: Foundation & Data Layer | Complete |
 | DATA-02 | Phase 1: Foundation & Data Layer | Complete |
-| DATA-03 | Phase 1: Foundation & Data Layer | Pending |
-| DATA-04 | Phase 1: Foundation & Data Layer | Pending |
+| DATA-03 | Phase 1: Foundation & Data Layer | Complete |
+| DATA-04 | Phase 1: Foundation & Data Layer | Complete |
 | UX-01 | Phase 1: Foundation & Data Layer | Complete |
 | UX-02 | Phase 1: Foundation & Data Layer | Complete |
 | UX-03 | Phase 1: Foundation & Data Layer | Complete |
