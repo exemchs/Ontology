@@ -8,6 +8,8 @@ import { AppSidebar } from "@/components/layout/app-sidebar";
 import { HeaderBar } from "@/components/layout/header-bar";
 import { WelcomePopup } from "@/components/layout/welcome-popup";
 import { CommandPalette } from "@/components/layout/command-palette";
+import { NamespaceProvider } from "@/contexts/NamespaceContext";
+import { getNamespaces } from "@/data/namespace-data";
 
 export default function AuthenticatedLayout({
   children,
@@ -37,14 +39,16 @@ export default function AuthenticatedLayout({
 
   // Authenticated -- full app shell with sidebar layout
   return (
-    <SidebarProvider defaultOpen={true}>
-      <AppSidebar />
-      <SidebarInset className="min-w-0">
-        <HeaderBar />
-        <main className="flex-1 overflow-auto">{children}</main>
-      </SidebarInset>
-      <WelcomePopup />
-      <CommandPalette />
-    </SidebarProvider>
+    <NamespaceProvider namespaces={getNamespaces()}>
+      <SidebarProvider defaultOpen={true}>
+        <AppSidebar />
+        <SidebarInset className="min-w-0">
+          <HeaderBar />
+          <main className="flex-1 overflow-auto">{children}</main>
+        </SidebarInset>
+        <WelcomePopup />
+        <CommandPalette />
+      </SidebarProvider>
+    </NamespaceProvider>
   );
 }
