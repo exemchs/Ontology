@@ -135,19 +135,28 @@ Plans:
 - [ ] 07-02: TBD
 
 ### Phase 8: Product UX Refinement
-**Goal**: 회의에서 도출된 7개 UX 개선 항목(CollapsibleResourcePanel, 쿼리 분할뷰, 데이터 임포트, 네임스페이스)의 완성도를 높이고 운영자 관점 사용성을 개선한다
+**Goal**: 스펙 기반 전체 재구성 — Dashboard를 드래그드롭 위젯 그리드로 전환, Query Console 스키마 탐색기/자동완성/챗봇 추가, Ontology Studio 트리뷰/미니맵/건강점수 추가, GPU/Graph Cluster 확장, User Management 4탭 재편
 **Depends on**: Phase 7
-**Requirements**: UXR-01 through UXR-07 (meeting action items refinement)
+**Requirements**: UXR-01, UXR-02, UXR-03, UXR-04, UXR-05, UXR-06, UXR-07
 **Success Criteria** (what must be TRUE):
-  1. CollapsibleResourcePanel이 Dashboard와 GPU 모니터링에서 매끄럽게 동작하고 테마 전환에 반응한다
-  2. 쿼리 결과 분할뷰에서 그래프-테이블 간 선택 동기화가 동작한다
-  3. 데이터 임포트 폼이 완전한 UX 플로우를 갖추고 있다 (에러, 로딩, 성공 상태)
-  4. 네임스페이스 전환이 앱 전체에 반영되고 권한 기반 UI가 정확히 동작한다
-  5. 전체 제품이 Palantir 수준의 운영자 도구 느낌을 준다
-**Plans**: TBD
+  1. Dashboard가 react-grid-layout 4칼럼 드래그드롭 그리드로 13개 위젯을 표시하고 레이아웃이 localStorage에 저장/복원된다
+  2. GPU Monitoring에 퍼널 차트, 상세 슬라이드 패널, 임계값 설정 폼, 비교 모드가 추가된다
+  3. Graph Cluster에 Latency 히스토그램, 쿼리 히트맵, 에러 타임라인, Alpha 비교 차트가 추가된다
+  4. Ontology Studio에 스키마 트리뷰, 미니맵, 건강 점수(0-100), Treemap 시각화가 추가된다
+  5. Query Console이 Graph+Table 2뷰로 간소화되고 스키마 탐색기, 자동완성, CSV/JSON 내보내기, 챗봇이 추가된다
+  6. User Management가 Namespaces/Users/Access Control/Menu Config 4탭 체계로 재편된다
+  7. 헤더 바에 벨 아이콘 알림 드롭다운과 역할 배지가 추가된다
+**Plans**: 8 plans
 
 Plans:
-- [ ] 08-01: TBD
+- [ ] 08-01-PLAN.md — Dashboard 위젯 시스템 + react-grid-layout 인프라
+- [ ] 08-02-PLAN.md — 헤더 바 AlertBell + 역할 배지
+- [ ] 08-03-PLAN.md — GPU Monitoring 확장 (퍼널/패널/임계값/비교)
+- [ ] 08-04-PLAN.md — Graph Cluster 확장 (히스토그램/히트맵/타임라인/Alpha비교)
+- [ ] 08-05-PLAN.md — Ontology Studio 확장 (트리뷰/미니맵/건강점수/Treemap)
+- [ ] 08-06-PLAN.md — Query Console 재구성 (뷰 정리/스키마탐색기/자동완성/내보내기)
+- [ ] 08-07-PLAN.md — User Management 4탭 재편
+- [ ] 08-08-PLAN.md — Dashboard 페이지 wiring + Query Console 챗봇
 
 ## Progress
 
@@ -165,4 +174,4 @@ Critical path: Phase 1 -> Phase 2 -> Phase 4 (DGraph, highest risk)
 | 5. GPU Monitoring | 3/3 | Complete | 2026-02-19 |
 | 6. Ontology Studio & User Management | 3/3 | Complete | 2026-02-19 |
 | 7. Query Console & RBAC | 3/3 | Complete | 2026-02-19 |
-| 8. Product UX Refinement | 0/? | Not started | - |
+| 8. Product UX Refinement | 0/8 | Not started | - |
