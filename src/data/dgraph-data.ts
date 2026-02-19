@@ -282,3 +282,111 @@ export function getDgraphEvents(): DgraphEvent[] {
   // Already sorted by timestamp descending (newest first)
   return events;
 }
+
+// ── Latency Histogram Data ──────────────────────────────────────────────────
+
+export function getDgraphLatencyData(): number[] {
+  return Array.from({ length: 200 }, () => {
+    const r = Math.random();
+    // Realistic distribution: most 10-100ms, some 100-500ms outliers
+    if (r < 0.65) return round(10 + Math.random() * 60, 1);
+    if (r < 0.85) return round(60 + Math.random() * 80, 1);
+    if (r < 0.95) return round(140 + Math.random() * 160, 1);
+    return round(300 + Math.random() * 200, 1);
+  });
+}
+
+// ── Query Heatmap Data ──────────────────────────────────────────────────────
+
+export interface DgraphHeatmapCell {
+  hour: number;
+  queryType: string;
+  count: number;
+}
+
+export function getDgraphHeatmapData(): DgraphHeatmapCell[] {
+  const queryTypes = ["mutation", "query", "schema", "backup", "health"];
+  const cells: DgraphHeatmapCell[] = [];
+
+  for (let hour = 0; hour < 24; hour++) {
+    for (const qt of queryTypes) {
+      // Higher counts during business hours (9-18)
+      const isBusinessHour = hour >= 9 && hour <= 18;
+      let base: number;
+      switch (qt) {
+        case "query":
+          base = isBusinessHour ? 180 : 40;
+          break;
+        case "mutation":
+          base = isBusinessHour ? 120 : 20;
+          break;
+        case "schema":
+          base = isBusinessHour ? 15 : 2;
+          break;
+        case "backup":
+          base = hour === 2 || hour === 14 ? 50 : 3;
+          break;
+        case "health":
+          base = 30; // constant health checks
+          break;
+        default:
+          base = 10;
+      }
+      cells.push({
+        hour,
+        queryType: qt,
+        count: Math.round(addJitter(base, 25)),
+      });
+    }
+  }
+
+  return cells;
+}
+
+// ── Error Log Data ──────────────────────────────────────────────────────────
+
+export interface DgraphErrorLogEntry {
+  timestamp: Date;
+  severity: "error" | "warning" | "info";
+  message: string;
+  alpha: string;
+}
+
+export function getDgraphErrorLog(): DgraphErrorLogEntry[] {
+  const now = Date.now();
+  return [
+    { timestamp: new Date(now - 2 * 60 * 1000), severity: "error", message: "Raft proposal timeout on Alpha-2", alpha: "sks-alpha-02" },
+    { timestamp: new Date(now - 5 * 60 * 1000), severity: "error", message: "Out of memory: tablet eviction triggered", alpha: "sks-compute-03" },
+    { timestamp: new Date(now - 8 * 60 * 1000), severity: "warning", message: "Schema update conflict detected", alpha: "sks-alpha-03" },
+    { timestamp: new Date(now - 12 * 60 * 1000), severity: "warning", message: "Memory pressure warning (85% utilization)", alpha: "sks-alpha-03" },
+    { timestamp: new Date(now - 18 * 60 * 1000), severity: "info", message: "Snapshot streaming completed successfully", alpha: "sks-alpha-01" },
+    { timestamp: new Date(now - 25 * 60 * 1000), severity: "warning", message: "Slow mutation detected: 380ms (threshold: 200ms)", alpha: "sks-alpha-06" },
+    { timestamp: new Date(now - 32 * 60 * 1000), severity: "error", message: "Connection refused: peer sks-compute-03 unreachable", alpha: "sks-alpha-05" },
+    { timestamp: new Date(now - 40 * 60 * 1000), severity: "info", message: "Predicate move completed: Equipment -> Group 2", alpha: "sks-alpha-04" },
+    { timestamp: new Date(now - 48 * 60 * 1000), severity: "warning", message: "Disk write latency spike: 65ms (avg: 12ms)", alpha: "sks-alpha-03" },
+    { timestamp: new Date(now - 55 * 60 * 1000), severity: "info", message: "Leader election completed for Group 1", alpha: "sks-zero-01" },
+    { timestamp: new Date(now - 68 * 60 * 1000), severity: "info", message: "Incremental backup completed (2.1 GB)", alpha: "sks-compute-01" },
+    { timestamp: new Date(now - 75 * 60 * 1000), severity: "warning", message: "High pending proposal count: 24", alpha: "sks-alpha-02" },
+    { timestamp: new Date(now - 90 * 60 * 1000), severity: "info", message: "Tablet size threshold reached, splitting shard", alpha: "sks-alpha-01" },
+    { timestamp: new Date(now - 110 * 60 * 1000), severity: "error", message: "TLS handshake failed with peer sks-zero-03", alpha: "sks-zero-02" },
+    { timestamp: new Date(now - 130 * 60 * 1000), severity: "info", message: "Cluster membership refreshed: 12 active nodes", alpha: "sks-zero-01" },
+  ];
+}
+
+// ── Alpha Comparison Data ───────────────────────────────────────────────────
+
+export interface DgraphAlphaMetrics {
+  alpha: string;
+  cpu: number;
+  memory: number;
+  disk: number;
+  qps: number;
+}
+
+export function getDgraphAlphaComparison(): DgraphAlphaMetrics[] {
+  return [
+    { alpha: "Alpha-1", cpu: round(addJitter(45, 8), 1), memory: round(addJitter(62, 5), 1), disk: round(addJitter(55, 4), 1), qps: Math.round(addJitter(1200, 10)) },
+    { alpha: "Alpha-2", cpu: round(addJitter(52, 8), 1), memory: round(addJitter(58, 5), 1), disk: round(addJitter(48, 4), 1), qps: Math.round(addJitter(1450, 10)) },
+    { alpha: "Alpha-3", cpu: round(addJitter(79, 8), 1), memory: round(addJitter(85, 5), 1), disk: round(addJitter(72, 4), 1), qps: Math.round(addJitter(1800, 10)) },
+  ];
+}
