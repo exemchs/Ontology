@@ -1,9 +1,5 @@
-export default function StudioPage() {
-  return (
-    <div className="flex flex-1 items-center justify-center">
-      <h1 className="text-2xl font-semibold text-muted-foreground">
-        Ontology Studio
-      </h1>
-    </div>
-  );
+import { StudioPage } from "@/components/studio/StudioPage";
+
+export default function StudioRoute() {
+  return <StudioPage />;
 }
