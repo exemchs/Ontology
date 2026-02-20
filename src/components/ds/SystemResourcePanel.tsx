@@ -70,21 +70,13 @@ export function SystemResourcePanel({
             />
             <span className="font-medium">System Resources</span>
             {!open && (
-              <div className="flex items-center gap-4">
-                {gauges.map((g) => {
-                  const status = getStatus(Math.round(g.percent));
-                  const statusLabel: Record<string, string> = {
-                    healthy: "Normal",
-                    warning: "Warning",
-                    critical: "Critical",
-                  };
-                  return (
-                    <span key={g.label} className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                      {g.label}
-                      <StatusDot status={status} label={statusLabel[status]} />
-                    </span>
-                  );
-                })}
+              <div className="flex items-center gap-3">
+                {gauges.map((g) => (
+                  <span key={g.label} className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                    {g.label}
+                    <StatusDot status={getStatus(Math.round(g.percent))} />
+                  </span>
+                ))}
               </div>
             )}
           </div>
