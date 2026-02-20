@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTheme } from "next-themes";
 import { select } from "d3-selection";
 import { scaleBand, scaleSequential, scaleLinear } from "d3-scale";
-import { interpolateYlOrRd } from "d3-scale-chromatic";
+import { interpolateBlues } from "d3-scale-chromatic";
 import { axisBottom, axisLeft } from "d3-axis";
 import { max as d3max } from "d3-array";
 
@@ -69,7 +69,7 @@ export function QueryHeatmap() {
         .range([0, innerH])
         .padding(0.05);
 
-      const colorScale = scaleSequential(interpolateYlOrRd).domain([0, maxCount]);
+      const colorScale = scaleSequential(interpolateBlues).domain([0, maxCount]);
 
       const svg = select(svgEl)
         .attr("viewBox", `0 0 ${width} ${height}`)

@@ -14,6 +14,7 @@ import {
   createDebouncedResizeObserver,
 } from "@/components/charts/shared/chart-utils";
 import { ChartSkeleton } from "@/components/charts/shared/ChartSkeleton";
+import { TruncatedLegend } from "@/components/charts/shared/TruncatedLegend";
 
 const QPS_NORM_MAX = 2000;
 
@@ -55,7 +56,7 @@ export function AlphaComparisonBar() {
       const width = rect.width;
       const height = Math.max(rect.height, 200);
 
-      const margin = { top: 20, right: 20, bottom: 40, left: 44 };
+      const margin = { top: 20, right: 20, bottom: 24, left: 44 };
       const innerW = width - margin.left - margin.right;
       const innerH = height - margin.top - margin.bottom;
 
@@ -142,27 +143,7 @@ export function AlphaComparisonBar() {
           sel.select(".domain").attr("stroke", colors.axisLine);
         });
 
-      // Legend (below chart area, inline)
-      const legendG = g
-        .append("g")
-        .attr("transform", `translate(0,${innerH + 24})`);
-
-      metrics.forEach((m, i) => {
-        const lg = legendG
-          .append("g")
-          .attr("transform", `translate(${i * (innerW / metrics.length)},0)`);
-        lg.append("rect")
-          .attr("width", 10)
-          .attr("height", 10)
-          .attr("rx", 2)
-          .attr("fill", metricColors(m.key));
-        lg.append("text")
-          .attr("x", 14)
-          .attr("y", 9)
-          .attr("fill", colors.textSecondary)
-          .style("font-size", "10px")
-          .text(m.label);
-      });
+      // Legend is rendered as a React component (TruncatedLegend) below the SVG
     }
 
     render();
@@ -188,9 +169,16 @@ export function AlphaComparisonBar() {
     );
   }
 
+  const legendItems = metrics.map((m, i) => ({
+    dataKey: m.key,
+    color: [`var(--chart-1)`, `var(--chart-2)`, `var(--chart-4)`, `var(--chart-5)`][i],
+    label: m.label,
+  }));
+
   return (
-    <div ref={containerRef} className="w-full min-h-[200px] max-h-[300px]">
-      <svg ref={svgRef} className="w-full h-full" />
+    <div ref={containerRef} className="group w-full min-h-[200px] max-h-[300px] flex flex-col">
+      <svg ref={svgRef} className="w-full flex-1 min-h-0" />
+      <TruncatedLegend items={legendItems} maxVisible={4} autoHide />
     </div>
   );
 }

@@ -31,7 +31,14 @@ export function QueryScatterPlot({ className }: QueryScatterPlotProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const destroyedRef = useRef(false);
   const { resolvedTheme } = useTheme();
-  const [filteredCount, setFilteredCount] = useState<number | null>(null);
+  const [brushSummary, setBrushSummary] = useState<{
+    count: number;
+    total: number;
+    avgLatency: number;
+    avgThroughput: number;
+    graphql: number;
+    dql: number;
+  } | null>(null);
 
   useEffect(() => {
     const svgEl = svgRef.current;
@@ -52,7 +59,7 @@ export function QueryScatterPlot({ className }: QueryScatterPlotProps) {
       const width = rect.width;
       const height = Math.max(rect.height, 200);
 
-      const margin = { top: 20, right: 20, bottom: 40, left: 50 };
+      const margin = { top: 20, right: 20, bottom: 30, left: 50 };
       const innerWidth = width - margin.left - margin.right;
       const innerHeight = height - margin.top - margin.bottom;
 
@@ -156,7 +163,7 @@ export function QueryScatterPlot({ className }: QueryScatterPlotProps) {
           if (!event.selection) {
             // Click without drag or clear: reset all dots
             dots.attr("opacity", 0.7).attr("stroke-opacity", 1);
-            setFilteredCount(null);
+            setBrushSummary(null);
             return;
           }
 
@@ -166,20 +173,33 @@ export function QueryScatterPlot({ className }: QueryScatterPlotProps) {
           if (Math.abs(x1 - x0) < 5 && Math.abs(y1 - y0) < 5) {
             brushG.call(brushBehavior.move, null);
             dots.attr("opacity", 0.7).attr("stroke-opacity", 1);
-            setFilteredCount(null);
+            setBrushSummary(null);
             return;
           }
 
-          // Count selected dots
-          let count = 0;
+          // Compute summary for selected dots
+          const selected: DgraphQueryPoint[] = [];
           data.forEach((d) => {
             const cx = xScale(d.latency);
             const cy = yScale(d.throughput);
             if (cx >= x0 && cx <= x1 && cy >= y0 && cy <= y1) {
-              count++;
+              selected.push(d);
             }
           });
-          setFilteredCount(count);
+          if (selected.length > 0) {
+            const avgLat = selected.reduce((s, d) => s + d.latency, 0) / selected.length;
+            const avgThr = selected.reduce((s, d) => s + d.throughput, 0) / selected.length;
+            setBrushSummary({
+              count: selected.length,
+              total: data.length,
+              avgLatency: Math.round(avgLat * 10) / 10,
+              avgThroughput: Math.round(avgThr),
+              graphql: selected.filter((d) => d.type === "graphql").length,
+              dql: selected.filter((d) => d.type === "dql").length,
+            });
+          } else {
+            setBrushSummary(null);
+          }
         });
 
       brushG.call(brushBehavior);
@@ -241,12 +261,7 @@ export function QueryScatterPlot({ className }: QueryScatterPlotProps) {
 
   return (
     <div ref={containerRef} className={cn("w-full min-h-[200px] max-h-[300px] flex flex-col", className)}>
-      <div className="flex items-center justify-end gap-4 mb-2 shrink-0">
-        {filteredCount !== null && (
-          <span className="text-xs text-muted-foreground">
-            Selected: {filteredCount} / 50
-          </span>
-        )}
+      <div className="flex items-center justify-end gap-4 mb-1 shrink-0">
         <div className="flex items-center gap-4 text-xs text-muted-foreground">
           <span className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full" style={{ backgroundColor: "var(--chart-1)" }} />
@@ -259,6 +274,14 @@ export function QueryScatterPlot({ className }: QueryScatterPlotProps) {
         </div>
       </div>
       <svg ref={svgRef} className="w-full flex-1" data-testid="query-scatter-plot" />
+      {brushSummary && (
+        <div className="shrink-0 mt-1 flex items-center gap-4 rounded-md bg-muted/50 px-3 py-1.5 text-xs">
+          <span className="font-medium">{brushSummary.count} / {brushSummary.total} selected</span>
+          <span className="text-muted-foreground">Avg Latency: <span className="font-mono">{brushSummary.avgLatency}ms</span></span>
+          <span className="text-muted-foreground">Avg Throughput: <span className="font-mono">{brushSummary.avgThroughput} q/s</span></span>
+          <span className="text-muted-foreground">GraphQL: {brushSummary.graphql} | DQL: {brushSummary.dql}</span>
+        </div>
+      )}
     </div>
   );
 }
