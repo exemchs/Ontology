@@ -51,7 +51,7 @@ interface GpuPipelineTreemapProps {
   className?: string;
 }
 
-const CHART_HEIGHT = 200;
+const CHART_HEIGHT = 180;
 
 export function GpuPipelineTreemap({ stages, className }: GpuPipelineTreemapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -95,7 +95,7 @@ export function GpuPipelineTreemap({ stages, className }: GpuPipelineTreemapProp
 
     treemap<TreeNode>()
       .size([width, height])
-      .tile(treemapSquarify.ratio(2))
+      .tile(treemapSquarify.ratio(4))
       .paddingInner(3)
       .round(true)(root);
 

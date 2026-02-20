@@ -85,8 +85,8 @@ export default function GpuPage() {
       <SystemResourcePanel gauges={systemGauges} trends={systemTrends} />
 
       {/* Utilization Distribution + GPU Pipeline + Health Issues */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
-        <Card className="border-border/40 lg:col-span-2">
+      <div className="grid grid-cols-1 lg:grid-cols-6 gap-3">
+        <Card className="border-border/40 lg:col-span-3">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between gap-2">
               <CardTitle className="text-sm">Utilization Distribution</CardTitle>
@@ -123,7 +123,7 @@ export default function GpuPage() {
           </CardContent>
         </Card>
 
-        <GpuHealthIssues issues={healthIssues} />
+        <GpuHealthIssues issues={healthIssues} className="lg:col-span-2" />
       </div>
 
       {/* Performance Trends (left) + GPU List (right) */}

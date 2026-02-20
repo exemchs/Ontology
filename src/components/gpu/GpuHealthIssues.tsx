@@ -24,12 +24,14 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { StatusDot } from "@/components/ds/StatusDot";
 import { GpuThresholdForm } from "@/components/gpu/GpuThresholdForm";
 import type { GpuHealthIssue } from "@/types";
 
 interface GpuHealthIssuesProps {
   issues: GpuHealthIssue[];
+  className?: string;
 }
 
 function formatRelativeTime(timestamp: Date): string {
@@ -53,7 +55,7 @@ function severityToStatus(severity: string): "healthy" | "warning" | "critical" 
   return "healthy";
 }
 
-export function GpuHealthIssues({ issues }: GpuHealthIssuesProps) {
+export function GpuHealthIssues({ issues, className }: GpuHealthIssuesProps) {
   const [showThresholds, setShowThresholds] = useState(false);
 
   const sorted = [...issues]
@@ -62,7 +64,7 @@ export function GpuHealthIssues({ issues }: GpuHealthIssuesProps) {
 
   return (
     <>
-      <Card className="border-border/40" data-testid="gpu-health-issues">
+      <Card className={cn("border-border/40", className)} data-testid="gpu-health-issues">
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between gap-2">
             <CardTitle className="text-sm">Health Issues</CardTitle>
