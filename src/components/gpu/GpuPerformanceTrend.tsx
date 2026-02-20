@@ -154,7 +154,7 @@ export function GpuPerformanceTrend({
   if (!widget) return chartContent;
 
   return (
-    <Card className={cn("border-border/40 h-full flex flex-col", className)}>
+    <Card className={cn("group border-border/40 h-full flex flex-col", className)}>
       <CardHeader className="pb-2 shrink-0">
         <div className="flex items-center justify-between gap-2">
           <CardTitle className="text-sm">Performance Trends</CardTitle>
