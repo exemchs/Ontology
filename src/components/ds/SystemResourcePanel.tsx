@@ -1,9 +1,12 @@
 // src/components/ds/SystemResourcePanel.tsx
 "use client";
 
+import { useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { HalfGauge } from "@/components/charts/shared/HalfGauge";
 import { ResourceTrendChart } from "@/components/charts/shared/ResourceTrendChart";
+import { TruncatedLegend, legendItemsFromConfig } from "@/components/charts/shared/TruncatedLegend";
+import { serverConfig } from "@/lib/chart-configs";
 import type { SystemResourceGauge, SystemResourceTrends } from "@/data/system-resource-data";
 
 interface SystemResourcePanelProps {
@@ -12,10 +15,18 @@ interface SystemResourcePanelProps {
 }
 
 export function SystemResourcePanel({ gauges, trends }: SystemResourcePanelProps) {
+  const legendItems = useMemo(
+    () => legendItemsFromConfig(serverConfig, trends.cpu.map((s) => s.serverName)),
+    [trends.cpu]
+  );
+
   return (
     <Card className="border-border/40">
       <CardHeader className="pb-2">
-        <CardTitle className="text-sm">System Resources</CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-sm">System Resources</CardTitle>
+          <TruncatedLegend items={legendItems} maxVisible={5} className="pt-0" />
+        </div>
       </CardHeader>
       <CardContent>
         <div className="flex items-center gap-4">

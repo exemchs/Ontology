@@ -8,10 +8,9 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-  ChartLegend,
-  ChartLegendContent,
 } from "@/components/ui/chart";
 import { gpuConfig } from "@/lib/chart-configs";
+import { TruncatedLegend, legendItemsFromConfig } from "@/components/charts/shared/TruncatedLegend";
 import type { GpuTimeSeries, GpuMetricType } from "@/data/gpu-data";
 
 const METRIC_UNITS: Record<GpuMetricType, string> = {
@@ -21,7 +20,6 @@ const METRIC_UNITS: Record<GpuMetricType, string> = {
   memory: "GB",
 };
 
-const GPU_KEYS = ["GPU-0", "GPU-1", "GPU-2", "GPU-3"] as const;
 
 interface GpuPerformanceTrendProps {
   series: GpuTimeSeries[];
@@ -78,61 +76,64 @@ export function GpuPerformanceTrend({
     [gpuNames]
   );
 
+  const legendItems = useMemo(
+    () => legendItemsFromConfig(gpuConfig, gpuNames),
+    [gpuNames]
+  );
+
   if (!data.length) return null;
 
   const unit = METRIC_UNITS[activeMetric];
 
   return (
-    <ChartContainer config={gpuConfig} className={className}>
-      <LineChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
-        <CartesianGrid vertical={false} strokeDasharray="3 3" />
-        <XAxis
-          dataKey="time"
-          tickFormatter={(v) => formatTime(new Date(v))}
-          tickLine={false}
-          axisLine={false}
-          tickMargin={8}
-        />
-        <YAxis
-          tickLine={false}
-          axisLine={false}
-          tickMargin={4}
-          tickFormatter={(v) => `${v}${unit}`}
-        />
-        <ChartTooltip
-          content={
-            <ChartTooltipContent
-              labelFormatter={(_, payload) => {
-                const ts = payload?.[0]?.payload?.time;
-                return ts ? formatTime(new Date(ts)) : "";
-              }}
-            />
-          }
-        />
-        <ChartLegend
-          content={
-            <ChartLegendContent
-              className="cursor-pointer"
-            />
-          }
-          onClick={(e) => {
-            if (e && e.dataKey) handleLegendClick(e.dataKey as string);
-          }}
-        />
-        {gpuNames.map((name) => (
-          <Line
-            key={name}
-            type="monotone"
-            dataKey={name}
-            stroke={`var(--color-${name})`}
-            strokeWidth={2}
-            dot={false}
-            activeDot={{ r: 4 }}
-            hide={hiddenGpus.has(name)}
-            strokeOpacity={hiddenGpus.has(name) ? 0.2 : 1}
+    <div className={className}>
+      <ChartContainer config={gpuConfig} className="h-[calc(100%-32px)] w-full">
+        <LineChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
+          <CartesianGrid vertical={false} strokeDasharray="3 3" />
+          <XAxis
+            dataKey="time"
+            tickFormatter={(v) => formatTime(new Date(v))}
+            tickLine={false}
+            axisLine={false}
+            tickMargin={8}
           />
-        ))}
-      </LineChart>
-    </ChartContainer>
+          <YAxis
+            tickLine={false}
+            axisLine={false}
+            tickMargin={4}
+            tickFormatter={(v) => `${v}${unit}`}
+          />
+          <ChartTooltip
+            content={
+              <ChartTooltipContent
+                labelFormatter={(_, payload) => {
+                  const ts = payload?.[0]?.payload?.time;
+                  return ts ? formatTime(new Date(ts)) : "";
+                }}
+              />
+            }
+          />
+          {gpuNames.map((name) => (
+            <Line
+              key={name}
+              type="monotone"
+              dataKey={name}
+              stroke={`var(--color-${name})`}
+              strokeWidth={2}
+              dot={false}
+              activeDot={{ r: 4 }}
+              hide={hiddenGpus.has(name)}
+              strokeOpacity={hiddenGpus.has(name) ? 0.2 : 1}
+            />
+          ))}
+        </LineChart>
+      </ChartContainer>
+      <TruncatedLegend
+        items={legendItems}
+        maxVisible={5}
+        hidden={hiddenGpus}
+        onToggle={handleLegendClick}
+      />
+    </div>
   );
 }
