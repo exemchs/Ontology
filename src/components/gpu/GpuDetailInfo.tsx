@@ -61,18 +61,20 @@ function DetailContent({ gpu, detailData }: { gpu: Gpu; detailData: GpuDetailDat
           {gpu.model}
         </Badge>
       </div>
-      <div className="grid grid-cols-5 gap-1.5">
+      <div className="grid grid-cols-2 gap-2">
         {tiles.map((tile) => (
           <div
             key={tile.label}
             className={cn(
-              "rounded-md border border-border/50 bg-muted/30 px-2 py-2 text-center",
+              "rounded-md border border-border/50 bg-muted/30 px-3 py-2.5 flex items-center gap-2.5",
               tile.highlight && "border-[var(--status-warning)]/40 bg-[var(--status-warning)]/5"
             )}
           >
-            <tile.icon className="size-3 mx-auto mb-1 text-muted-foreground" />
-            <p className="text-[9px] text-muted-foreground leading-none mb-0.5">{tile.label}</p>
-            <p className="text-xs font-semibold tabular-nums leading-tight">{tile.value}</p>
+            <tile.icon className="size-4 text-muted-foreground shrink-0" />
+            <div className="min-w-0">
+              <p className="text-[11px] text-muted-foreground leading-none mb-0.5">{tile.label}</p>
+              <p className="text-sm font-semibold tabular-nums leading-tight">{tile.value}</p>
+            </div>
           </div>
         ))}
       </div>

@@ -73,8 +73,8 @@ export function SystemResourcePanel({
               <div className="flex items-center gap-3">
                 {gauges.map((g) => (
                   <span key={g.label} className="inline-flex items-center gap-1 text-xs text-muted-foreground">
-                    {g.label}
                     <StatusDot status={getStatus(Math.round(g.percent))} />
+                    {g.label}
                   </span>
                 ))}
               </div>

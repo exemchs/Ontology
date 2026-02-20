@@ -116,7 +116,7 @@ export default function GpuPage() {
       </div>
 
       {/* Performance Trends + GPU List & Detail */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-3">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-3 items-start">
         <Card className="group border-border/40 lg:col-span-2">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between gap-2">
