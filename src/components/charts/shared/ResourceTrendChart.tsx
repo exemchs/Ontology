@@ -159,5 +159,5 @@ export function ResourceTrendChart({
 
   if (!isClient) return <div className={className} />;
 
-  return <div ref={containerRef} className={className} style={{ minHeight: 120 }} />;
+  return <div ref={containerRef} className={className} style={{ minHeight: 80 }} />;
 }
