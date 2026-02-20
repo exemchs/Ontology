@@ -198,14 +198,14 @@ export function QueryHeatmap() {
 
   if (!isClient) {
     return (
-      <div className="w-full h-full min-h-[200px]">
+      <div className="w-full min-h-[200px] max-h-[300px]">
         <ChartSkeleton />
       </div>
     );
   }
 
   return (
-    <div ref={containerRef} className="w-full h-full min-h-[200px]">
+    <div ref={containerRef} className="w-full min-h-[200px] max-h-[300px]">
       <svg ref={svgRef} className="w-full h-full" />
     </div>
   );

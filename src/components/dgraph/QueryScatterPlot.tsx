@@ -240,7 +240,7 @@ export function QueryScatterPlot({ className }: QueryScatterPlotProps) {
   }, [resolvedTheme]);
 
   return (
-    <div ref={containerRef} className={cn("w-full h-full min-h-[200px] flex flex-col", className)}>
+    <div ref={containerRef} className={cn("w-full min-h-[200px] max-h-[300px] flex flex-col", className)}>
       <div className="flex items-center justify-end gap-4 mb-2 shrink-0">
         {filteredCount !== null && (
           <span className="text-xs text-muted-foreground">
