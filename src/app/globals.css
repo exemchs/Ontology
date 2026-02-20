@@ -59,7 +59,7 @@
   --chart-8: #84cc16;
 
   /* ── Status ─────────────────────────────────────────────── */
-  --status-healthy: #22c55e;
+  --status-healthy: #3b82f6;
   --status-warning: #f59e0b;
   --status-critical: #ef4444;
 
@@ -123,7 +123,7 @@
   --chart-8: #a3e635;
 
   /* Status */
-  --status-healthy: #4ade80;
+  --status-healthy: #60a5fa;
   --status-warning: #fbbf24;
   --status-critical: #f87171;
 

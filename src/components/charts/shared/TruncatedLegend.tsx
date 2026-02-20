@@ -14,6 +14,8 @@ interface TruncatedLegendProps {
   maxVisible?: number;
   hidden?: Set<string>;
   onToggle?: (dataKey: string) => void;
+  /** When true, legend is hidden until the parent `group` element is hovered. */
+  autoHide?: boolean;
   className?: string;
 }
 
@@ -21,12 +23,16 @@ interface TruncatedLegendProps {
  * 시리즈가 많을 때 maxVisible개까지만 표시하고,
  * 나머지는 "+N" 배지로 축약. 호버 시 전체 목록 툴팁 표시.
  * onToggle 제공 시 클릭으로 시리즈 토글 가능.
+ *
+ * autoHide=true 시, 부모에 `group` 클래스가 있어야 하며
+ * 부모 호버 시 CSS grid 높이 애니메이션으로 나타남.
  */
 export function TruncatedLegend({
   items,
   maxVisible = 5,
   hidden,
   onToggle,
+  autoHide = false,
   className,
 }: TruncatedLegendProps) {
   const [showOverflow, setShowOverflow] = useState(false);
@@ -34,7 +40,7 @@ export function TruncatedLegend({
   const visible = items.slice(0, maxVisible);
   const overflow = items.slice(maxVisible);
 
-  return (
+  const content = (
     <div className={`flex items-center justify-center gap-3 pt-2 flex-wrap ${className ?? ""}`}>
       {visible.map((item) => {
         const isHidden = hidden?.has(item.dataKey);
@@ -93,6 +99,17 @@ export function TruncatedLegend({
       )}
     </div>
   );
+
+  if (!autoHide) return content;
+
+  // CSS grid height animation: 0fr → 1fr on parent group hover
+  return (
+    <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-[grid-template-rows] duration-300 ease-in-out">
+      <div className="overflow-hidden">
+        {content}
+      </div>
+    </div>
+  );
 }
 
 /**
@@ -105,7 +122,7 @@ export function legendItemsFromConfig(
 ): LegendItem[] {
   return dataKeys.map((key) => ({
     dataKey: key,
-    color: `var(--color-${key})`,
+    color: (config[key]?.color as string) ?? `var(--color-${key})`,
     label: (config[key]?.label as string) ?? key,
   }));
 }

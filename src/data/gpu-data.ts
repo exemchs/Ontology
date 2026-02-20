@@ -250,10 +250,10 @@ export interface GpuFunnelStage {
 
 export function getGpuFunnelData(): GpuFunnelStage[] {
   return [
-    { label: "Total GPUs", value: 4, color: "var(--color-chart-1)" },
-    { label: "Allocated", value: 3, color: "var(--color-chart-2)" },
-    { label: "Active", value: 2, color: "var(--color-chart-3)" },
-    { label: "Effective", value: 1, color: "var(--color-chart-4)" },
+    { label: "Total GPUs", value: 16, color: "var(--color-chart-1)" },
+    { label: "Allocated", value: 12, color: "var(--color-chart-2)" },
+    { label: "Active", value: 9, color: "var(--color-chart-3)" },
+    { label: "Effective", value: 6, color: "var(--color-chart-4)" },
   ];
 }
 

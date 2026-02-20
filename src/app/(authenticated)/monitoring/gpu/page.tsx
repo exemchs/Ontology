@@ -1,17 +1,17 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
-import { Settings2 } from "lucide-react";
+import { Settings2, LayoutGrid, List } from "lucide-react";
 
 import { PageShell } from "@/components/ds/PageShell";
 import { SystemResourcePanel } from "@/components/ds/SystemResourcePanel";
 import { getSystemResourceGauges, getSystemResourceTrends } from "@/data/system-resource-data";
 import { GpuSummaryHeader } from "@/components/gpu/GpuSummaryHeader";
+import { GpuList } from "@/components/gpu/GpuList";
 import { GpuCardGrid } from "@/components/gpu/GpuCardGrid";
-import { GpuFunnelChart } from "@/components/gpu/GpuFunnelChart";
+import { GpuPipelineTreemap } from "@/components/gpu/GpuPipelineTreemap";
 import { GpuPerformanceTrend } from "@/components/gpu/GpuPerformanceTrend";
 import { GpuHeatmapRidgelineToggle } from "@/components/gpu/GpuHeatmapRidgelineToggle";
-import { GpuComparisonBar } from "@/components/gpu/GpuComparisonBar";
 import { GpuHealthIssues } from "@/components/gpu/GpuHealthIssues";
 import { GpuProcessesTable } from "@/components/gpu/GpuProcessesTable";
 import { GpuDetailPanel } from "@/components/gpu/GpuDetailPanel";
@@ -35,27 +35,26 @@ import {
   getGpuCards,
   getGpuTimeSeries,
   getGpuHeatmap,
-  getGpuComparison,
   getGpuHealthIssues,
   getGpuProcesses,
   getGpuFunnelData,
   getGpuDetailData,
 } from "@/data/gpu-data";
-import type { GpuMetricType } from "@/data/gpu-data";
+import type { GpuMetricType, GpuTimeSeries } from "@/data/gpu-data";
 
 type HeatmapView = "heatmap" | "ridgeline";
+type GpuListView = "list" | "grid";
 
 export default function GpuPage() {
   const [activeMetric, setActiveMetric] = useState<GpuMetricType>("utilization");
   const [heatmapView, setHeatmapView] = useState<HeatmapView>("heatmap");
   const [selectedGpu, setSelectedGpu] = useState<number | null>(null);
-  const [comparisonGpus, setComparisonGpus] = useState<number[]>([]);
   const [showThresholds, setShowThresholds] = useState(false);
+  const [gpuListView, setGpuListView] = useState<GpuListView>("list");
 
   const gpus = useMemo(() => getGpuCards(), []);
-  const timeSeries = useMemo(() => getGpuTimeSeries(), []);
+  const allTimeSeries = useMemo(() => getGpuTimeSeries(), []);
   const heatmapData = useMemo(() => getGpuHeatmap(), []);
-  const comparisonData = useMemo(() => getGpuComparison(), []);
   const healthIssues = useMemo(() => getGpuHealthIssues(), []);
   const processes = useMemo(() => getGpuProcesses(), []);
   const systemGauges = useMemo(() => getSystemResourceGauges(), []);
@@ -72,23 +71,8 @@ export default function GpuPage() {
     [selectedGpu]
   );
 
-  // Filter comparison data when GPUs are selected for comparison
-  const filteredComparisonData = useMemo(() => {
-    if (comparisonGpus.length < 2) return comparisonData;
-    const selectedNames = gpus
-      .filter((g) => comparisonGpus.includes(g.id))
-      .map((g) => g.name);
-    return comparisonData.filter((d) => selectedNames.includes(d.gpuName));
-  }, [comparisonData, comparisonGpus, gpus]);
-
-  const handleGpuClick = useCallback((gpuId: number) => {
+  const handleGpuSelect = useCallback((gpuId: number) => {
     setSelectedGpu(gpuId);
-  }, []);
-
-  const handleGpuSelectToggle = useCallback((gpuId: number, checked: boolean) => {
-    setComparisonGpus((prev) =>
-      checked ? [...prev, gpuId] : prev.filter((id) => id !== gpuId)
-    );
   }, []);
 
   const handleSheetClose = useCallback(() => {
@@ -103,26 +87,48 @@ export default function GpuPage() {
       <GpuSummaryHeader gpus={gpus} />
       <SystemResourcePanel gauges={systemGauges} trends={systemTrends} />
 
-      {/* GPU Pipeline Funnel */}
-      <GpuFunnelChart stages={funnelStages} />
+      {/* GPU Pipeline + Utilization Distribution (side by side) */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+        <Card className="border-border/40">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm">GPU Pipeline</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <GpuPipelineTreemap stages={funnelStages} />
+          </CardContent>
+        </Card>
 
-      {/* GPU Cards with click + comparison selection */}
-      <GpuCardGrid
-        gpus={gpus}
-        onGpuClick={handleGpuClick}
-        selectedGpus={comparisonGpus}
-        onGpuSelectToggle={handleGpuSelectToggle}
-      />
-
-      {/* Comparison selection indicator */}
-      {comparisonGpus.length > 0 && comparisonGpus.length < 2 && (
-        <p className="text-xs text-muted-foreground text-center">
-          Select at least 2 GPUs for comparison overlay
-        </p>
-      )}
+        <Card className="border-border/40 lg:col-span-2">
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between gap-2">
+              <CardTitle className="text-sm">Utilization Distribution</CardTitle>
+              <Tabs
+                value={heatmapView}
+                onValueChange={(v) => setHeatmapView(v as HeatmapView)}
+              >
+                <TabsList className="h-7">
+                  <TabsTrigger value="heatmap" className="text-xs px-2">
+                    Heatmap
+                  </TabsTrigger>
+                  <TabsTrigger value="ridgeline" className="text-xs px-2">
+                    Ridgeline
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <GpuHeatmapRidgelineToggle
+              heatmapData={heatmapData}
+              timeSeriesData={allTimeSeries}
+              view={heatmapView}
+            />
+          </CardContent>
+        </Card>
+      </div>
 
       {/* Performance Trends */}
-      <Card className="border-border/40">
+      <Card className="group border-border/40">
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between gap-2">
             <CardTitle className="text-sm">Performance Trends</CardTitle>
@@ -149,58 +155,56 @@ export default function GpuPage() {
         </CardHeader>
         <CardContent>
           <GpuPerformanceTrend
-            series={timeSeries}
+            series={allTimeSeries}
             activeMetric={activeMetric}
             className="aspect-[16/7]"
           />
         </CardContent>
       </Card>
 
-      {/* Utilization Heatmap / Ridgeline */}
-      <Card className="border-border/40">
-        <CardHeader className="pb-2">
-          <div className="flex items-center justify-between gap-2">
-            <CardTitle className="text-sm">Utilization Distribution</CardTitle>
-            <Tabs
-              value={heatmapView}
-              onValueChange={(v) => setHeatmapView(v as HeatmapView)}
-            >
-              <TabsList className="h-7">
-                <TabsTrigger value="heatmap" className="text-xs px-2">
-                  Heatmap
-                </TabsTrigger>
-                <TabsTrigger value="ridgeline" className="text-xs px-2">
-                  Ridgeline
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <GpuHeatmapRidgelineToggle
-            heatmapData={heatmapData}
-            timeSeriesData={timeSeries}
-            view={heatmapView}
-          />
-        </CardContent>
-      </Card>
-
-      {/* GPU Comparison */}
+      {/* GPU List */}
       <Card className="border-border/40">
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between gap-2">
             <CardTitle className="text-sm">
-              GPU Comparison
-              {comparisonGpus.length >= 2 && (
-                <span className="text-xs text-muted-foreground font-normal ml-2">
-                  ({comparisonGpus.length} selected)
-                </span>
-              )}
+              GPU List
+              <span className="text-xs text-muted-foreground font-normal ml-2">
+                {gpus.length}
+              </span>
             </CardTitle>
+            <div className="flex items-center gap-1">
+              <Button
+                variant={gpuListView === "list" ? "secondary" : "ghost"}
+                size="icon"
+                className="h-7 w-7"
+                onClick={() => setGpuListView("list")}
+              >
+                <List className="h-3.5 w-3.5" />
+              </Button>
+              <Button
+                variant={gpuListView === "grid" ? "secondary" : "ghost"}
+                size="icon"
+                className="h-7 w-7"
+                onClick={() => setGpuListView("grid")}
+              >
+                <LayoutGrid className="h-3.5 w-3.5" />
+              </Button>
+            </div>
           </div>
         </CardHeader>
-        <CardContent>
-          <GpuComparisonBar data={filteredComparisonData} className="aspect-[16/9]" />
+        <CardContent className={gpuListView === "list" ? "p-0" : ""}>
+          {gpuListView === "list" ? (
+            <GpuList
+              gpus={gpus}
+              selectedId={selectedGpu}
+              onSelect={handleGpuSelect}
+            />
+          ) : (
+            <GpuCardGrid
+              gpus={gpus}
+              onGpuClick={handleGpuSelect}
+            />
+          )}
         </CardContent>
       </Card>
 
@@ -235,7 +239,7 @@ export default function GpuPage() {
           if (!open) handleSheetClose();
         }}
       >
-        <SheetContent side="right" className="sm:max-w-[450px]">
+        <SheetContent side="right" className="sm:max-w-[520px] px-6">
           <SheetHeader>
             <SheetTitle>GPU Details</SheetTitle>
             <SheetDescription>
@@ -244,8 +248,10 @@ export default function GpuPage() {
           </SheetHeader>
           <GpuDetailPanel
             gpu={selectedGpuData}
+            allGpus={gpus}
             processes={processes}
             detailData={detailData}
+            onGpuChange={handleGpuSelect}
             onClose={handleSheetClose}
           />
         </SheetContent>

@@ -4,6 +4,13 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import type { Gpu, GpuProcess } from "@/types";
 import type { GpuDetailData } from "@/data/gpu-data";
 
@@ -11,8 +18,10 @@ import type { GpuDetailData } from "@/data/gpu-data";
 
 interface GpuDetailPanelProps {
   gpu: Gpu | null;
+  allGpus: Gpu[];
   processes: GpuProcess[];
   detailData: GpuDetailData | null;
+  onGpuChange: (gpuId: number) => void;
   onClose: () => void;
 }
 
@@ -34,14 +43,14 @@ function formatMemory(mb: number): string {
 }
 
 function getBarColor(value: number): string {
-  if (value > 80) return "bg-red-500";
-  if (value >= 60) return "bg-amber-500";
-  return "bg-emerald-500";
+  if (value > 80) return "bg-[var(--status-critical)]";
+  if (value >= 60) return "bg-[var(--status-warning)]";
+  return "bg-[var(--status-healthy)]";
 }
 
 // ── Component ────────────────────────────────────────────────────────────────
 
-export function GpuDetailPanel({ gpu, processes, detailData }: GpuDetailPanelProps) {
+export function GpuDetailPanel({ gpu, allGpus, processes, detailData, onGpuChange }: GpuDetailPanelProps) {
   if (!gpu) return null;
 
   const gpuProcesses = processes.filter((p) => p.gpuName === gpu.name);
@@ -56,20 +65,34 @@ export function GpuDetailPanel({ gpu, processes, detailData }: GpuDetailPanelPro
   ];
 
   return (
-    <ScrollArea className="h-[calc(100vh-8rem)] pr-3" data-testid="gpu-detail-panel">
-      <div className="space-y-6 pb-4">
-        {/* Header */}
-        <div>
-          <div className="flex items-center gap-2 flex-wrap">
-            <h2 className="text-lg font-semibold">{gpu.name}</h2>
-            <Badge
-              variant={getStatusVariant(gpu.status)}
-              className={getStatusClassName(gpu.status)}
-            >
-              {gpu.status}
-            </Badge>
-          </div>
-          <p className="text-sm text-muted-foreground mt-1">{gpu.model}</p>
+    <ScrollArea className="h-[calc(100vh-8rem)]" data-testid="gpu-detail-panel">
+      <div className="space-y-6 px-1 pb-4">
+        {/* GPU Selector */}
+        <Select
+          value={String(gpu.id)}
+          onValueChange={(v) => onGpuChange(Number(v))}
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {allGpus.map((g) => (
+              <SelectItem key={g.id} value={String(g.id)}>
+                <span className="font-medium">{g.name}</span>
+                <span className="text-muted-foreground ml-2 text-xs">{g.model}</span>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        {/* Status Badge */}
+        <div className="flex items-center gap-2">
+          <Badge
+            variant={getStatusVariant(gpu.status)}
+            className={getStatusClassName(gpu.status)}
+          >
+            {gpu.status}
+          </Badge>
         </div>
 
         {/* Key Metrics */}
@@ -162,12 +185,6 @@ export function GpuDetailPanel({ gpu, processes, detailData }: GpuDetailPanelPro
             </div>
           )}
         </div>
-
-        <Separator />
-
-        <p className="text-xs text-muted-foreground text-center">
-          Press Esc or click outside to close
-        </p>
       </div>
     </ScrollArea>
   );

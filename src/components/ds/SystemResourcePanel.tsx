@@ -1,9 +1,16 @@
 // src/components/ds/SystemResourcePanel.tsx
 "use client";
 
-import { useMemo } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { HalfGauge } from "@/components/charts/shared/HalfGauge";
+import { useMemo, useState, useEffect } from "react";
+import { ChevronRight, Cpu, MemoryStick, HardDrive } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { cn } from "@/lib/utils";
+import { ResourceStat } from "@/components/ds/ResourceStat";
 import { ResourceTrendChart } from "@/components/charts/shared/ResourceTrendChart";
 import { TruncatedLegend, legendItemsFromConfig } from "@/components/charts/shared/TruncatedLegend";
 import { serverConfig } from "@/lib/chart-configs";
@@ -12,54 +19,102 @@ import type { SystemResourceGauge, SystemResourceTrends } from "@/data/system-re
 interface SystemResourcePanelProps {
   gauges: SystemResourceGauge[];
   trends: SystemResourceTrends;
+  storageKey?: string;
 }
 
-export function SystemResourcePanel({ gauges, trends }: SystemResourcePanelProps) {
+export function SystemResourcePanel({
+  gauges,
+  trends,
+  storageKey = "system-resource-panel",
+}: SystemResourcePanelProps) {
+  const [open, setOpen] = useState(true);
+
+  useEffect(() => {
+    const stored = localStorage.getItem(storageKey);
+    if (stored === "closed") setOpen(false);
+  }, [storageKey]);
+
+  function handleToggle(next: boolean) {
+    setOpen(next);
+    localStorage.setItem(storageKey, next ? "open" : "closed");
+  }
+
+  const gaugeIcons: Record<string, LucideIcon> = {
+    CPU: Cpu,
+    Memory: MemoryStick,
+    Disk: HardDrive,
+  };
+
   const legendItems = useMemo(
     () => legendItemsFromConfig(serverConfig, trends.cpu.map((s) => s.serverName)),
     [trends.cpu]
   );
 
-  return (
-    <Card className="border-border/40">
-      <CardHeader className="pb-2">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-sm">System Resources</CardTitle>
-          <TruncatedLegend items={legendItems} maxVisible={5} className="pt-0" />
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div className="flex items-center gap-4">
-          {/* 왼쪽: 반원 게이지 3개 세로 배치 (고정 폭) */}
-          <div className="flex flex-col gap-0 shrink-0" style={{ width: 130 }}>
-            {gauges.map((gauge) => (
-              <HalfGauge key={gauge.label} data={gauge} />
-            ))}
-          </div>
+  const summary = gauges
+    .map((g) => `${g.label} ${Math.round(g.percent)}%`)
+    .join(" · ");
 
-          {/* 오른쪽: 트렌드 차트 3개 가로 배치 */}
-          <div className="grid grid-cols-3 gap-2 flex-1 min-w-0">
-            <ResourceTrendChart
-              title="CPU"
-              series={trends.cpu}
-              unit="Cores"
-              className="w-full h-[180px]"
+  return (
+    <Collapsible open={open} onOpenChange={handleToggle}>
+      <div className="group rounded-lg border border-border/40 bg-card">
+        <CollapsibleTrigger className="flex w-full items-center justify-between px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
+          <div className="flex items-center gap-3">
+            <ChevronRight
+              className={cn(
+                "size-4 text-muted-foreground transition-transform",
+                open && "rotate-90"
+              )}
             />
-            <ResourceTrendChart
-              title="Memory"
-              series={trends.memory}
-              unit="GB"
-              className="w-full h-[180px]"
-            />
-            <ResourceTrendChart
-              title="Disk"
-              series={trends.disk}
-              unit="GB"
-              className="w-full h-[180px]"
-            />
+            <span className="font-medium">System Resources</span>
+            {!open && (
+              <span className="text-xs text-muted-foreground tabular-nums">
+                {summary}
+              </span>
+            )}
           </div>
-        </div>
-      </CardContent>
-    </Card>
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <div className="px-4 pb-4">
+            <div className="flex items-stretch gap-4">
+              {/* Left: compact resource stats */}
+              <div className="flex flex-col justify-center shrink-0" style={{ width: 160 }}>
+                {gauges.map((gauge) => (
+                  <ResourceStat key={gauge.label} data={gauge} icon={gaugeIcons[gauge.label] ?? Cpu} />
+                ))}
+              </div>
+
+              {/* Vertical divider */}
+              <div className="w-px self-stretch bg-border/40" />
+
+              {/* Right: trend charts */}
+              <div className="grid grid-cols-3 gap-2 flex-1 min-w-0">
+                <ResourceTrendChart
+                  title="CPU"
+                  series={trends.cpu}
+                  unit="Cores"
+                  syncId="system-resource"
+                  className="w-full h-[160px]"
+                />
+                <ResourceTrendChart
+                  title="Memory"
+                  series={trends.memory}
+                  unit="GB"
+                  syncId="system-resource"
+                  className="w-full h-[160px]"
+                />
+                <ResourceTrendChart
+                  title="Disk"
+                  series={trends.disk}
+                  unit="GB"
+                  syncId="system-resource"
+                  className="w-full h-[160px]"
+                />
+              </div>
+            </div>
+            <TruncatedLegend items={legendItems} maxVisible={5} autoHide />
+          </div>
+        </CollapsibleContent>
+      </div>
+    </Collapsible>
   );
 }

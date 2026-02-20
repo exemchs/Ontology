@@ -50,11 +50,11 @@ interface ServerSeed {
 }
 
 const serverSeeds: ServerSeed[] = [
-  { name: "Server-A", cpuTotal: 8, cpuUsed: 0.12, memoryTotal: 32, memoryUsed: 16.5, diskTotal: 500, diskUsed: 1.2 },
-  { name: "Server-B", cpuTotal: 8, cpuUsed: 0.10, memoryTotal: 32, memoryUsed: 14.2, diskTotal: 500, diskUsed: 1.0 },
-  { name: "Server-C", cpuTotal: 8, cpuUsed: 0.08, memoryTotal: 16, memoryUsed: 9.8, diskTotal: 250, diskUsed: 0.8 },
-  { name: "Server-D", cpuTotal: 4, cpuUsed: 0.06, memoryTotal: 16, memoryUsed: 11.0, diskTotal: 250, diskUsed: 0.6 },
-  { name: "Server-E", cpuTotal: 4, cpuUsed: 0.04, memoryTotal: 16, memoryUsed: 8.5, diskTotal: 200, diskUsed: 0.4 },
+  { name: "Server-A", cpuTotal: 8, cpuUsed: 0.12, memoryTotal: 32, memoryUsed: 25.6, diskTotal: 500, diskUsed: 1.2 },
+  { name: "Server-B", cpuTotal: 8, cpuUsed: 0.10, memoryTotal: 32, memoryUsed: 23.8, diskTotal: 500, diskUsed: 1.0 },
+  { name: "Server-C", cpuTotal: 8, cpuUsed: 0.08, memoryTotal: 16, memoryUsed: 12.4, diskTotal: 250, diskUsed: 0.8 },
+  { name: "Server-D", cpuTotal: 4, cpuUsed: 0.06, memoryTotal: 16, memoryUsed: 13.1, diskTotal: 250, diskUsed: 0.6 },
+  { name: "Server-E", cpuTotal: 4, cpuUsed: 0.04, memoryTotal: 16, memoryUsed: 10.9, diskTotal: 200, diskUsed: 0.4 },
 ];
 
 const serverColors = [

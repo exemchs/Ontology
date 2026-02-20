@@ -133,6 +133,7 @@ export function GpuPerformanceTrend({
         maxVisible={5}
         hidden={hiddenGpus}
         onToggle={handleLegendClick}
+        autoHide
       />
     </div>
   );

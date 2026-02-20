@@ -16,6 +16,7 @@ interface ResourceTrendChartProps {
   title: string;
   series: ServerResourceTrend[];
   unit: string;
+  syncId?: string;
   className?: string;
 }
 
@@ -23,6 +24,7 @@ export function ResourceTrendChart({
   title,
   series,
   unit,
+  syncId,
   className,
 }: ResourceTrendChartProps) {
   const formatTime = useMemo(() => timeFormat("%H:%M"), []);
@@ -53,7 +55,7 @@ export function ResourceTrendChart({
         {title}
       </p>
       <ChartContainer config={serverConfig} className="h-[calc(100%-20px)] w-full">
-        <AreaChart data={data} margin={{ top: 4, right: 4, bottom: 0, left: -12 }}>
+        <AreaChart data={data} syncId={syncId} margin={{ top: 4, right: 4, bottom: 0, left: -12 }}>
           <CartesianGrid vertical={false} strokeDasharray="3 3" />
           <XAxis
             dataKey="time"
