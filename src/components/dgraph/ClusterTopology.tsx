@@ -384,6 +384,41 @@ export function ClusterTopology({ onNodeClick, className }: ClusterTopologyProps
     // Prevent zoom on double-click (would reset transform)
     svg.on("dblclick.zoom", null);
 
+    // ── Auto fit-to-view on initial simulation settle ────────────────
+
+    let initialFitDone = false;
+    simulation.on("tick.initialFit", () => {
+      if (initialFitDone || destroyedRef.current) return;
+      if (simulation.alpha() < 0.1) {
+        initialFitDone = true;
+        simulation.on("tick.initialFit", null);
+        const nodes = nodeDatumsRef.current;
+        if (nodes.length === 0) return;
+        const rect = svgEl.getBoundingClientRect();
+        const vw = rect.width;
+        const vh = rect.height;
+        const pad = 60;
+        let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+        nodes.forEach((n) => {
+          const r = getNodeRadius(n.node);
+          x0 = Math.min(x0, (n.x ?? 0) - r);
+          x1 = Math.max(x1, (n.x ?? 0) + r);
+          y0 = Math.min(y0, (n.y ?? 0) - r);
+          y1 = Math.max(y1, (n.y ?? 0) + r);
+        });
+        const bw = x1 - x0;
+        const bh = y1 - y0;
+        if (bw === 0 || bh === 0) return;
+        const s = Math.min((vw - pad * 2) / bw, (vh - pad * 2) / bh, 2);
+        const cx = (x0 + x1) / 2;
+        const cy = (y0 + y1) / 2;
+        svg.transition().duration(500).call(
+          zoomBehavior.transform as any,
+          zoomIdentity.translate(vw / 2, vh / 2).scale(s).translate(-cx, -cy)
+        );
+      }
+    });
+
     // ── Node Click Handler ───────────────────────────────────────────
 
     nodeGroups.on("click", (event: MouseEvent, d: NodeDatum) => {

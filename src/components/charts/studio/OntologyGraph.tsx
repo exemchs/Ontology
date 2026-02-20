@@ -347,6 +347,7 @@ export function OntologyGraph({
     if (!svgEl || !containerEl) return;
 
     destroyedRef.current = false;
+    let initialFitDone = false;
 
     // Wait for valid dimensions from ResizeObserver before initializing
     const resizeObserver = createDebouncedResizeObserver((w, h) => {
@@ -662,6 +663,42 @@ export function OntologyGraph({
       if (modeRef.current === "radial" || modeRef.current === "hierarchy") {
         simulation.stop();
         applyStaticLayout(modeRef.current, g, types, graphData, width, height);
+      }
+
+      // ── Auto fit-to-view on initial force layout settle ────────────
+
+      if (!initialFitDone && modeRef.current === "force") {
+        simulation.on("tick.initialFit", () => {
+          if (initialFitDone || destroyedRef.current) return;
+          if (simulation.alpha() < 0.1) {
+            initialFitDone = true;
+            simulation.on("tick.initialFit", null);
+            const nodes = graphNodesRef.current;
+            if (nodes.length === 0 || !svgEl) return;
+            const rect = svgEl.getBoundingClientRect();
+            const vw = rect.width;
+            const vh = rect.height;
+            const pad = 60;
+            let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+            nodes.forEach((n) => {
+              const r = getNodeRadius(n.nodeCount);
+              x0 = Math.min(x0, n.x - r);
+              x1 = Math.max(x1, n.x + r);
+              y0 = Math.min(y0, n.y - r);
+              y1 = Math.max(y1, n.y + r);
+            });
+            const bw = x1 - x0;
+            const bh = y1 - y0;
+            if (bw === 0 || bh === 0) return;
+            const s = Math.min((vw - pad * 2) / bw, (vh - pad * 2) / bh, 2);
+            const cx = (x0 + x1) / 2;
+            const cy = (y0 + y1) / 2;
+            svg.transition().duration(500).call(
+              zoomBehavior.transform as any,
+              zoomIdentity.translate(vw / 2, vh / 2).scale(s).translate(-cx, -cy)
+            );
+          }
+        });
       }
 
       // ── Cleanup function stored for next call ──────────────────────
