@@ -35,7 +35,7 @@ function getStatusBadgeClass(status: string): string {
 function getBarColor(value: number): string {
   if (value > 80) return "bg-red-500";
   if (value >= 60) return "bg-amber-500";
-  return "bg-emerald-500";
+  return "bg-[var(--status-healthy)]";
 }
 
 // ── Component ────────────────────────────────────────────────────────────────

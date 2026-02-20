@@ -32,7 +32,7 @@ export default function GpuSummaryWidget({
         <div className="w-full h-2 rounded-full overflow-hidden flex bg-muted">
           {activePct > 0 && (
             <div
-              className="h-full bg-green-500 transition-all"
+              className="h-full bg-[var(--status-healthy)] transition-all"
               style={{ width: `${activePct}%` }}
             />
           )}
@@ -53,7 +53,7 @@ export default function GpuSummaryWidget({
         <div className="flex items-center gap-4">
           <div className="flex flex-col items-center">
             <div className="flex items-center gap-1.5">
-              <span className="h-2 w-2 rounded-full bg-green-500" />
+              <span className="h-2 w-2 rounded-full bg-[var(--status-healthy)]" />
               <span className="text-lg font-bold tabular-nums">{active}</span>
             </div>
             <span className="text-[10px] text-muted-foreground">Active</span>

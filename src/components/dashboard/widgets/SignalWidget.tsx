@@ -13,21 +13,21 @@ const statusConfig: Record<
   { dot: string; text: string; bg: string; label: string }
 > = {
   healthy: {
-    dot: "bg-green-500",
-    text: "text-green-600 dark:text-green-400",
-    bg: "bg-green-500/10",
+    dot: "bg-[var(--status-healthy)]",
+    text: "text-[var(--status-healthy)]",
+    bg: "bg-[var(--status-healthy)]/10",
     label: "Healthy",
   },
   warning: {
-    dot: "bg-amber-500",
-    text: "text-amber-600 dark:text-amber-400",
-    bg: "bg-amber-500/10",
+    dot: "bg-[var(--status-warning)]",
+    text: "text-[var(--status-warning)]",
+    bg: "bg-[var(--status-warning)]/10",
     label: "Warning",
   },
   error: {
-    dot: "bg-red-500",
-    text: "text-red-600 dark:text-red-400",
-    bg: "bg-red-500/10",
+    dot: "bg-[var(--status-critical)]",
+    text: "text-[var(--status-critical)]",
+    bg: "bg-[var(--status-critical)]/10",
     label: "Error",
   },
 };
