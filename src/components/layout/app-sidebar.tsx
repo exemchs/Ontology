@@ -36,7 +36,20 @@ export function AppSidebar() {
       <SidebarHeader className="pb-0">
         <div className="flex h-7 items-center px-2">
           {isCollapsed ? (
-            <span className="text-lg font-bold text-primary">eX</span>
+            <>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/logos/logo-dark-collapse.svg"
+                alt="eXemble"
+                className="hidden dark:block h-6 w-auto"
+              />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/logos/logo-light-collapse.svg"
+                alt="eXemble"
+                className="block dark:hidden h-6 w-auto"
+              />
+            </>
           ) : (
             <>
               {/* eslint-disable-next-line @next/next/no-img-element */}
