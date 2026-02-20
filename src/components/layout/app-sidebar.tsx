@@ -186,8 +186,18 @@ export function AppSidebar() {
                   tooltip="Admin"
                   className="data-[state=open]:bg-sidebar-accent"
                 >
-                  <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-sidebar-accent">
-                    <User2 className="size-4" />
+                  <div
+                    className={cn(
+                      "flex shrink-0 items-center justify-center rounded-full bg-blue-500 transition-[width,height] duration-200",
+                      isCollapsed ? "size-8" : "size-6"
+                    )}
+                  >
+                    <User2
+                      className={cn(
+                        "text-white",
+                        isCollapsed ? "size-4" : "size-3.5"
+                      )}
+                    />
                   </div>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-medium">Admin</span>
