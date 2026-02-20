@@ -107,7 +107,7 @@ export function SchemaExplorer({ onInsert }: SchemaExplorerProps) {
                         className="flex items-center gap-1.5 w-full px-1 py-0.5 rounded text-left hover:bg-muted/50 transition-colors"
                       >
                         <Hash className="size-2.5 text-emerald-500 shrink-0" />
-                        <span className="text-[11px] text-muted-foreground truncate">
+                        <span className="text-xs text-muted-foreground truncate">
                           {pred}
                         </span>
                       </button>
@@ -119,7 +119,7 @@ export function SchemaExplorer({ onInsert }: SchemaExplorerProps) {
                         className="flex items-center gap-1.5 w-full px-1 py-0.5 rounded text-left hover:bg-muted/50 transition-colors"
                       >
                         <ArrowRight className="size-2.5 text-amber-500 shrink-0" />
-                        <span className="text-[11px] text-muted-foreground truncate">
+                        <span className="text-xs text-muted-foreground truncate">
                           {rel.name}
                         </span>
                         <span className="text-[10px] text-muted-foreground/60 ml-auto">

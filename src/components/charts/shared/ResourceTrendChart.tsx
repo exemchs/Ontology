@@ -51,7 +51,7 @@ export function ResourceTrendChart({
 
   return (
     <div className={className}>
-      <p className="text-[11px] font-medium text-foreground mb-1 ml-1">
+      <p className="text-xs font-medium text-foreground mb-1 ml-1">
         {title}
       </p>
       <ChartContainer config={serverConfig} className="h-[calc(100%-20px)] w-full">

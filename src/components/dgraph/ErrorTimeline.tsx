@@ -56,7 +56,7 @@ export function ErrorTimeline() {
               >
                 {entry.severity}
               </Badge>
-              <span className="text-[11px] text-muted-foreground font-mono">
+              <span className="text-xs text-muted-foreground font-mono">
                 {entry.alpha}
               </span>
               <span className="text-[10px] text-muted-foreground ml-auto">

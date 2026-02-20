@@ -240,7 +240,7 @@ export function QueryConsole() {
               <div className="flex items-center gap-1 pr-2">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm" className="h-6 gap-1 text-[10px]">
+                    <Button variant="outline" size="sm" className="h-6 gap-1 text-xs">
                       <Download className="size-3" />
                       Export
                     </Button>

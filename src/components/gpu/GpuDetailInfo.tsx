@@ -72,7 +72,7 @@ function DetailContent({ gpu, detailData }: { gpu: Gpu; detailData: GpuDetailDat
           >
             <tile.icon className="size-4 text-muted-foreground shrink-0" />
             <div className="min-w-0">
-              <p className="text-[11px] text-muted-foreground leading-none mb-0.5">{tile.label}</p>
+              <p className="text-xs text-muted-foreground leading-none mb-0.5">{tile.label}</p>
               <p className="text-sm font-semibold tabular-nums leading-tight">{tile.value}</p>
             </div>
           </div>

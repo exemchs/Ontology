@@ -84,21 +84,21 @@ export function GpuList({ gpus, processes, selectedId, onSelect, className }: Gp
                 </td>
                 <td className="px-3 py-2">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-[11px] tabular-nums">{gpu.utilization}%</span>
+                    <span className="text-xs tabular-nums">{gpu.utilization}%</span>
                     <MiniBar percent={gpu.utilization} />
                   </div>
                 </td>
                 <td className="px-3 py-2">
-                  <span className="text-[11px] tabular-nums">{gpu.temperature}&deg;</span>
+                  <span className="text-xs tabular-nums">{gpu.temperature}&deg;</span>
                 </td>
                 <td className="px-3 py-2">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-[11px] tabular-nums">{gpu.memoryUsed}/{gpu.memoryTotal}G</span>
+                    <span className="text-xs tabular-nums">{gpu.memoryUsed}/{gpu.memoryTotal}G</span>
                     <MiniBar percent={memPct} />
                   </div>
                 </td>
                 <td className="px-3 py-2">
-                  <span className="text-[11px] tabular-nums text-muted-foreground">{procCount}</span>
+                  <span className="text-xs tabular-nums text-muted-foreground">{procCount}</span>
                 </td>
               </tr>
             );
