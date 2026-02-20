@@ -187,6 +187,7 @@ export default function DashboardGrid() {
           isDraggable
           isResizable
           margin={[12, 12]}
+          containerPadding={[0, 0]}
           onLayoutChange={handleLayoutChange}
           onDragStop={handleUserAction}
           onResizeStop={handleUserAction}
