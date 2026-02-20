@@ -371,16 +371,16 @@ export function TypeDetail({
         </span>
       </div>
 
-      <Tabs defaultValue="predicates" className="flex-1">
-        <TabsList className="mx-4 mt-2">
+      <Tabs defaultValue="predicates" className="flex flex-1 flex-col min-h-0">
+        <TabsList className="mx-4 mt-2 shrink-0">
           <TabsTrigger value="predicates">Predicates</TabsTrigger>
           <TabsTrigger value="relations">Relations</TabsTrigger>
           <TabsTrigger value="statistics">Statistics</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="predicates" className="px-4 pt-3">
-          <ScrollArea className="h-[180px]">
-            <div className="flex flex-wrap gap-1.5">
+        <TabsContent value="predicates" className="flex-1 min-h-0 mt-0 px-4 pt-3">
+          <ScrollArea className="h-full">
+            <div className="flex flex-wrap gap-1.5 pb-2">
               {type.predicates.map((pred) => (
                 <PredicateBadge
                   key={pred}
@@ -398,8 +398,8 @@ export function TypeDetail({
           </ScrollArea>
         </TabsContent>
 
-        <TabsContent value="relations" className="px-4 pt-3">
-          <div className="mb-3 flex items-center gap-2">
+        <TabsContent value="relations" className="flex flex-1 flex-col min-h-0 mt-0 px-4 pt-3">
+          <div className="mb-3 flex items-center gap-2 shrink-0">
             <span className="text-muted-foreground text-xs">Filter:</span>
             <Select
               value={edgeFilter}
@@ -415,8 +415,8 @@ export function TypeDetail({
               </SelectContent>
             </Select>
           </div>
-          <ScrollArea className="h-[140px]">
-            <div className="flex flex-col gap-2">
+          <ScrollArea className="flex-1 min-h-0">
+            <div className="flex flex-col gap-2 pb-2">
               {filteredRelations.length === 0 ? (
                 <p className="text-muted-foreground text-xs">
                   No relations for this filter
@@ -464,7 +464,7 @@ export function TypeDetail({
           </ScrollArea>
         </TabsContent>
 
-        <TabsContent value="statistics" className="px-4 pt-3">
+        <TabsContent value="statistics" className="flex-1 min-h-0 mt-0 overflow-auto px-4 pt-3">
           <div className="flex flex-col gap-4">
             <div>
               <p className="text-muted-foreground text-xs">Node Count</p>

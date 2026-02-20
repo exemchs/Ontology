@@ -204,7 +204,7 @@ export function StudioPage() {
 
       <div data-testid="studio-page" className="flex flex-1 min-h-0 gap-3">
         {/* Left Panel (~35%) */}
-        <div className="flex w-[35%] min-w-[280px] flex-col gap-3">
+        <div className="flex w-[35%] min-w-[280px] min-h-0 flex-col gap-3">
           <Card className="border-border/40 flex-[3] overflow-hidden py-0">
             <SchemaTreeView
               types={types}
