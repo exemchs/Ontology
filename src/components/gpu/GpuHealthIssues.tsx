@@ -17,6 +17,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { StatusDot } from "@/components/ds/StatusDot";
 import { GpuThresholdForm } from "@/components/gpu/GpuThresholdForm";
@@ -55,24 +61,22 @@ export function GpuHealthIssues({ issues }: GpuHealthIssuesProps) {
     .slice(0, 6);
 
   return (
-    <Card className="border-border/40" data-testid="gpu-health-issues">
-      <CardHeader className="pb-2">
-        <div className="flex items-center justify-between gap-2">
-          <CardTitle className="text-sm">Health Issues</CardTitle>
-          <Button
-            variant={showThresholds ? "secondary" : "ghost"}
-            size="icon"
-            className="h-7 w-7"
-            onClick={() => setShowThresholds((v) => !v)}
-          >
-            <Settings2 className="h-3.5 w-3.5" />
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent>
-        {showThresholds ? (
-          <GpuThresholdForm compact />
-        ) : (
+    <>
+      <Card className="border-border/40" data-testid="gpu-health-issues">
+        <CardHeader className="pb-2">
+          <div className="flex items-center justify-between gap-2">
+            <CardTitle className="text-sm">Health Issues</CardTitle>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7"
+              onClick={() => setShowThresholds(true)}
+            >
+              <Settings2 className="h-3.5 w-3.5" />
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
@@ -102,8 +106,17 @@ export function GpuHealthIssues({ issues }: GpuHealthIssuesProps) {
               ))}
             </TableBody>
           </Table>
-        )}
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+
+      <Dialog open={showThresholds} onOpenChange={setShowThresholds}>
+        <DialogContent className="sm:max-w-[420px]">
+          <DialogHeader>
+            <DialogTitle>Alert Thresholds</DialogTitle>
+          </DialogHeader>
+          <GpuThresholdForm compact />
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
