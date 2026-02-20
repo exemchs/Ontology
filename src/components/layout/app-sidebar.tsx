@@ -31,7 +31,7 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" className="border-r border-sidebar-border/40">
       {/* Logo — height matches HeaderBar h-12 so border lines up */}
-      <SidebarHeader className="h-12 shrink-0 border-b border-border/40 justify-center p-0 px-2">
+      <SidebarHeader className="h-12 shrink-0 border-b border-border/40 justify-center p-0 px-3">
         <div className="flex h-7 items-center">
           {!isCollapsed && (
             <>
@@ -81,7 +81,7 @@ export function AppSidebar() {
 
       {/* Footer */}
       <SidebarFooter className="gap-1">
-        <SidebarSeparator />
+        <SidebarSeparator className="mx-0" />
         <SidebarMenu>
           <SidebarMenuItem>
             <NamespaceSelector />

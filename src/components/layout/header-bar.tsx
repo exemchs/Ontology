@@ -24,7 +24,7 @@ export function HeaderBar() {
   const { theme, setTheme } = useTheme();
 
   return (
-    <header className="flex h-12 shrink-0 items-center gap-2 border-b border-border/40 px-4">
+    <header className="flex h-12 shrink-0 items-center gap-2 border-b border-border/40 pl-3 pr-4">
       {/* Left: sidebar trigger + breadcrumb */}
       <SidebarTrigger />
       <Separator orientation="vertical" className="mr-2 h-4" />
