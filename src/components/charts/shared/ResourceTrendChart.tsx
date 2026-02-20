@@ -77,12 +77,6 @@ export function ResourceTrendChart({
                   const ts = payload?.[0]?.payload?.time;
                   return ts ? formatTime(new Date(ts)) : "";
                 }}
-                formatter={(value, name) => (
-                  <span className="tabular-nums">
-                    {typeof value === "number" ? value.toFixed(2) : value}{" "}
-                    <span className="text-muted-foreground text-[10px]">{unit}</span>
-                  </span>
-                )}
               />
             }
           />
