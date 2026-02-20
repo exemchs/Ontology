@@ -113,11 +113,23 @@ export function GpuPipelineTreemap({ stages, className }: GpuPipelineTreemapProp
 
     const leaves = root.leaves() as HierarchyRectangularNode<TreeNode>[];
 
+    // Clip paths per tile
+    const defs = svg.append("defs");
+    leaves.forEach((d, i) => {
+      defs.append("clipPath")
+        .attr("id", `tile-clip-${i}`)
+        .append("rect")
+        .attr("width", d.x1 - d.x0)
+        .attr("height", d.y1 - d.y0)
+        .attr("rx", 4);
+    });
+
     const nodes = svg
       .selectAll("g")
       .data(leaves)
       .join("g")
-      .attr("transform", (d) => `translate(${d.x0},${d.y0})`);
+      .attr("transform", (d) => `translate(${d.x0},${d.y0})`)
+      .attr("clip-path", (_, i) => `url(#tile-clip-${i})`);
 
     // Rectangles
     nodes
