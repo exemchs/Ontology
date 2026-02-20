@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useId } from "react";
-import { useTheme } from "next-themes";
+import { useEffect, useRef, useState, useId, useCallback } from "react";
 import { select, type Selection } from "d3-selection";
 import {
   forceSimulation,
@@ -23,6 +22,8 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cleanupD3Svg, createDebouncedResizeObserver } from "@/components/charts/shared/chart-utils";
 import { getChartColors, resolveColor } from "@/components/charts/shared/chart-theme";
 import { createTooltip } from "@/components/charts/shared/chart-tooltip";
+import { D3ZoomControls } from "@/components/charts/shared/D3ZoomControls";
+import { D3Minimap, type MinimapNode, type MinimapTransform } from "@/components/charts/shared/D3Minimap";
 import { cn } from "@/lib/utils";
 
 // ── Types ─────────────────────────────────────────────────────────────────
@@ -50,10 +51,6 @@ interface OntologyGraphProps {
   onSelectType?: (type: OntologyType) => void;
   edgeFilter: "all" | "outbound" | "inbound";
   className?: string;
-  onZoomChange?: (
-    transform: { x: number; y: number; k: number },
-    nodes: { x: number; y: number; name: string }[]
-  ) => void;
 }
 
 // ── Graph Data Builder ────────────────────────────────────────────────────
@@ -195,24 +192,23 @@ export function OntologyGraph({
   onSelectType,
   edgeFilter,
   className,
-  onZoomChange,
 }: OntologyGraphProps) {
   const uniqueId = useId().replace(/:/g, "");
   const containerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const simulationRef = useRef<Simulation<GraphNode, GraphLink> | null>(null);
   const zoomRef = useRef<ZoomBehavior<SVGSVGElement, unknown> | null>(null);
+  const svgSelRef = useRef<Selection<SVGSVGElement, unknown, null, undefined> | null>(null);
+  const graphNodesRef = useRef<GraphNode[]>([]);
   const destroyedRef = useRef(false);
   const dimensionsRef = useRef({ width: 0, height: 0 });
 
   const [mode, setMode] = useState<GraphMode>("force");
+  const [minimapNodes, setMinimapNodes] = useState<MinimapNode[]>([]);
+  const [minimapTransform, setMinimapTransform] = useState<MinimapTransform>({ x: 0, y: 0, k: 1 });
 
   // Store mode in ref for access inside D3 callbacks without re-running main effect
   const modeRef = useRef(mode);
-
-  // Store onZoomChange in ref for D3 callback access
-  const onZoomChangeRef = useRef(onZoomChange);
-  onZoomChangeRef.current = onZoomChange;
 
   // ── Mode switch effect ────────────────────────────────────────────────
 
@@ -391,12 +387,14 @@ export function OntologyGraph({
         n.x = width / 2 + (Math.random() - 0.5) * 100;
         n.y = height / 2 + (Math.random() - 0.5) * 100;
       });
+      graphNodesRef.current = graphData.nodes;
 
       // ── SVG Setup ────────────────────────────────────────────────────
 
       const svg = select(svgEl as SVGSVGElement)
         .attr("width", width)
         .attr("height", height);
+      svgSelRef.current = svg;
 
       // Defs with arrow marker
       const defs = svg.append("defs");
@@ -600,14 +598,9 @@ export function OntologyGraph({
           });
 
         // Update minimap with current node positions during simulation
-        if (onZoomChangeRef.current) {
-          const nodePositions = graphData.nodes.map((n) => ({
-            x: n.x,
-            y: n.y,
-            name: n.name,
-          }));
-          onZoomChangeRef.current({ x: 0, y: 0, k: 1 }, nodePositions);
-        }
+        setMinimapNodes(
+          graphData.nodes.map((n) => ({ x: n.x, y: n.y, name: n.name }))
+        );
       });
 
       // ── Drag Behavior (Force mode only) ──────────────────────────────
@@ -643,19 +636,11 @@ export function OntologyGraph({
         .scaleExtent([0.3, 3])
         .on("zoom", (event: D3ZoomEvent<SVGSVGElement, unknown>) => {
           g.attr("transform", event.transform.toString());
-          // Notify minimap of zoom change
-          if (onZoomChangeRef.current) {
-            const t = event.transform;
-            const nodePositions = graphData.nodes.map((n) => ({
-              x: n.x,
-              y: n.y,
-              name: n.name,
-            }));
-            onZoomChangeRef.current(
-              { x: t.x, y: t.y, k: t.k },
-              nodePositions
-            );
-          }
+          const t = event.transform;
+          setMinimapTransform({ x: t.x, y: t.y, k: t.k });
+          setMinimapNodes(
+            graphData.nodes.map((n) => ({ x: n.x, y: n.y, name: n.name }))
+          );
         });
 
       svg.call(zoomBehavior);
@@ -703,12 +688,66 @@ export function OntologyGraph({
 
   const cleanupFnRef = useRef<(() => void) | null>(null);
 
+  // ── Zoom control callbacks ──────────────────────────────────────────────
+
+  const handleZoomIn = useCallback(() => {
+    if (!svgSelRef.current || !zoomRef.current) return;
+    svgSelRef.current.transition().duration(300).call(
+      zoomRef.current.scaleBy as any, 1.5
+    );
+  }, []);
+
+  const handleZoomOut = useCallback(() => {
+    if (!svgSelRef.current || !zoomRef.current) return;
+    svgSelRef.current.transition().duration(300).call(
+      zoomRef.current.scaleBy as any, 1 / 1.5
+    );
+  }, []);
+
+  const handleFitToView = useCallback(() => {
+    const svgEl = svgRef.current;
+    if (!svgSelRef.current || !zoomRef.current || !svgEl) return;
+    const nodes = graphNodesRef.current;
+    if (nodes.length === 0) return;
+
+    const rect = svgEl.getBoundingClientRect();
+    const w = rect.width;
+    const h = rect.height;
+
+    const pad = 60;
+    let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+    nodes.forEach((n) => {
+      const r = getNodeRadius(n.nodeCount);
+      minX = Math.min(minX, n.x - r);
+      maxX = Math.max(maxX, n.x + r);
+      minY = Math.min(minY, n.y - r);
+      maxY = Math.max(maxY, n.y + r);
+    });
+
+    const bw = maxX - minX;
+    const bh = maxY - minY;
+    if (bw === 0 || bh === 0) return;
+
+    const scale = Math.min((w - pad * 2) / bw, (h - pad * 2) / bh, 2);
+    const cx = (minX + maxX) / 2;
+    const cy = (minY + maxY) / 2;
+
+    const transform = zoomIdentity
+      .translate(w / 2, h / 2)
+      .scale(scale)
+      .translate(-cx, -cy);
+
+    svgSelRef.current.transition().duration(500).call(
+      zoomRef.current.transform as any, transform
+    );
+  }, []);
+
   // ── Render ──────────────────────────────────────────────────────────
 
   return (
     <div
       ref={containerRef}
-      className={cn("relative w-full h-full min-h-[300px]", className)}
+      className={cn("group relative w-full h-full min-h-[300px]", className)}
       data-testid="ontology-graph"
     >
       {/* Mode toggle */}
@@ -724,6 +763,21 @@ export function OntologyGraph({
 
       {/* SVG canvas */}
       <svg ref={svgRef} className="absolute inset-0 w-full h-full" />
+
+      {/* Zoom controls + Minimap overlay (fade-in on hover) */}
+      <div className="absolute bottom-3 right-3 z-10 flex items-end gap-2 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity duration-300">
+        <D3Minimap
+          nodes={minimapNodes}
+          viewportTransform={minimapTransform}
+          graphWidth={dimensionsRef.current.width}
+          graphHeight={dimensionsRef.current.height}
+        />
+        <D3ZoomControls
+          onZoomIn={handleZoomIn}
+          onZoomOut={handleZoomOut}
+          onFitToView={handleFitToView}
+        />
+      </div>
     </div>
   );
 }

@@ -8,11 +8,6 @@ import { SchemaOverviewPanel } from "@/components/studio/SchemaOverviewPanel";
 import { TypeDetail, type EdgeFilter } from "@/components/studio/TypeDetail";
 import { TypeAddDialog } from "@/components/studio/TypeAddDialog";
 import { OntologyGraph } from "@/components/charts/studio/OntologyGraph";
-import {
-  OntologyMinimap,
-  type MinimapNode,
-  type MinimapTransform,
-} from "@/components/studio/OntologyMinimap";
 import { getOntologyTypes } from "@/data/studio-data";
 import { toast } from "sonner";
 import type { OntologyType } from "@/types";
@@ -24,22 +19,6 @@ export function StudioPage() {
   );
   const [edgeFilter, setEdgeFilter] = useState<EdgeFilter>("all");
   const [addTypeDialogOpen, setAddTypeDialogOpen] = useState(false);
-
-  // Minimap state
-  const [minimapNodes, setMinimapNodes] = useState<MinimapNode[]>([]);
-  const [minimapTransform, setMinimapTransform] = useState<MinimapTransform>({
-    x: 0,
-    y: 0,
-    k: 1,
-  });
-
-  const handleZoomChange = useCallback(
-    (transform: { x: number; y: number; k: number }, nodes: { x: number; y: number; name: string }[]) => {
-      setMinimapTransform(transform);
-      setMinimapNodes(nodes);
-    },
-    []
-  );
 
   // Bridge SchemaTreeView (name-based) to OntologyType selection
   const handleTreeSelect = useCallback(
@@ -271,17 +250,7 @@ export function StudioPage() {
               selectedType={selectedType}
               onSelectType={setSelectedType}
               edgeFilter={edgeFilter}
-              onZoomChange={handleZoomChange}
             />
-            {/* Minimap overlay */}
-            <div className="absolute bottom-2 right-2 z-10">
-              <OntologyMinimap
-                nodes={minimapNodes}
-                viewportTransform={minimapTransform}
-                graphWidth={800}
-                graphHeight={500}
-              />
-            </div>
           </Card>
         </div>
       </div>

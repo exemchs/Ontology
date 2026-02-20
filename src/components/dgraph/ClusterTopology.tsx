@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { select } from "d3-selection";
+import { select, type Selection } from "d3-selection";
 import {
   forceSimulation,
   forceLink,
@@ -14,7 +14,8 @@ import {
   type SimulationLinkDatum,
 } from "d3-force";
 import { drag as d3Drag, type D3DragEvent } from "d3-drag";
-import { zoom as d3Zoom, zoomTransform, type D3ZoomEvent } from "d3-zoom";
+import { zoom as d3Zoom, zoomTransform, zoomIdentity, type ZoomBehavior, type D3ZoomEvent } from "d3-zoom";
+import "d3-transition";
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
@@ -24,6 +25,8 @@ import { cn } from "@/lib/utils";
 import { getDgraphNodes, getDgraphLinks, type DgraphNode } from "@/data/dgraph-data";
 import { cleanupD3Svg, createDebouncedResizeObserver } from "@/components/charts/shared/chart-utils";
 import { getChartColors, resolveColor } from "@/components/charts/shared/chart-theme";
+import { D3ZoomControls } from "@/components/charts/shared/D3ZoomControls";
+import { D3Minimap, type MinimapNode, type MinimapTransform } from "@/components/charts/shared/D3Minimap";
 
 // ── Constants ─────────────────────────────────────────────────────────────
 
@@ -72,9 +75,15 @@ export function ClusterTopology({ onNodeClick, className }: ClusterTopologyProps
   const particlesEnabledRef = useRef(true);
   const animFrameRef = useRef<number>(0);
   const destroyedRef = useRef(false);
+  const zoomBehaviorRef = useRef<ZoomBehavior<SVGSVGElement, unknown> | null>(null);
+  const svgSelRef = useRef<Selection<SVGSVGElement, unknown, null, undefined> | null>(null);
+  const nodeDatumsRef = useRef<NodeDatum[]>([]);
 
   const [layout, setLayout] = useState<"force" | "radial">("force");
   const [particlesEnabled, setParticlesEnabled] = useState(true);
+  const [minimapNodes, setMinimapNodes] = useState<MinimapNode[]>([]);
+  const [minimapTransform, setMinimapTransform] = useState<MinimapTransform>({ x: 0, y: 0, k: 1 });
+  const [graphDims, setGraphDims] = useState({ width: 0, height: 0 });
 
   // Sync particlesEnabled state to ref so rAF loop reads latest value
   useEffect(() => {
@@ -142,6 +151,7 @@ export function ClusterTopology({ onNodeClick, className }: ClusterTopologyProps
       id: n.id,
       node: n,
     }));
+    nodeDatumsRef.current = nodeDatums;
 
     const linkDatums: LinkDatum[] = rawLinks.map((l) => ({
       source: l.source,
@@ -156,6 +166,8 @@ export function ClusterTopology({ onNodeClick, className }: ClusterTopologyProps
     const height = rect.height;
 
     const svg = select(svgEl);
+    svgSelRef.current = svg;
+    setGraphDims({ width, height });
 
     // Inject pulse animation CSS
     svg
@@ -292,6 +304,11 @@ export function ClusterTopology({ onNodeClick, className }: ClusterTopologyProps
         .attr("y2", (d) => ((d.target as NodeDatum).y ?? 0));
 
       nodeGroups.attr("transform", (d) => `translate(${d.x ?? 0},${d.y ?? 0})`);
+
+      // Update minimap node positions
+      setMinimapNodes(
+        nodeDatums.map((d) => ({ x: d.x ?? 0, y: d.y ?? 0, name: d.node.name }))
+      );
     });
 
     // ── Particle Animation (rAF) ───────────────────────────────────
@@ -353,6 +370,8 @@ export function ClusterTopology({ onNodeClick, className }: ClusterTopologyProps
       .scaleExtent([0.3, 4])
       .on("zoom", (event: D3ZoomEvent<SVGSVGElement, unknown>) => {
         g.attr("transform", event.transform.toString());
+        const t = event.transform;
+        setMinimapTransform({ x: t.x, y: t.y, k: t.k });
       })
       .on("start", () => {
         // Signal popover close on zoom/pan start
@@ -360,6 +379,7 @@ export function ClusterTopology({ onNodeClick, className }: ClusterTopologyProps
       });
 
     svg.call(zoomBehavior);
+    zoomBehaviorRef.current = zoomBehavior;
 
     // Prevent zoom on double-click (would reset transform)
     svg.on("dblclick.zoom", null);
@@ -421,8 +441,62 @@ export function ClusterTopology({ onNodeClick, className }: ClusterTopologyProps
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // ── Zoom control callbacks ──────────────────────────────────────────────
+
+  const handleZoomIn = useCallback(() => {
+    if (!svgSelRef.current || !zoomBehaviorRef.current) return;
+    svgSelRef.current.transition().duration(300).call(
+      zoomBehaviorRef.current.scaleBy as any, 1.5
+    );
+  }, []);
+
+  const handleZoomOut = useCallback(() => {
+    if (!svgSelRef.current || !zoomBehaviorRef.current) return;
+    svgSelRef.current.transition().duration(300).call(
+      zoomBehaviorRef.current.scaleBy as any, 1 / 1.5
+    );
+  }, []);
+
+  const handleFitToView = useCallback(() => {
+    const svgEl = svgRef.current;
+    if (!svgSelRef.current || !zoomBehaviorRef.current || !svgEl) return;
+    const nodes = nodeDatumsRef.current;
+    if (nodes.length === 0) return;
+
+    const rect = svgEl.getBoundingClientRect();
+    const w = rect.width;
+    const h = rect.height;
+
+    const pad = 60;
+    let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+    nodes.forEach((n) => {
+      const r = getNodeRadius(n.node);
+      minX = Math.min(minX, (n.x ?? 0) - r);
+      maxX = Math.max(maxX, (n.x ?? 0) + r);
+      minY = Math.min(minY, (n.y ?? 0) - r);
+      maxY = Math.max(maxY, (n.y ?? 0) + r);
+    });
+
+    const bw = maxX - minX;
+    const bh = maxY - minY;
+    if (bw === 0 || bh === 0) return;
+
+    const scale = Math.min((w - pad * 2) / bw, (h - pad * 2) / bh, 2);
+    const cx = (minX + maxX) / 2;
+    const cy = (minY + maxY) / 2;
+
+    const transform = zoomIdentity
+      .translate(w / 2, h / 2)
+      .scale(scale)
+      .translate(-cx, -cy);
+
+    svgSelRef.current.transition().duration(500).call(
+      zoomBehaviorRef.current.transform as any, transform
+    );
+  }, []);
+
   return (
-    <div ref={containerRef} className={cn("relative w-full h-full min-h-[400px]", className)}>
+    <div ref={containerRef} className={cn("group relative w-full h-full min-h-[400px]", className)}>
       {/* Layout toggle */}
       <div className="absolute top-3 left-3 z-10 flex items-center gap-2">
         <Tabs value={layout} onValueChange={(v) => setLayout(v as "force" | "radial")}>
@@ -439,6 +513,20 @@ export function ClusterTopology({ onNodeClick, className }: ClusterTopologyProps
       </div>
       {/* SVG canvas */}
       <svg ref={svgRef} className="w-full h-full" data-testid="cluster-topology" />
+      {/* Zoom controls + Minimap overlay (fade-in on hover) */}
+      <div className="absolute bottom-3 right-3 z-10 flex items-end gap-2 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity duration-300">
+        <D3Minimap
+          nodes={minimapNodes}
+          viewportTransform={minimapTransform}
+          graphWidth={graphDims.width}
+          graphHeight={graphDims.height}
+        />
+        <D3ZoomControls
+          onZoomIn={handleZoomIn}
+          onZoomOut={handleZoomOut}
+          onFitToView={handleFitToView}
+        />
+      </div>
     </div>
   );
 }
