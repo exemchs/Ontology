@@ -1,6 +1,8 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { useTheme } from "next-themes";
+import { Moon, Sun, Search } from "lucide-react";
 
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import {
@@ -13,38 +15,17 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { breadcrumbMap } from "@/lib/navigation";
-import { NamespaceSelector } from "@/components/layout/NamespaceSelector";
 import { AlertBell } from "@/components/layout/AlertBell";
-import { useRole } from "@/contexts/RoleContext";
-import type { Role } from "@/types";
-
-// ── Role badge color mapping ────────────────────────────────────────────────
-
-const roleBadgeConfig: Record<Role, { variant: "destructive" | "default" | "secondary" | "outline"; className: string }> = {
-  super_admin: { variant: "destructive", className: "" },
-  service_app: { variant: "default", className: "bg-blue-500/15 text-blue-600 border-blue-500/30 dark:text-blue-400" },
-  data_analyst: { variant: "secondary", className: "" },
-  auditor: { variant: "outline", className: "" },
-};
-
-function formatRoleName(role: Role): string {
-  return role
-    .split("_")
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ");
-}
 
 export function HeaderBar() {
   const pathname = usePathname();
   const crumb = breadcrumbMap[pathname];
-  const { currentRole } = useRole();
-  const badgeCfg = roleBadgeConfig[currentRole];
+  const { theme, setTheme } = useTheme();
 
   return (
     <header className="flex h-12 shrink-0 items-center gap-2 border-b border-border/40 px-4">
-      {/* Left side: sidebar trigger + breadcrumb */}
+      {/* Left: sidebar trigger + breadcrumb */}
       <SidebarTrigger />
       <Separator orientation="vertical" className="mr-2 h-4" />
       {crumb && (
@@ -61,19 +42,9 @@ export function HeaderBar() {
         </Breadcrumb>
       )}
 
-      {/* Right side: namespace + role badge + bell + Cmd+K hint */}
-      <div className="ml-auto flex items-center gap-2">
-        <NamespaceSelector />
-        <Badge
-          variant={badgeCfg.variant}
-          className={`text-[10px] px-1.5 py-0 ${badgeCfg.className}`}
-        >
-          {formatRoleName(currentRole)}
-        </Badge>
-        <AlertBell />
-        <Button
-          variant="outline"
-          size="sm"
+      {/* Center: search bar */}
+      <div className="flex-1 flex justify-center">
+        <button
           onClick={() => {
             document.dispatchEvent(
               new KeyboardEvent("keydown", {
@@ -83,10 +54,30 @@ export function HeaderBar() {
               })
             );
           }}
-          className="h-7 gap-1 px-2 text-xs text-muted-foreground"
+          className="flex h-8 w-full max-w-sm items-center gap-2 rounded-md border border-input bg-background px-3 text-sm text-muted-foreground hover:bg-accent transition-colors"
         >
-          <kbd className="font-mono text-[10px]">⌘K</kbd>
+          <Search className="size-3.5 shrink-0" />
+          <span className="flex-1 text-left">Search...</span>
+          <kbd className="ml-auto font-mono text-[10px] text-muted-foreground/60">⌘K</kbd>
+        </button>
+      </div>
+
+      {/* Right: theme toggle + alert bell */}
+      <div className="flex items-center gap-1">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8"
+          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+        >
+          {theme === "dark" ? (
+            <Sun className="size-4" />
+          ) : (
+            <Moon className="size-4" />
+          )}
+          <span className="sr-only">Toggle theme</span>
         </Button>
+        <AlertBell />
       </div>
     </header>
   );

@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useTheme } from "next-themes";
-import { Moon, Sun, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 
 import {
   Sidebar,
@@ -16,41 +15,40 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarSeparator,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { navigationGroups } from "@/lib/navigation";
 import { useAuth } from "@/hooks/use-auth";
+import { NamespaceSelector } from "@/components/layout/NamespaceSelector";
 
 export function AppSidebar() {
   const pathname = usePathname();
-  const { theme, setTheme } = useTheme();
   const { logout } = useAuth();
   const { state } = useSidebar();
   const isCollapsed = state === "collapsed";
 
   return (
     <Sidebar collapsible="icon" className="border-r border-sidebar-border/40">
-      {/* Logo area */}
-      <SidebarHeader className="pb-0">
-        <div className="flex h-7 items-center px-2">
-          {!isCollapsed && (
-            <>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/logos/logo-dark.png"
-                alt="eXemble"
-                className="hidden dark:block h-6 w-auto"
-              />
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/logos/logo-light.png"
-                alt="eXemble"
-                className="block dark:hidden h-6 w-auto"
-              />
-            </>
-          )}
-        </div>
+      {/* Logo — height matches HeaderBar h-12 so border lines up */}
+      <SidebarHeader className="h-12 border-b border-border/40 px-4 py-0 justify-center">
+        {!isCollapsed && (
+          <>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logos/logo-dark.png"
+              alt="eXemble"
+              className="hidden dark:block h-6 w-auto"
+            />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logos/logo-light.png"
+              alt="eXemble"
+              className="block dark:hidden h-6 w-auto"
+            />
+          </>
+        )}
       </SidebarHeader>
 
       {/* Navigation groups */}
@@ -80,21 +78,12 @@ export function AppSidebar() {
         ))}
       </SidebarContent>
 
-      {/* Footer: theme toggle + logout */}
+      {/* Footer */}
       <SidebarFooter className="gap-1">
+        <SidebarSeparator />
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton
-              tooltip={theme === "dark" ? "Light mode" : "Dark mode"}
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            >
-              {theme === "dark" ? (
-                <Sun className="size-4" />
-              ) : (
-                <Moon className="size-4" />
-              )}
-              <span>Theme</span>
-            </SidebarMenuButton>
+            <NamespaceSelector />
           </SidebarMenuItem>
         </SidebarMenu>
 
