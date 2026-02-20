@@ -71,7 +71,7 @@ export function AlertBell() {
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent align="end" className="w-80 p-0">
+      <PopoverContent side="right" align="end" className="w-80 p-0">
         {/* Header */}
         <div className="flex items-center justify-between border-b px-4 py-3">
           <h4 className="text-sm font-medium">Notifications</h4>

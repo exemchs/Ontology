@@ -1,13 +1,13 @@
 "use client";
 
-import { Database, Check } from "lucide-react";
+import { Database, Check, ChevronDown } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
+import { SidebarMenuButton, useSidebar } from "@/components/ui/sidebar";
 import { useNamespace } from "@/contexts/NamespaceContext";
 import { cn } from "@/lib/utils";
 
@@ -19,20 +19,30 @@ const STATUS_COLORS: Record<string, string> = {
 
 export function NamespaceSelector() {
   const { currentNamespace, setCurrentNamespace, namespaces } = useNamespace();
+  const { state } = useSidebar();
+  const isCollapsed = state === "collapsed";
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          className="h-7 gap-1.5 px-2 text-xs text-muted-foreground"
+        <SidebarMenuButton
+          tooltip={currentNamespace}
+          className="h-8 w-full"
         >
-          <Database className="size-3" />
-          <span className="max-w-[100px] truncate">{currentNamespace}</span>
-        </Button>
+          <Database className="size-4" />
+          {!isCollapsed && (
+            <>
+              <span className="flex-1 truncate text-xs">{currentNamespace}</span>
+              <ChevronDown className="size-3 text-muted-foreground" />
+            </>
+          )}
+        </SidebarMenuButton>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-[200px]">
+      <DropdownMenuContent
+        side="right"
+        align="end"
+        className="w-[200px]"
+      >
         {namespaces.map((ns) => (
           <DropdownMenuItem
             key={ns.name}
