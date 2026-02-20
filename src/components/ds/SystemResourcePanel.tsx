@@ -72,12 +72,16 @@ export function SystemResourcePanel({
             {!open && (
               <div className="flex items-center gap-4">
                 {gauges.map((g) => {
-                  const pct = Math.round(g.percent);
+                  const status = getStatus(Math.round(g.percent));
+                  const statusLabel: Record<string, string> = {
+                    healthy: "Normal",
+                    warning: "Warning",
+                    critical: "Critical",
+                  };
                   return (
                     <span key={g.label} className="flex items-center gap-1.5 text-xs text-muted-foreground">
                       {g.label}
-                      <StatusDot status={getStatus(pct)} />
-                      <span className="tabular-nums font-medium">{pct}%</span>
+                      <StatusDot status={status} label={statusLabel[status]} />
                     </span>
                   );
                 })}
