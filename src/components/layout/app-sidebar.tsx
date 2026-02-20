@@ -32,23 +32,25 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" className="border-r border-sidebar-border/40">
       {/* Logo — height matches HeaderBar h-12 so border lines up */}
-      <SidebarHeader className="h-12 border-b border-border/40 px-4 py-0 justify-center">
-        {!isCollapsed && (
-          <>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/logos/logo-dark.png"
-              alt="eXemble"
-              className="hidden dark:block h-6 w-auto"
-            />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/logos/logo-light.png"
-              alt="eXemble"
-              className="block dark:hidden h-6 w-auto"
-            />
-          </>
-        )}
+      <SidebarHeader className="h-12 shrink-0 border-b border-border/40 justify-center pb-0">
+        <div className="flex h-7 items-center px-2">
+          {!isCollapsed && (
+            <>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/logos/logo-dark.png"
+                alt="eXemble"
+                className="hidden dark:block h-5 w-auto"
+              />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/logos/logo-light.png"
+                alt="eXemble"
+                className="block dark:hidden h-5 w-auto"
+              />
+            </>
+          )}
+        </div>
       </SidebarHeader>
 
       {/* Navigation groups */}

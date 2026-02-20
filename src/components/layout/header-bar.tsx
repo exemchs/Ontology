@@ -42,9 +42,12 @@ export function HeaderBar() {
         </Breadcrumb>
       )}
 
-      {/* Center: search bar */}
-      <div className="flex-1 flex justify-center">
-        <button
+      {/* Right: search + theme + alerts */}
+      <div className="ml-auto flex items-center gap-1">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8"
           onClick={() => {
             document.dispatchEvent(
               new KeyboardEvent("keydown", {
@@ -54,16 +57,10 @@ export function HeaderBar() {
               })
             );
           }}
-          className="flex h-8 w-full max-w-sm items-center gap-2 rounded-md border border-input bg-background px-3 text-sm text-muted-foreground hover:bg-accent transition-colors"
         >
-          <Search className="size-3.5 shrink-0" />
-          <span className="flex-1 text-left">Search...</span>
-          <kbd className="ml-auto font-mono text-[10px] text-muted-foreground/60">⌘K</kbd>
-        </button>
-      </div>
-
-      {/* Right: theme toggle + alert bell */}
-      <div className="flex items-center gap-1">
+          <Search className="size-4" />
+          <span className="sr-only">Search</span>
+        </Button>
         <Button
           variant="ghost"
           size="icon"
