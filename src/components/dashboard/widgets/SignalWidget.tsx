@@ -1,6 +1,5 @@
 "use client";
 
-import { Circle } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 interface SignalWidgetProps {
@@ -9,29 +8,45 @@ interface SignalWidgetProps {
   status: "healthy" | "warning" | "error";
 }
 
-const statusColors: Record<SignalWidgetProps["status"], string> = {
-  healthy: "text-green-500",
-  warning: "text-amber-500",
-  error: "text-red-500",
-};
-
-const statusLabels: Record<SignalWidgetProps["status"], string> = {
-  healthy: "Healthy",
-  warning: "Warning",
-  error: "Error",
+const statusConfig: Record<
+  SignalWidgetProps["status"],
+  { dot: string; text: string; bg: string; label: string }
+> = {
+  healthy: {
+    dot: "bg-green-500",
+    text: "text-green-600 dark:text-green-400",
+    bg: "bg-green-500/10",
+    label: "Healthy",
+  },
+  warning: {
+    dot: "bg-amber-500",
+    text: "text-amber-600 dark:text-amber-400",
+    bg: "bg-amber-500/10",
+    label: "Warning",
+  },
+  error: {
+    dot: "bg-red-500",
+    text: "text-red-600 dark:text-red-400",
+    bg: "bg-red-500/10",
+    label: "Error",
+  },
 };
 
 export default function SignalWidget({ label, value, status }: SignalWidgetProps) {
+  const cfg = statusConfig[status];
+
   return (
-    <Card className="h-full py-3">
-      <CardContent className="flex flex-col items-center justify-center gap-1 px-3">
-        <Circle className={`h-5 w-5 fill-current ${statusColors[status]}`} />
+    <Card className={`h-full py-3 ${cfg.bg}`}>
+      <CardContent className="flex flex-col items-center justify-center gap-1.5 px-3">
+        <span className={`h-2.5 w-2.5 rounded-full ${cfg.dot}`} />
         <span className="text-2xl font-bold tabular-nums">{value}</span>
         <span className="text-xs text-muted-foreground truncate w-full text-center">
           {label}
         </span>
-        <span className={`text-[10px] font-medium ${statusColors[status]}`}>
-          {statusLabels[status]}
+        <span
+          className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${cfg.text} ${cfg.bg}`}
+        >
+          {cfg.label}
         </span>
       </CardContent>
     </Card>
