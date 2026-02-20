@@ -151,9 +151,15 @@ export default function GpuGrid() {
     setLayout(newLayout);
   }, []);
 
-  const handleUserAction = useCallback(() => {
-    setIsDirty(true);
-  }, []);
+  const handleUserAction = useCallback(
+    (_layout: Layout[], oldItem: Layout, newItem: Layout) => {
+      if (oldItem.x !== newItem.x || oldItem.y !== newItem.y ||
+          oldItem.w !== newItem.w || oldItem.h !== newItem.h) {
+        setIsDirty(true);
+      }
+    },
+    []
+  );
 
   const handleSave = useCallback(() => {
     saveGpuLayout(layout);
