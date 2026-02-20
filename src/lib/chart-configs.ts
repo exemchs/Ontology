@@ -46,3 +46,17 @@ export const typeDistributionConfig = {
   records: { label: "Records", color: "var(--chart-1)" },
   queries: { label: "Queries", color: "var(--chart-2)" },
 } satisfies ChartConfig
+
+export const thresholdConfig = {
+  latency: { label: "p95 Latency", color: "var(--chart-1)" },
+} satisfies ChartConfig
+
+export const diskTrendConfig = {
+  Used: { label: "Used", color: "var(--chart-1)" },
+  Reserved: { label: "Reserved", color: "var(--chart-2)" },
+} satisfies ChartConfig
+
+export const memoryTrendConfig = {
+  "Alpha RSS": { label: "Alpha RSS", color: "var(--chart-1)" },
+  Cache: { label: "Cache", color: "var(--chart-2)" },
+} satisfies ChartConfig

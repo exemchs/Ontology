@@ -32,6 +32,7 @@ import {
   getDashboardGpuSummary,
   getDashboardDailySummary,
 } from "@/data/dashboard-data";
+import { diskTrendConfig, memoryTrendConfig } from "@/lib/chart-configs";
 
 const signalData = getDashboardSignalData();
 const sparklineData = getDashboardSparklineData();
@@ -86,7 +87,8 @@ function renderWidget(config: WidgetConfig) {
     case "trend": {
       const field = config.props.field as keyof typeof trendData;
       const series = trendData[field];
-      return <TrendChartWidget label={config.title} series={series} />;
+      const chartConfig = field === "disk" ? diskTrendConfig : memoryTrendConfig;
+      return <TrendChartWidget label={config.title} series={series} config={chartConfig} />;
     }
     case "gpu-summary":
       return (
