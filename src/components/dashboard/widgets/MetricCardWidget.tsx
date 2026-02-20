@@ -13,9 +13,9 @@ interface MetricCardWidgetProps {
 const trendConfig = {
   up: {
     icon: TrendingUp,
-    text: "text-green-600 dark:text-green-400",
-    bg: "bg-green-500/10",
-    cardBg: "bg-green-500/5",
+    text: "text-[var(--status-healthy)]",
+    bg: "bg-[var(--status-healthy)]/10",
+    cardBg: "bg-[var(--status-healthy)]/5",
   },
   down: {
     icon: TrendingDown,

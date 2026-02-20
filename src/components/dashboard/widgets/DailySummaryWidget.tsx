@@ -35,8 +35,8 @@ export default function DailySummaryWidget({
             <span
               className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-bold tabular-nums ${
                 queryImproved
-                  ? "bg-green-500/10 text-green-600 dark:text-green-400"
-                  : "bg-red-500/10 text-red-600 dark:text-red-400"
+                  ? "bg-[var(--status-healthy)]/10 text-[var(--status-healthy)]"
+                  : "bg-[var(--status-critical)]/10 text-[var(--status-critical)]"
               }`}
             >
               {queryImproved ? (
@@ -54,8 +54,8 @@ export default function DailySummaryWidget({
             <span
               className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-bold tabular-nums ${
                 errorImproved
-                  ? "bg-green-500/10 text-green-600 dark:text-green-400"
-                  : "bg-red-500/10 text-red-600 dark:text-red-400"
+                  ? "bg-[var(--status-healthy)]/10 text-[var(--status-healthy)]"
+                  : "bg-[var(--status-critical)]/10 text-[var(--status-critical)]"
               }`}
             >
               {errorImproved ? (
@@ -70,7 +70,9 @@ export default function DailySummaryWidget({
               <div className="flex items-center gap-1">
                 <div
                   className={`h-1 rounded-full ${
-                    errorImproved ? "bg-green-500" : "bg-red-500"
+                    errorImproved
+                      ? "bg-[var(--status-healthy)]"
+                      : "bg-[var(--status-critical)]"
                   }`}
                   style={{ width: `${todayPct}%` }}
                 />

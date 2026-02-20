@@ -45,8 +45,8 @@ export default function SparklineWidget({
           <span
             className={`ml-auto inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[10px] font-medium ${
               isUp
-                ? "bg-green-500/10 text-green-600 dark:text-green-400"
-                : "bg-red-500/10 text-red-600 dark:text-red-400"
+                ? "bg-[var(--status-healthy)]/10 text-[var(--status-healthy)]"
+                : "bg-[var(--status-critical)]/10 text-[var(--status-critical)]"
             }`}
           >
             {isUp ? (
