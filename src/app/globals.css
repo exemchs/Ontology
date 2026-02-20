@@ -233,3 +233,12 @@
   background: var(--primary) !important;
   opacity: 0.12;
 }
+
+/* 레이아웃 수정 중 상태 펄싱 */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+.layout-editing-pulse {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
