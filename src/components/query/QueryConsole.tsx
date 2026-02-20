@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
 import { exportJson, exportCsv } from "@/lib/query-export";
+import { PageShell } from "@/components/ds/PageShell";
 import type { QueryType } from "@/types";
 
 // -- Mock result generator ----------------------------------------------------
@@ -165,7 +166,12 @@ export function QueryConsole() {
   }, [activeTab]);
 
   return (
-    <div className="flex h-full bg-background">
+    <PageShell
+      title="Query Console"
+      description="Execute GraphQL and DQL queries against the Dgraph cluster"
+      className="h-full"
+    >
+    <div className="flex flex-1 min-h-0 bg-background">
       {/* Left: Schema Explorer */}
       <div className="w-[220px] shrink-0">
         <SchemaExplorer onInsert={handleSchemaInsert} />
@@ -301,5 +307,6 @@ export function QueryConsole() {
         onToggle={() => setShowChatbot((prev) => !prev)}
       />
     </div>
+    </PageShell>
   );
 }
