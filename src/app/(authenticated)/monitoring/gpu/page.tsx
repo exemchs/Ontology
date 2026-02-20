@@ -13,7 +13,6 @@ import { GpuPipelineTreemap } from "@/components/gpu/GpuPipelineTreemap";
 import { GpuPerformanceTrend } from "@/components/gpu/GpuPerformanceTrend";
 import { GpuHeatmapRidgelineToggle } from "@/components/gpu/GpuHeatmapRidgelineToggle";
 import { GpuHealthIssues } from "@/components/gpu/GpuHealthIssues";
-import { GpuProcessesTable } from "@/components/gpu/GpuProcessesTable";
 import { GpuDetailPanel } from "@/components/gpu/GpuDetailPanel";
 import {
   Sheet,
@@ -209,9 +208,6 @@ export default function GpuPage() {
           </CardContent>
         </Card>
       </div>
-
-      {/* Processes */}
-      <GpuProcessesTable processes={processes} />
 
       {/* GPU Detail Slide Panel */}
       <Sheet
