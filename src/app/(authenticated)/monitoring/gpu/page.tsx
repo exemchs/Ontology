@@ -97,7 +97,7 @@ export default function GpuPage() {
       <SystemResourcePanel gauges={systemGauges} trends={systemTrends} />
 
       {/* Utilization Distribution + GPU Pipeline + Health Issues */}
-      <div className="grid grid-cols-1 lg:grid-cols-6 gap-3 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-6 gap-3">
         <Card className="border-border/40 lg:col-span-3">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between gap-2">
@@ -130,8 +130,8 @@ export default function GpuPage() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm">GPU Pipeline</CardTitle>
           </CardHeader>
-          <CardContent>
-            <GpuPipelineTreemap stages={funnelStages} />
+          <CardContent className="flex-1">
+            <GpuPipelineTreemap stages={funnelStages} className="h-full" />
           </CardContent>
         </Card>
 

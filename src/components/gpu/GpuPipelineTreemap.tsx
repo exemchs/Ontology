@@ -7,7 +7,7 @@ import { hierarchy, treemap, treemapSquarify, type HierarchyRectangularNode } fr
 
 import { resolveColor, getChartColors } from "@/components/charts/shared/chart-theme";
 import { createTooltip } from "@/components/charts/shared/chart-tooltip";
-import { cleanupD3Svg, createDebouncedResizeObserver } from "@/components/charts/shared/chart-utils";
+import { cleanupD3Svg } from "@/components/charts/shared/chart-utils";
 import type { GpuFunnelStage } from "@/data/gpu-data";
 
 // ── Build treemap data from funnel stages ───────────────────────────────────
@@ -51,29 +51,36 @@ interface GpuPipelineTreemapProps {
   className?: string;
 }
 
-const CHART_HEIGHT = 180;
+const MIN_HEIGHT = 120;
 
 export function GpuPipelineTreemap({ stages, className }: GpuPipelineTreemapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
   const { resolvedTheme } = useTheme();
 
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
-    const ro = createDebouncedResizeObserver((w) => setWidth(w), 100);
+    const ro = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { width: w, height: h } = entry.contentRect;
+        setWidth(Math.round(w));
+        setHeight(Math.round(h));
+      }
+    });
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
 
   useEffect(() => {
     const container = containerRef.current;
-    if (!container || width < 100) return;
+    const chartHeight = Math.max(height, MIN_HEIGHT);
+    if (!container || width < 100 || chartHeight < MIN_HEIGHT) return;
 
     cleanupD3Svg(container);
     const tooltip = createTooltip();
     const colors = getChartColors();
-    const height = CHART_HEIGHT;
 
     const children = buildTreemapChildren(stages);
     const total = stages[0]?.value ?? 1;
@@ -94,7 +101,7 @@ export function GpuPipelineTreemap({ stages, className }: GpuPipelineTreemapProp
       .sum((d) => d.value ?? 0);
 
     treemap<TreeNode>()
-      .size([width, height])
+      .size([width, chartHeight])
       .tile(treemapSquarify.ratio(4))
       .paddingInner(3)
       .round(true)(root);
@@ -102,7 +109,7 @@ export function GpuPipelineTreemap({ stages, className }: GpuPipelineTreemapProp
     const svg = select(container)
       .append("svg")
       .attr("width", width)
-      .attr("height", height);
+      .attr("height", chartHeight);
 
     const leaves = root.leaves() as HierarchyRectangularNode<TreeNode>[];
 
@@ -199,9 +206,9 @@ export function GpuPipelineTreemap({ stages, className }: GpuPipelineTreemapProp
       tooltip.destroy();
       cleanupD3Svg(container);
     };
-  }, [stages, width, resolvedTheme]);
+  }, [stages, width, height, resolvedTheme]);
 
   return (
-    <div ref={containerRef} className={className} style={{ width: "100%", height: CHART_HEIGHT }} />
+    <div ref={containerRef} className={className} style={{ width: "100%", minHeight: MIN_HEIGHT }} />
   );
 }
