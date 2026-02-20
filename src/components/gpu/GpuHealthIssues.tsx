@@ -63,8 +63,8 @@ export function GpuHealthIssues({ issues, className }: GpuHealthIssuesProps) {
 
   return (
     <>
-      <Card className={cn("border-border/40", className)} data-testid="gpu-health-issues">
-        <CardHeader className="pb-2">
+      <Card className={cn("border-border/40 flex flex-col max-h-[400px]", className)} data-testid="gpu-health-issues">
+        <CardHeader className="pb-2 shrink-0">
           <div className="flex items-center justify-between gap-2">
             <CardTitle className="text-sm">Health Issues</CardTitle>
             <Button
@@ -77,8 +77,8 @@ export function GpuHealthIssues({ issues, className }: GpuHealthIssuesProps) {
             </Button>
           </div>
         </CardHeader>
-        <CardContent className="overflow-hidden p-0">
-          <div className="max-h-[320px] overflow-y-auto px-6 pb-6">
+        <CardContent className="overflow-hidden p-0 flex-1 min-h-0">
+          <div className="h-full overflow-y-auto px-6 pb-6">
           <Table>
             <TableHeader className="sticky top-0 bg-card z-10">
               <TableRow>
