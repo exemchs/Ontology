@@ -3,14 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
-import {
-  Moon,
-  Sun,
-  LogOut,
-  Search,
-  User2,
-  ChevronsUpDown,
-} from "lucide-react";
+import { Moon, Sun, LogOut, Search, User2 } from "lucide-react";
 
 import {
   Sidebar,
@@ -177,8 +170,7 @@ export function AppSidebar() {
       </SidebarContent>
 
       {/* ── Footer ─────────────────────────────────────────────────────── */}
-      <SidebarFooter>
-        {/* Namespace + Notifications */}
+      <SidebarFooter className="p-2">
         <SidebarMenu>
           <SidebarMenuItem>
             <NamespaceSelector />
@@ -186,46 +178,28 @@ export function AppSidebar() {
           <SidebarMenuItem>
             <AlertBell />
           </SidebarMenuItem>
-        </SidebarMenu>
-
-        {/* User card (shadcn pattern) */}
-        <SidebarMenu>
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <SidebarMenuButton
-                  size="lg"
-                  tooltip="Admin"
-                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-                >
-                  <div className="flex size-8 items-center justify-center rounded-lg bg-sidebar-accent text-sidebar-accent-foreground">
-                    <User2 className="size-4" />
-                  </div>
-                  <div className="grid flex-1 text-left leading-tight">
-                    <span className="truncate text-sm font-medium">Admin</span>
-                    <span className="truncate text-xs text-muted-foreground">
-                      {formatRoleName(currentRole)}
-                    </span>
-                  </div>
-                  <ChevronsUpDown className="ml-auto size-4" />
+                <SidebarMenuButton tooltip="Admin">
+                  <User2 className="size-4" />
+                  <span>Admin</span>
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 side="right"
                 align="end"
-                className="w-56"
+                className="w-48"
                 sideOffset={4}
               >
-                <DropdownMenuLabel className="p-0 font-normal">
-                  <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                    <div className="flex size-8 items-center justify-center rounded-lg bg-muted">
-                      <User2 className="size-4" />
-                    </div>
-                    <div className="grid flex-1 text-left leading-tight">
-                      <span className="truncate text-sm font-medium">Admin</span>
+                <DropdownMenuLabel className="text-xs font-normal">
+                  <div className="flex items-center gap-2">
+                    <User2 className="size-3.5 text-muted-foreground" />
+                    <div>
+                      <p className="font-medium">Admin</p>
                       <Badge
                         variant={badgeCfg.variant}
-                        className={`mt-0.5 w-fit text-[10px] px-1.5 py-0 ${badgeCfg.className}`}
+                        className={`mt-0.5 text-[10px] px-1.5 py-0 ${badgeCfg.className}`}
                       >
                         {formatRoleName(currentRole)}
                       </Badge>

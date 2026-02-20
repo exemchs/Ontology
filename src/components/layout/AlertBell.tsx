@@ -66,7 +66,7 @@ export function AlertBell() {
           <Bell className="size-4" />
           <span>Notifications</span>
           {unresolvedCount > 0 && (
-            <span className="absolute top-1.5 left-5 size-2 rounded-full bg-destructive group-data-[collapsible=icon]:left-1.5 group-data-[collapsible=icon]:top-1" />
+            <span className="absolute top-1.5 left-[18px] size-1.5 rounded-full bg-destructive group-data-[collapsible=icon]:top-2 group-data-[collapsible=icon]:left-5" />
           )}
         </SidebarMenuButton>
       </PopoverTrigger>
