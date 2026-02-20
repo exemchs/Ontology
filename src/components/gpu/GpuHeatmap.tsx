@@ -51,7 +51,7 @@ export function GpuHeatmap({ data }: GpuHeatmapProps) {
 
       const rect = container.getBoundingClientRect();
       const width = rect.width;
-      const height = 250;
+      const height = Math.max(rect.height, 200);
 
       const margin = { top: 20, right: 80, bottom: 40, left: 60 };
       const innerW = width - margin.left - margin.right;
@@ -230,14 +230,14 @@ export function GpuHeatmap({ data }: GpuHeatmapProps) {
 
   if (!isClient) {
     return (
-      <div className="w-full h-[250px]" data-testid="gpu-heatmap">
+      <div className="w-full h-full min-h-[200px]" data-testid="gpu-heatmap">
         <ChartSkeleton />
       </div>
     );
   }
 
   return (
-    <div ref={containerRef} className="w-full h-[250px]" data-testid="gpu-heatmap">
+    <div ref={containerRef} className="w-full h-full min-h-[200px]" data-testid="gpu-heatmap">
       <svg ref={svgRef} className="w-full h-full" />
     </div>
   );

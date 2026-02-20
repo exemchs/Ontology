@@ -2,6 +2,7 @@
 
 import { GpuHeatmap } from "@/components/gpu/GpuHeatmap";
 import { GpuRidgeline } from "@/components/gpu/GpuRidgeline";
+import { cn } from "@/lib/utils";
 import type { GpuHeatmapCell, GpuTimeSeries } from "@/data/gpu-data";
 
 type ChartView = "heatmap" | "ridgeline";
@@ -20,7 +21,7 @@ export function GpuHeatmapRidgelineToggle({
   className,
 }: GpuHeatmapRidgelineToggleProps) {
   return (
-    <div className={className}>
+    <div className={cn("h-full", className)}>
       {view === "ridgeline" ? (
         <GpuRidgeline data={timeSeriesData} />
       ) : (

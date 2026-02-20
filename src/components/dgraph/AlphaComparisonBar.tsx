@@ -53,7 +53,7 @@ export function AlphaComparisonBar() {
       const colors = getChartColors();
       const rect = container.getBoundingClientRect();
       const width = rect.width;
-      const height = 260;
+      const height = Math.max(rect.height, 200);
 
       const margin = { top: 20, right: 20, bottom: 40, left: 44 };
       const innerW = width - margin.left - margin.right;
@@ -182,14 +182,14 @@ export function AlphaComparisonBar() {
 
   if (!isClient) {
     return (
-      <div className="w-full h-[260px]">
+      <div className="w-full h-full min-h-[200px]">
         <ChartSkeleton />
       </div>
     );
   }
 
   return (
-    <div ref={containerRef} className="w-full h-[260px]">
+    <div ref={containerRef} className="w-full h-full min-h-[200px]">
       <svg ref={svgRef} className="w-full h-full" />
     </div>
   );

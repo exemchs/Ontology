@@ -50,7 +50,7 @@ export function QueryScatterPlot({ className }: QueryScatterPlotProps) {
 
       const rect = container.getBoundingClientRect();
       const width = rect.width;
-      const height = 300;
+      const height = Math.max(rect.height, 200);
 
       const margin = { top: 20, right: 20, bottom: 40, left: 50 };
       const innerWidth = width - margin.left - margin.right;
@@ -240,8 +240,8 @@ export function QueryScatterPlot({ className }: QueryScatterPlotProps) {
   }, [resolvedTheme]);
 
   return (
-    <div ref={containerRef} className={cn("w-full", className)}>
-      <div className="flex items-center justify-end gap-4 mb-2">
+    <div ref={containerRef} className={cn("w-full h-full min-h-[200px] flex flex-col", className)}>
+      <div className="flex items-center justify-end gap-4 mb-2 shrink-0">
         {filteredCount !== null && (
           <span className="text-xs text-muted-foreground">
             Selected: {filteredCount} / 50
@@ -258,7 +258,7 @@ export function QueryScatterPlot({ className }: QueryScatterPlotProps) {
           </span>
         </div>
       </div>
-      <svg ref={svgRef} className="w-full" style={{ height: 300 }} data-testid="query-scatter-plot" />
+      <svg ref={svgRef} className="w-full flex-1" data-testid="query-scatter-plot" />
     </div>
   );
 }

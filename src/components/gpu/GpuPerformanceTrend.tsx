@@ -9,6 +9,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { cn } from "@/lib/utils";
 import { gpuConfig } from "@/lib/chart-configs";
 import { TruncatedLegend, legendItemsFromConfig } from "@/components/charts/shared/TruncatedLegend";
 import type { GpuTimeSeries, GpuMetricType } from "@/data/gpu-data";
@@ -86,8 +87,8 @@ export function GpuPerformanceTrend({
   const unit = METRIC_UNITS[activeMetric];
 
   return (
-    <div className={className}>
-      <ChartContainer config={gpuConfig} className="h-[calc(100%-32px)] w-full">
+    <div className={cn("flex flex-col", className)}>
+      <ChartContainer config={gpuConfig} className="flex-1 min-h-0 w-full">
         <LineChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
           <CartesianGrid vertical={false} strokeDasharray="3 3" />
           <XAxis

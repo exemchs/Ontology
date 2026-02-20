@@ -79,12 +79,12 @@ export default function DgraphMonitoringPage() {
       description="12-node cluster topology, query patterns, and shard distribution"
     >
       {/* Top row: Topology + Events */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3" style={{ minHeight: 500 }}>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 lg:min-h-[500px]">
         <Card className="border-border/40 lg:col-span-2 overflow-hidden">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm">Cluster Topology</CardTitle>
           </CardHeader>
-          <CardContent className="p-0 relative" style={{ height: 460 }}>
+          <CardContent className="p-0 relative">
             <ClusterTopology onNodeClick={handleNodeClick} />
           </CardContent>
         </Card>

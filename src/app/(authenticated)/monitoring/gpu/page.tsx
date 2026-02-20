@@ -146,7 +146,7 @@ export default function GpuPage() {
             <GpuPerformanceTrend
               series={allTimeSeries}
               activeMetric={activeMetric}
-              className="aspect-[16/7]"
+              className="h-full min-h-[200px]"
             />
           </CardContent>
         </Card>
