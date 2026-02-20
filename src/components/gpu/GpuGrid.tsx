@@ -2,14 +2,14 @@
 
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import ReactGridLayout, { type Layout } from "react-grid-layout";
-import { RotateCcw } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { GridDragHandle } from "@/components/ds/GridDragHandle";
+import { LayoutActionBar } from "@/components/ds/LayoutActionBar";
 import {
   loadGpuLayout,
   saveGpuLayout,
@@ -118,6 +118,7 @@ export default function GpuGrid() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(1200);
   const [selectedGpu, setSelectedGpu] = useState<number>(1);
+  const [isDirty, setIsDirty] = useState(false);
 
   const [layout, setLayout] = useState<Layout[]>(() => DEFAULT_GPU_LAYOUT);
 
@@ -148,11 +149,17 @@ export default function GpuGrid() {
 
   const handleLayoutChange = useCallback((newLayout: Layout[]) => {
     setLayout(newLayout);
-    saveGpuLayout(newLayout);
+    setIsDirty(true);
   }, []);
+
+  const handleSave = useCallback(() => {
+    saveGpuLayout(layout);
+    setIsDirty(false);
+  }, [layout]);
 
   const handleReset = useCallback(() => {
     setLayout(resetGpuLayout(DEFAULT_GPU_LAYOUT));
+    setIsDirty(false);
   }, []);
 
   const handleGpuSelect = useCallback((gpuId: number) => {
@@ -161,23 +168,12 @@ export default function GpuGrid() {
 
   return (
     <div ref={containerRef} className="relative w-full">
-      {/* Reset button */}
-      <div className="absolute top-0 right-0 z-10">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleReset}
-          className="text-muted-foreground hover:text-foreground"
-        >
-          <RotateCcw className="h-3.5 w-3.5 mr-1" />
-          Reset Layout
-        </Button>
-      </div>
+      {/* Layout action bar */}
+      <LayoutActionBar isDirty={isDirty} onSave={handleSave} onReset={handleReset} />
 
       {/* Grid (SSR-safe: only render after mount) */}
       {mounted && (
         <ReactGridLayout
-          className="mt-8"
           layout={layout}
           cols={6}
           rowHeight={80}
@@ -186,10 +182,11 @@ export default function GpuGrid() {
           isResizable
           margin={[12, 12]}
           onLayoutChange={handleLayoutChange}
-          draggableHandle=".react-grid-item"
+          draggableHandle=".grid-drag-handle"
         >
           {GPU_WIDGET_REGISTRY.map((config) => (
-            <div key={config.id} className="overflow-hidden">
+            <div key={config.id} className="relative overflow-hidden">
+              <GridDragHandle />
               <RenderWidget
                 config={config}
                 selectedGpu={selectedGpu}

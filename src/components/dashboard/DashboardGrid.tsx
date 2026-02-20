@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import ReactGridLayout, { type Layout } from "react-grid-layout";
-import { RotateCcw } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { GridDragHandle } from "@/components/ds/GridDragHandle";
+import { LayoutActionBar } from "@/components/ds/LayoutActionBar";
 import {
   loadLayout,
   saveLayout,
@@ -115,6 +115,7 @@ export default function DashboardGrid() {
   const [mounted, setMounted] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(1200);
+  const [isDirty, setIsDirty] = useState(false);
 
   const [layout, setLayout] = useState<Layout[]>(() =>
     DEFAULT_DASHBOARD_LAYOUT
@@ -147,32 +148,27 @@ export default function DashboardGrid() {
 
   const handleLayoutChange = useCallback((newLayout: Layout[]) => {
     setLayout(newLayout);
-    saveLayout(newLayout);
+    setIsDirty(true);
   }, []);
+
+  const handleSave = useCallback(() => {
+    saveLayout(layout);
+    setIsDirty(false);
+  }, [layout]);
 
   const handleReset = useCallback(() => {
     setLayout(resetLayout(DEFAULT_DASHBOARD_LAYOUT));
+    setIsDirty(false);
   }, []);
 
   return (
     <div ref={containerRef} className="relative w-full">
-      {/* Reset button */}
-      <div className="absolute top-0 right-0 z-10">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleReset}
-          className="text-muted-foreground hover:text-foreground"
-        >
-          <RotateCcw className="h-3.5 w-3.5 mr-1" />
-          Reset Layout
-        </Button>
-      </div>
+      {/* Layout action bar */}
+      <LayoutActionBar isDirty={isDirty} onSave={handleSave} onReset={handleReset} />
 
       {/* Grid (SSR-safe: only render after mount) */}
       {mounted && (
         <ReactGridLayout
-          className="mt-8"
           layout={layout}
           cols={4}
           rowHeight={80}
@@ -181,10 +177,11 @@ export default function DashboardGrid() {
           isResizable
           margin={[12, 12]}
           onLayoutChange={handleLayoutChange}
-          draggableHandle=".react-grid-item"
+          draggableHandle=".grid-drag-handle"
         >
           {WIDGET_REGISTRY.map((config) => (
-            <div key={config.id} className="overflow-hidden">
+            <div key={config.id} className="relative overflow-hidden">
+              <GridDragHandle />
               {renderWidget(config)}
             </div>
           ))}
