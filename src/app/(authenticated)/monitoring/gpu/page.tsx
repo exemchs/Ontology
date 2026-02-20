@@ -4,8 +4,8 @@ import { useState, useMemo, useCallback } from "react";
 import { Settings2 } from "lucide-react";
 
 import { PageShell } from "@/components/ds/PageShell";
-import { CollapsibleResourcePanel } from "@/components/ds/CollapsibleResourcePanel";
-import { getDashboardGauges } from "@/data/dashboard-data";
+import { SystemResourcePanel } from "@/components/ds/SystemResourcePanel";
+import { getSystemResourceGauges, getSystemResourceTrends } from "@/data/system-resource-data";
 import { GpuSummaryHeader } from "@/components/gpu/GpuSummaryHeader";
 import { GpuCardGrid } from "@/components/gpu/GpuCardGrid";
 import { GpuFunnelChart } from "@/components/gpu/GpuFunnelChart";
@@ -58,7 +58,8 @@ export default function GpuPage() {
   const comparisonData = useMemo(() => getGpuComparison(), []);
   const healthIssues = useMemo(() => getGpuHealthIssues(), []);
   const processes = useMemo(() => getGpuProcesses(), []);
-  const systemGauges = useMemo(() => getDashboardGauges(), []);
+  const systemGauges = useMemo(() => getSystemResourceGauges(), []);
+  const systemTrends = useMemo(() => getSystemResourceTrends(), []);
   const funnelStages = useMemo(() => getGpuFunnelData(), []);
 
   const selectedGpuData = useMemo(
@@ -100,10 +101,7 @@ export default function GpuPage() {
       description="Real-time GPU performance and health overview"
     >
       <GpuSummaryHeader gpus={gpus} />
-      <CollapsibleResourcePanel
-        gauges={systemGauges}
-        storageKey="gpu-resource-collapsed"
-      />
+      <SystemResourcePanel gauges={systemGauges} trends={systemTrends} />
 
       {/* GPU Pipeline Funnel */}
       <GpuFunnelChart stages={funnelStages} />
