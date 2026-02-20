@@ -41,13 +41,17 @@ export function AppSidebar() {
               <img
                 src="/logos/logo-dark-collapse.svg"
                 alt="eXemble"
-                className="hidden dark:block h-6 w-auto"
+                width={24}
+                height={24}
+                className="hidden dark:block"
               />
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/logos/logo-light-collapse.svg"
                 alt="eXemble"
-                className="block dark:hidden h-6 w-auto"
+                width={24}
+                height={24}
+                className="block dark:hidden"
               />
             </>
           ) : (
