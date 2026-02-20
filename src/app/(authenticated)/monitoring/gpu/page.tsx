@@ -127,86 +127,88 @@ export default function GpuPage() {
         </Card>
       </div>
 
-      {/* Performance Trends */}
-      <Card className="group border-border/40">
-        <CardHeader className="pb-2">
-          <div className="flex items-center justify-between gap-2">
-            <CardTitle className="text-sm">Performance Trends</CardTitle>
-            <Tabs
-              value={activeMetric}
-              onValueChange={(v) => setActiveMetric(v as GpuMetricType)}
-            >
-              <TabsList className="h-7">
-                <TabsTrigger value="utilization" className="text-xs px-2">
-                  Utilization
-                </TabsTrigger>
-                <TabsTrigger value="temperature" className="text-xs px-2">
-                  Temperature
-                </TabsTrigger>
-                <TabsTrigger value="power" className="text-xs px-2">
-                  Power
-                </TabsTrigger>
-                <TabsTrigger value="memory" className="text-xs px-2">
-                  Memory
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <GpuPerformanceTrend
-            series={allTimeSeries}
-            activeMetric={activeMetric}
-            className="aspect-[16/7]"
-          />
-        </CardContent>
-      </Card>
-
-      {/* GPU List */}
-      <Card className="border-border/40">
-        <CardHeader className="pb-2">
-          <div className="flex items-center justify-between gap-2">
-            <CardTitle className="text-sm">
-              GPU List
-              <span className="text-xs text-muted-foreground font-normal ml-2">
-                {gpus.length}
-              </span>
-            </CardTitle>
-            <div className="flex items-center gap-1">
-              <Button
-                variant={gpuListView === "list" ? "secondary" : "ghost"}
-                size="icon"
-                className="h-7 w-7"
-                onClick={() => setGpuListView("list")}
+      {/* Performance Trends (left) + GPU List (right) */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+        <Card className="group border-border/40 lg:col-span-2">
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between gap-2">
+              <CardTitle className="text-sm">Performance Trends</CardTitle>
+              <Tabs
+                value={activeMetric}
+                onValueChange={(v) => setActiveMetric(v as GpuMetricType)}
               >
-                <List className="h-3.5 w-3.5" />
-              </Button>
-              <Button
-                variant={gpuListView === "grid" ? "secondary" : "ghost"}
-                size="icon"
-                className="h-7 w-7"
-                onClick={() => setGpuListView("grid")}
-              >
-                <LayoutGrid className="h-3.5 w-3.5" />
-              </Button>
+                <TabsList className="h-7">
+                  <TabsTrigger value="utilization" className="text-xs px-2">
+                    Utilization
+                  </TabsTrigger>
+                  <TabsTrigger value="temperature" className="text-xs px-2">
+                    Temperature
+                  </TabsTrigger>
+                  <TabsTrigger value="power" className="text-xs px-2">
+                    Power
+                  </TabsTrigger>
+                  <TabsTrigger value="memory" className="text-xs px-2">
+                    Memory
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
             </div>
-          </div>
-        </CardHeader>
-        <CardContent className={gpuListView === "list" ? "p-0" : ""}>
-          {gpuListView === "list" ? (
-            <GpuList
-              gpus={gpus}
-              selectedId={selectedGpu}
-              onSelect={handleGpuSelect}
+          </CardHeader>
+          <CardContent>
+            <GpuPerformanceTrend
+              series={allTimeSeries}
+              activeMetric={activeMetric}
+              className="aspect-[16/7]"
             />
-          ) : (
-            <GpuCardGrid
-              gpus={gpus}
-              onGpuClick={handleGpuSelect}
-            />
-          )}
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border/40">
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between gap-2">
+              <CardTitle className="text-sm">
+                GPU List
+                <span className="text-xs text-muted-foreground font-normal ml-2">
+                  {gpus.length}
+                </span>
+              </CardTitle>
+              <div className="flex items-center gap-1">
+                <Button
+                  variant={gpuListView === "list" ? "secondary" : "ghost"}
+                  size="icon"
+                  className="h-7 w-7"
+                  onClick={() => setGpuListView("list")}
+                >
+                  <List className="h-3.5 w-3.5" />
+                </Button>
+                <Button
+                  variant={gpuListView === "grid" ? "secondary" : "ghost"}
+                  size="icon"
+                  className="h-7 w-7"
+                  onClick={() => setGpuListView("grid")}
+                >
+                  <LayoutGrid className="h-3.5 w-3.5" />
+                </Button>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className={gpuListView === "list" ? "p-0" : ""}>
+            {gpuListView === "list" ? (
+              <GpuList
+                gpus={gpus}
+                processes={processes}
+                selectedId={selectedGpu}
+                onSelect={handleGpuSelect}
+              />
+            ) : (
+              <GpuCardGrid
+                gpus={gpus}
+                onGpuClick={handleGpuSelect}
+              />
+            )}
+          </CardContent>
+        </Card>
+      </div>
 
       {/* Health + Processes */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">

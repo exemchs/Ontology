@@ -4,6 +4,7 @@
 import { useMemo, useState, useEffect } from "react";
 import { ChevronRight, Cpu, MemoryStick, HardDrive } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { StatusDot } from "@/components/ds/StatusDot";
 import {
   Collapsible,
   CollapsibleContent,
@@ -50,9 +51,11 @@ export function SystemResourcePanel({
     [trends.cpu]
   );
 
-  const summary = gauges
-    .map((g) => `${g.label} ${Math.round(g.percent)}%`)
-    .join(" · ");
+  function getStatus(pct: number): "healthy" | "warning" | "critical" {
+    if (pct > 85) return "critical";
+    if (pct > 70) return "warning";
+    return "healthy";
+  }
 
   return (
     <Collapsible open={open} onOpenChange={handleToggle}>
@@ -67,9 +70,18 @@ export function SystemResourcePanel({
             />
             <span className="font-medium">System Resources</span>
             {!open && (
-              <span className="text-xs text-muted-foreground tabular-nums">
-                {summary}
-              </span>
+              <div className="flex items-center gap-4">
+                {gauges.map((g) => {
+                  const pct = Math.round(g.percent);
+                  return (
+                    <span key={g.label} className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      {g.label}
+                      <StatusDot status={getStatus(pct)} />
+                      <span className="tabular-nums font-medium">{pct}%</span>
+                    </span>
+                  );
+                })}
+              </div>
             )}
           </div>
         </CollapsibleTrigger>
