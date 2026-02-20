@@ -149,6 +149,9 @@ export default function GpuGrid() {
 
   const handleLayoutChange = useCallback((newLayout: Layout[]) => {
     setLayout(newLayout);
+  }, []);
+
+  const handleUserAction = useCallback(() => {
     setIsDirty(true);
   }, []);
 
@@ -182,6 +185,8 @@ export default function GpuGrid() {
           isResizable
           margin={[12, 12]}
           onLayoutChange={handleLayoutChange}
+          onDragStop={handleUserAction}
+          onResizeStop={handleUserAction}
           draggableHandle=".grid-drag-handle"
         >
           {GPU_WIDGET_REGISTRY.map((config) => (

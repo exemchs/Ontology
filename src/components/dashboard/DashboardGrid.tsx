@@ -148,6 +148,9 @@ export default function DashboardGrid() {
 
   const handleLayoutChange = useCallback((newLayout: Layout[]) => {
     setLayout(newLayout);
+  }, []);
+
+  const handleUserAction = useCallback(() => {
     setIsDirty(true);
   }, []);
 
@@ -177,6 +180,8 @@ export default function DashboardGrid() {
           isResizable
           margin={[12, 12]}
           onLayoutChange={handleLayoutChange}
+          onDragStop={handleUserAction}
+          onResizeStop={handleUserAction}
           draggableHandle=".grid-drag-handle"
         >
           {WIDGET_REGISTRY.map((config) => (
