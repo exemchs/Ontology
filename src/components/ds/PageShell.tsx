@@ -1,12 +1,15 @@
+import { cn } from "@/lib/utils";
+
 interface PageShellProps {
   title: string;
   description?: string;
+  className?: string;
   children: React.ReactNode;
 }
 
-export function PageShell({ title, description, children }: PageShellProps) {
+export function PageShell({ title, description, className, children }: PageShellProps) {
   return (
-    <div className="flex flex-col gap-3 p-4">
+    <div className={cn("flex flex-col gap-3 p-4", className)}>
       <div>
         <h1 className="text-lg font-semibold tracking-tight">{title}</h1>
         {description && (
