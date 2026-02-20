@@ -33,7 +33,11 @@ const defaultThresholds: ThresholdRow[] = [
 
 // ── Component ────────────────────────────────────────────────────────────────
 
-export function GpuThresholdForm() {
+interface GpuThresholdFormProps {
+  compact?: boolean;
+}
+
+export function GpuThresholdForm({ compact = false }: GpuThresholdFormProps) {
   const [thresholds, setThresholds] = useState<ThresholdRow[]>(defaultThresholds);
 
   function updateThreshold(
@@ -52,49 +56,53 @@ export function GpuThresholdForm() {
     toast.success("Thresholds saved (mock)");
   }
 
+  const content = (
+    <div className="space-y-3">
+      {/* Header row */}
+      <div className="grid grid-cols-[1fr_80px_80px_32px] gap-2 items-center text-xs text-muted-foreground">
+        <span>Metric</span>
+        <span className="text-center">Warning</span>
+        <span className="text-center">Critical</span>
+        <span />
+      </div>
+
+      {/* Metric rows */}
+      {thresholds.map((row, i) => (
+        <div
+          key={row.metric}
+          className="grid grid-cols-[1fr_80px_80px_32px] gap-2 items-center"
+        >
+          <Label className="text-xs font-medium">{row.metric}</Label>
+          <Input
+            type="number"
+            value={row.warning}
+            onChange={(e) => updateThreshold(i, "warning", e.target.value)}
+            className="h-7 text-xs text-center"
+          />
+          <Input
+            type="number"
+            value={row.critical}
+            onChange={(e) => updateThreshold(i, "critical", e.target.value)}
+            className="h-7 text-xs text-center"
+          />
+          <span className="text-[10px] text-muted-foreground">{row.unit}</span>
+        </div>
+      ))}
+
+      <Button onClick={handleSave} size="sm" className="mt-2 w-full">
+        Save
+      </Button>
+    </div>
+  );
+
+  if (compact) return content;
+
   return (
     <Card className="border-border/40">
       <CardHeader className="pb-2">
         <CardTitle className="text-sm">Alert Thresholds</CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="space-y-3">
-          {/* Header row */}
-          <div className="grid grid-cols-[1fr_100px_100px_40px] gap-2 items-center text-xs text-muted-foreground">
-            <span>Metric</span>
-            <span className="text-center">Warning</span>
-            <span className="text-center">Critical</span>
-            <span>Unit</span>
-          </div>
-
-          {/* Metric rows */}
-          {thresholds.map((row, i) => (
-            <div
-              key={row.metric}
-              className="grid grid-cols-[1fr_100px_100px_40px] gap-2 items-center"
-            >
-              <Label className="text-sm font-medium">{row.metric}</Label>
-              <Input
-                type="number"
-                value={row.warning}
-                onChange={(e) => updateThreshold(i, "warning", e.target.value)}
-                className="h-8 text-sm text-center"
-              />
-              <Input
-                type="number"
-                value={row.critical}
-                onChange={(e) => updateThreshold(i, "critical", e.target.value)}
-                className="h-8 text-sm text-center"
-              />
-              <span className="text-xs text-muted-foreground">{row.unit}</span>
-            </div>
-          ))}
-
-          <Button onClick={handleSave} size="sm" className="mt-2 w-full">
-            Save Thresholds
-          </Button>
-        </div>
-      </CardContent>
+      <CardContent>{content}</CardContent>
     </Card>
   );
 }

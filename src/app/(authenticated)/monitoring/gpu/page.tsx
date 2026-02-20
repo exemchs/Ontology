@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
-import { Settings2, LayoutGrid, List } from "lucide-react";
+import { LayoutGrid, List } from "lucide-react";
 
 import { PageShell } from "@/components/ds/PageShell";
 import { SystemResourcePanel } from "@/components/ds/SystemResourcePanel";
@@ -15,7 +15,6 @@ import { GpuHeatmapRidgelineToggle } from "@/components/gpu/GpuHeatmapRidgelineT
 import { GpuHealthIssues } from "@/components/gpu/GpuHealthIssues";
 import { GpuProcessesTable } from "@/components/gpu/GpuProcessesTable";
 import { GpuDetailPanel } from "@/components/gpu/GpuDetailPanel";
-import { GpuThresholdForm } from "@/components/gpu/GpuThresholdForm";
 import {
   Sheet,
   SheetContent,
@@ -49,7 +48,6 @@ export default function GpuPage() {
   const [activeMetric, setActiveMetric] = useState<GpuMetricType>("utilization");
   const [heatmapView, setHeatmapView] = useState<HeatmapView>("heatmap");
   const [selectedGpu, setSelectedGpu] = useState<number | null>(null);
-  const [showThresholds, setShowThresholds] = useState(false);
   const [gpuListView, setGpuListView] = useState<GpuListView>("list");
 
   const gpus = useMemo(() => getGpuCards(), []);
@@ -87,17 +85,8 @@ export default function GpuPage() {
       <GpuSummaryHeader gpus={gpus} />
       <SystemResourcePanel gauges={systemGauges} trends={systemTrends} />
 
-      {/* GPU Pipeline + Utilization Distribution (side by side) */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
-        <Card className="border-border/40">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm">GPU Pipeline</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <GpuPipelineTreemap stages={funnelStages} />
-          </CardContent>
-        </Card>
-
+      {/* Utilization Distribution + GPU Pipeline + Health Issues */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
         <Card className="border-border/40 lg:col-span-2">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between gap-2">
@@ -125,6 +114,17 @@ export default function GpuPage() {
             />
           </CardContent>
         </Card>
+
+        <Card className="border-border/40">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm">GPU Pipeline</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <GpuPipelineTreemap stages={funnelStages} />
+          </CardContent>
+        </Card>
+
+        <GpuHealthIssues issues={healthIssues} />
       </div>
 
       {/* Performance Trends (left) + GPU List (right) */}
@@ -210,29 +210,8 @@ export default function GpuPage() {
         </Card>
       </div>
 
-      {/* Health + Processes */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-        <GpuHealthIssues issues={healthIssues} />
-        <GpuProcessesTable processes={processes} />
-      </div>
-
-      {/* Alert Thresholds (toggle) */}
-      <div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setShowThresholds((prev) => !prev)}
-          className="gap-2"
-        >
-          <Settings2 className="h-4 w-4" />
-          {showThresholds ? "Hide" : "Show"} Alert Thresholds
-        </Button>
-        {showThresholds && (
-          <div className="mt-3">
-            <GpuThresholdForm />
-          </div>
-        )}
-      </div>
+      {/* Processes */}
+      <GpuProcessesTable processes={processes} />
 
       {/* GPU Detail Slide Panel */}
       <Sheet

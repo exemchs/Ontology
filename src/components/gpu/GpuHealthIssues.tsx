@@ -1,5 +1,8 @@
 "use client";
 
+import { useState } from "react";
+import { Settings2 } from "lucide-react";
+
 import {
   Card,
   CardHeader,
@@ -14,7 +17,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 import { StatusDot } from "@/components/ds/StatusDot";
+import { GpuThresholdForm } from "@/components/gpu/GpuThresholdForm";
 import type { GpuHealthIssue } from "@/types";
 
 interface GpuHealthIssuesProps {
@@ -43,6 +48,8 @@ function severityToStatus(severity: string): "healthy" | "warning" | "critical" 
 }
 
 export function GpuHealthIssues({ issues }: GpuHealthIssuesProps) {
+  const [showThresholds, setShowThresholds] = useState(false);
+
   const sorted = [...issues]
     .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
     .slice(0, 6);
@@ -50,38 +57,52 @@ export function GpuHealthIssues({ issues }: GpuHealthIssuesProps) {
   return (
     <Card className="border-border/40" data-testid="gpu-health-issues">
       <CardHeader className="pb-2">
-        <CardTitle className="text-sm">Health Issues</CardTitle>
+        <div className="flex items-center justify-between gap-2">
+          <CardTitle className="text-sm">Health Issues</CardTitle>
+          <Button
+            variant={showThresholds ? "secondary" : "ghost"}
+            size="icon"
+            className="h-7 w-7"
+            onClick={() => setShowThresholds((v) => !v)}
+          >
+            <Settings2 className="h-3.5 w-3.5" />
+          </Button>
+        </div>
       </CardHeader>
       <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Severity</TableHead>
-              <TableHead>GPU</TableHead>
-              <TableHead>Message</TableHead>
-              <TableHead>Time</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {sorted.map((issue) => (
-              <TableRow key={issue.id}>
-                <TableCell>
-                  <StatusDot
-                    status={severityToStatus(issue.severity)}
-                    label={issue.severity}
-                  />
-                </TableCell>
-                <TableCell className="text-xs">{issue.gpuName}</TableCell>
-                <TableCell className="text-sm max-w-[280px]">
-                  {issue.message}
-                </TableCell>
-                <TableCell className="text-xs text-muted-foreground tabular-nums whitespace-nowrap">
-                  {formatRelativeTime(issue.timestamp)}
-                </TableCell>
+        {showThresholds ? (
+          <GpuThresholdForm compact />
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[60px]">Sev</TableHead>
+                <TableHead className="w-[50px]">GPU</TableHead>
+                <TableHead>Message</TableHead>
+                <TableHead className="w-[60px]">Time</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {sorted.map((issue) => (
+                <TableRow key={issue.id}>
+                  <TableCell>
+                    <StatusDot
+                      status={severityToStatus(issue.severity)}
+                      label={issue.severity}
+                    />
+                  </TableCell>
+                  <TableCell className="text-xs">{issue.gpuName}</TableCell>
+                  <TableCell className="text-xs max-w-[200px] truncate">
+                    {issue.message}
+                  </TableCell>
+                  <TableCell className="text-xs text-muted-foreground tabular-nums whitespace-nowrap">
+                    {formatRelativeTime(issue.timestamp)}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
       </CardContent>
     </Card>
   );
