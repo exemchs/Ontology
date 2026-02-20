@@ -41,7 +41,7 @@ export function QueryHistory({ onSelect }: QueryHistoryProps) {
         <SheetHeader>
           <SheetTitle>Query History</SheetTitle>
         </SheetHeader>
-        <ScrollArea className="flex-1 px-4">
+        <ScrollArea className="h-[calc(100vh-80px)] px-4">
           <div className="flex flex-col gap-2 pb-4">
             {history.map((item) => (
               <button

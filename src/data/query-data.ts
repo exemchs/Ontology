@@ -144,26 +144,36 @@ export interface QueryHistoryItem {
   user: string;
 }
 
+const HISTORY_QUERIES = [
+  "{ queryEquipment { equipment_id name status location } }",
+  '{ process(func: type(Process), first: 50) { name step_number duration } }',
+  '{ wafers(func: type(Wafer)) @filter(eq(status, "active")) { wafer_id lot_id grade } }',
+  "{ queryDefect(order: { desc: severity }, first: 100) { defect_id type severity size } }",
+  '{ maintenance(func: type(MaintenanceRecord), first: 20) { record_id type technician } }',
+  "{ queryRecipe { recipe_id name version parameters } }",
+  '{ equipment(func: type(Equipment)) @filter(eq(location, "FAB1-BAY03")) { name status } }',
+  "{ queryProcess(filter: { temperature: { gt: 300 } }) { name temperature pressure } }",
+  '{ defects(func: type(Defect)) @filter(ge(severity, 3)) { defect_id location_x location_y } }',
+  "{ queryWafer(order: { desc: yield_rate }, first: 25) { wafer_id yield_rate layer_count } }",
+];
+
 export function getQueryHistory(): QueryHistoryItem[] {
   const now = new Date();
-  const statuses: QueryStatus[] = ["completed", "completed", "completed", "completed", "completed", "completed", "completed", "error", "completed", "completed"];
-  const users = ["admin", "analyst1", "api-server", "analyst1", "admin", "operator1", "auditor1", "analyst1", "admin", "api-server"];
+  const users = ["admin", "analyst1", "api-server", "operator1", "auditor1"];
 
-  return Array.from({ length: 10 }, (_, i) => {
-    const minsAgo = (i + 1) * 7 + Math.floor(Math.random() * 5);
-    const isError = statuses[i] === "error";
+  return Array.from({ length: 25 }, (_, i) => {
+    const minsAgo = (i + 1) * 5 + Math.floor(Math.random() * 10);
+    const isError = i === 7 || i === 15 || i === 22;
 
     return {
       id: `qh-${String(i + 1).padStart(3, "0")}`,
-      queryText: i % 2 === 0
-        ? "{ queryEquipment { equipment_id name status } }"
-        : '{ process(func: type(Process), first: 50) { name step_number } }',
-      queryType: (i % 2 === 0 ? "graphql" : "dql") as QueryType,
-      status: statuses[i] ?? "completed",
-      executionTime: isError ? 0 : round(addJitter(i < 5 ? 45 : 120, 30), 0),
-      resultCount: isError ? 0 : Math.round(addJitter(i < 5 ? 832 : 24500, 5)),
+      queryText: HISTORY_QUERIES[i % HISTORY_QUERIES.length],
+      queryType: (i % 3 === 0 ? "dql" : "graphql") as QueryType,
+      status: (isError ? "error" : "completed") as QueryStatus,
+      executionTime: isError ? 0 : round(addJitter(30 + i * 8, 30), 0),
+      resultCount: isError ? 0 : Math.round(addJitter(100 + i * 200, 10)),
       createdAt: new Date(now.getTime() - minsAgo * 60 * 1000).toISOString(),
-      user: users[i] ?? "admin",
+      user: users[i % users.length],
     };
   });
 }
