@@ -9,6 +9,7 @@ import { getSystemResourceGauges, getSystemResourceTrends } from "@/data/system-
 import { GpuSummaryHeader } from "@/components/gpu/GpuSummaryHeader";
 import { GpuList } from "@/components/gpu/GpuList";
 import { GpuCardGrid } from "@/components/gpu/GpuCardGrid";
+import { GpuDetailInfo } from "@/components/gpu/GpuDetailInfo";
 import { GpuPipelineTreemap } from "@/components/gpu/GpuPipelineTreemap";
 import { GpuPerformanceTrend } from "@/components/gpu/GpuPerformanceTrend";
 import { GpuHeatmapRidgelineToggle } from "@/components/gpu/GpuHeatmapRidgelineToggle";
@@ -63,6 +64,17 @@ export default function GpuPage() {
     [gpus, selectedGpu]
   );
 
+  // Active GPU for inline detail panel (defaults to first GPU)
+  const activeGpu = useMemo(
+    () => gpus.find((g) => g.id === selectedGpu) ?? gpus[0],
+    [gpus, selectedGpu]
+  );
+
+  const activeDetailData = useMemo(
+    () => getGpuDetailData(String(activeGpu?.id ?? 1)),
+    [activeGpu]
+  );
+
   const detailData = useMemo(
     () => (selectedGpu ? getGpuDetailData(String(selectedGpu)) : null),
     [selectedGpu]
@@ -85,7 +97,7 @@ export default function GpuPage() {
       <SystemResourcePanel gauges={systemGauges} trends={systemTrends} />
 
       {/* Utilization Distribution + GPU Pipeline + Health Issues */}
-      <div className="grid grid-cols-1 lg:grid-cols-6 gap-3">
+      <div className="grid grid-cols-1 lg:grid-cols-6 gap-3 items-start">
         <Card className="border-border/40 lg:col-span-3">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between gap-2">
@@ -126,8 +138,8 @@ export default function GpuPage() {
         <GpuHealthIssues issues={healthIssues} className="lg:col-span-2" />
       </div>
 
-      {/* Performance Trends (left) + GPU List (right) */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+      {/* Performance Trends + GPU Detail + GPU List */}
+      <div className="grid grid-cols-1 lg:grid-cols-6 gap-3">
         <Card className="group border-border/40 lg:col-span-2">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between gap-2">
@@ -138,16 +150,16 @@ export default function GpuPage() {
               >
                 <TabsList className="h-7">
                   <TabsTrigger value="utilization" className="text-xs px-2">
-                    Utilization
+                    Util
                   </TabsTrigger>
                   <TabsTrigger value="temperature" className="text-xs px-2">
-                    Temperature
+                    Temp
                   </TabsTrigger>
                   <TabsTrigger value="power" className="text-xs px-2">
                     Power
                   </TabsTrigger>
                   <TabsTrigger value="memory" className="text-xs px-2">
-                    Memory
+                    Mem
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
@@ -162,7 +174,13 @@ export default function GpuPage() {
           </CardContent>
         </Card>
 
-        <Card className="border-border/40">
+        <GpuDetailInfo
+          gpu={activeGpu}
+          detailData={activeDetailData}
+          className="border-border/40 lg:col-span-2"
+        />
+
+        <Card className="border-border/40 lg:col-span-2">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between gap-2">
               <CardTitle className="text-sm">
