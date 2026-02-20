@@ -22,6 +22,14 @@ export const gpuConfig = {
   "GPU-3": { label: "GPU-3", color: "var(--chart-4)" },
 } satisfies ChartConfig
 
+export const serverConfig = {
+  "Server-A": { label: "Server-A", color: "var(--chart-1)" },
+  "Server-B": { label: "Server-B", color: "var(--chart-2)" },
+  "Server-C": { label: "Server-C", color: "var(--chart-3)" },
+  "Server-D": { label: "Server-D", color: "var(--chart-4)" },
+  "Server-E": { label: "Server-E", color: "var(--chart-5)" },
+} satisfies ChartConfig
+
 export const gpuComparisonConfig = {
   utilization: { label: "Utilization", color: "var(--chart-1)" },
   memory: { label: "Memory", color: "var(--chart-2)" },
