@@ -17,7 +17,7 @@ export function GpuCardGrid({
   onGpuSelectToggle,
 }: GpuCardGridProps) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
       {gpus.map((gpu) => (
         <GpuCard
           key={gpu.id}

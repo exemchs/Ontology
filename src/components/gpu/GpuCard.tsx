@@ -45,9 +45,8 @@ function MetricBar({
           style={{ width: `${Math.min(percent, 100)}%` }}
         />
       </div>
-      <span className="text-xs tabular-nums w-14 text-right shrink-0">
-        {value}
-        {unit}
+      <span className="text-xs tabular-nums text-right shrink-0">
+        {value}{unit}
       </span>
     </div>
   );
