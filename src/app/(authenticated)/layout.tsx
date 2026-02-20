@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
+import { HeaderBar } from "@/components/layout/header-bar";
 import { WelcomePopup } from "@/components/layout/welcome-popup";
 import { CommandPalette } from "@/components/layout/command-palette";
 import { NamespaceProvider } from "@/contexts/NamespaceContext";
@@ -42,6 +43,7 @@ export default function AuthenticatedLayout({
       <SidebarProvider defaultOpen={true}>
         <AppSidebar />
         <SidebarInset className="min-w-0">
+          <HeaderBar />
           <main className="flex-1 overflow-auto">{children}</main>
         </SidebarInset>
         <WelcomePopup />

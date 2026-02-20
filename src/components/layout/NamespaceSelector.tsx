@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { SidebarMenuButton } from "@/components/ui/sidebar";
+import { Button } from "@/components/ui/button";
 import { useNamespace } from "@/contexts/NamespaceContext";
 import { cn } from "@/lib/utils";
 
@@ -23,12 +23,16 @@ export function NamespaceSelector() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <SidebarMenuButton tooltip={currentNamespace}>
-          <Database className="size-4" />
-          <span>{currentNamespace}</span>
-        </SidebarMenuButton>
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-7 gap-1.5 px-2 text-xs text-muted-foreground"
+        >
+          <Database className="size-3" />
+          <span className="max-w-[100px] truncate">{currentNamespace}</span>
+        </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent side="right" align="end" className="w-[200px]">
+      <DropdownMenuContent align="end" className="w-[200px]">
         {namespaces.map((ns) => (
           <DropdownMenuItem
             key={ns.name}

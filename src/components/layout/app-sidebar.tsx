@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
-import { Moon, Sun, LogOut, Search, User2, EllipsisVertical } from "lucide-react";
+import { Moon, Sun, LogOut } from "lucide-react";
 
 import {
   Sidebar,
@@ -16,84 +16,24 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { navigationGroups } from "@/lib/navigation";
 import { useAuth } from "@/hooks/use-auth";
-import { useRole } from "@/contexts/RoleContext";
-import { NamespaceSelector } from "@/components/layout/NamespaceSelector";
-import { AlertBell } from "@/components/layout/AlertBell";
-import type { Role } from "@/types";
-import { cn } from "@/lib/utils";
-
-// ── Role badge config ─────────────────────────────────────────────────────────
-
-const roleBadgeConfig: Record<
-  Role,
-  { variant: "destructive" | "default" | "secondary" | "outline"; className: string }
-> = {
-  super_admin: { variant: "destructive", className: "" },
-  service_app: {
-    variant: "default",
-    className:
-      "bg-blue-500/15 text-blue-600 border-blue-500/30 dark:text-blue-400",
-  },
-  data_analyst: { variant: "secondary", className: "" },
-  auditor: { variant: "outline", className: "" },
-};
-
-function formatRoleName(role: Role): string {
-  return role
-    .split("_")
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ");
-}
-
-// ── Component ─────────────────────────────────────────────────────────────────
 
 export function AppSidebar() {
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
   const { logout } = useAuth();
   const { state } = useSidebar();
-  const { currentRole } = useRole();
   const isCollapsed = state === "collapsed";
-  const badgeCfg = roleBadgeConfig[currentRole];
-
-  const openCommandPalette = () => {
-    document.dispatchEvent(
-      new KeyboardEvent("keydown", {
-        key: "k",
-        metaKey: true,
-        bubbles: true,
-      })
-    );
-  };
-
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  };
 
   return (
     <Sidebar collapsible="icon" className="border-r border-sidebar-border/40">
-      {/* ── Header: Logo + collapse trigger ────────────────────────────── */}
-      <SidebarHeader>
-        <div
-          className={cn(
-            "flex h-7 items-center px-2",
-            isCollapsed ? "justify-center" : "justify-between"
-          )}
-        >
+      {/* Logo area */}
+      <SidebarHeader className="pb-0">
+        <div className="flex h-7 items-center px-2">
           {!isCollapsed && (
             <>
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -110,40 +50,11 @@ export function AppSidebar() {
               />
             </>
           )}
-          <SidebarTrigger className="size-6" />
         </div>
       </SidebarHeader>
 
-      {/* ── Content: Search + Navigation ────────────────────────────────── */}
+      {/* Navigation groups */}
       <SidebarContent>
-        {/* Search trigger (opens ⌘K) */}
-        <SidebarGroup>
-          <SidebarGroupContent>
-            {isCollapsed ? (
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    tooltip="Search (⌘K)"
-                    onClick={openCommandPalette}
-                  >
-                    <Search className="size-4" />
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            ) : (
-              <button
-                onClick={openCommandPalette}
-                className="flex h-8 w-full items-center gap-2 rounded-md border border-input bg-background px-3 text-xs text-muted-foreground hover:bg-accent transition-colors"
-              >
-                <Search className="size-3.5 shrink-0" />
-                <span>Search...</span>
-                <kbd className="ml-auto font-mono text-[10px]">⌘K</kbd>
-              </button>
-            )}
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        {/* Navigation groups */}
         {navigationGroups.map((group) => (
           <SidebarGroup key={group.label}>
             <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
@@ -169,78 +80,33 @@ export function AppSidebar() {
         ))}
       </SidebarContent>
 
-      {/* ── Footer ─────────────────────────────────────────────────────── */}
-      <SidebarFooter className="p-2">
+      {/* Footer: theme toggle + logout */}
+      <SidebarFooter className="gap-1">
         <SidebarMenu>
           <SidebarMenuItem>
-            <NamespaceSelector />
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <AlertBell />
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton
-                  size="lg"
-                  tooltip="Admin"
-                  className="data-[state=open]:bg-sidebar-accent"
-                >
-                  <div
-                    className={cn(
-                      "flex shrink-0 items-center justify-center rounded-full bg-blue-500 transition-[width,height] duration-200",
-                      isCollapsed ? "size-8" : "size-6"
-                    )}
-                  >
-                    <User2
-                      className={cn(
-                        "text-white",
-                        isCollapsed ? "size-4" : "size-3.5"
-                      )}
-                    />
-                  </div>
-                  <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-medium">Admin</span>
-                    <span className="truncate text-xs text-muted-foreground">
-                      {formatRoleName(currentRole)}
-                    </span>
-                  </div>
-                  <EllipsisVertical className="ml-auto size-4" />
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                side="right"
-                align="end"
-                className="w-48"
-                sideOffset={4}
-              >
-                <DropdownMenuLabel className="font-normal">
-                  <p className="text-sm font-medium">Admin</p>
-                  <Badge
-                    variant={badgeCfg.variant}
-                    className={`mt-1 text-[10px] px-1.5 py-0 ${badgeCfg.className}`}
-                  >
-                    {formatRoleName(currentRole)}
-                  </Badge>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={toggleTheme}>
-                  {theme === "dark" ? (
-                    <Sun className="size-4" />
-                  ) : (
-                    <Moon className="size-4" />
-                  )}
-                  <span>Theme</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={logout}>
-                  <LogOut className="size-4" />
-                  <span>Log out</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <SidebarMenuButton
+              tooltip={theme === "dark" ? "Light mode" : "Dark mode"}
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            >
+              {theme === "dark" ? (
+                <Sun className="size-4" />
+              ) : (
+                <Moon className="size-4" />
+              )}
+              <span>Theme</span>
+            </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
+
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={logout}
+          className="w-full justify-start gap-2 h-8"
+        >
+          <LogOut className="size-3.5" />
+          {!isCollapsed && <span className="text-xs">Log out</span>}
+        </Button>
       </SidebarFooter>
     </Sidebar>
   );
