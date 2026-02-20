@@ -21,6 +21,8 @@ interface GpuDetailInfoProps {
   gpu: Gpu;
   detailData: GpuDetailData | null;
   className?: string;
+  /** When true, renders without Card wrapper (for embedding inside another Card) */
+  embedded?: boolean;
 }
 
 interface MetricTile {
@@ -30,7 +32,7 @@ interface MetricTile {
   highlight?: boolean;
 }
 
-export function GpuDetailInfo({ gpu, detailData, className }: GpuDetailInfoProps) {
+function DetailContent({ gpu, detailData }: { gpu: Gpu; detailData: GpuDetailData | null }) {
   const memPct = Math.round((gpu.memoryUsed / gpu.memoryTotal) * 100);
 
   const tiles: MetricTile[] = [
@@ -52,6 +54,38 @@ export function GpuDetailInfo({ gpu, detailData, className }: GpuDetailInfoProps
   ];
 
   return (
+    <div>
+      <div className="flex items-center gap-2 flex-wrap mb-3">
+        <span className="text-sm font-semibold">{gpu.name}</span>
+        <Badge variant="secondary" className="text-[10px] font-medium">
+          {gpu.model}
+        </Badge>
+      </div>
+      <div className="grid grid-cols-5 gap-1.5">
+        {tiles.map((tile) => (
+          <div
+            key={tile.label}
+            className={cn(
+              "rounded-md border border-border/50 bg-muted/30 px-2 py-2 text-center",
+              tile.highlight && "border-[var(--status-warning)]/40 bg-[var(--status-warning)]/5"
+            )}
+          >
+            <tile.icon className="size-3 mx-auto mb-1 text-muted-foreground" />
+            <p className="text-[9px] text-muted-foreground leading-none mb-0.5">{tile.label}</p>
+            <p className="text-xs font-semibold tabular-nums leading-tight">{tile.value}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export function GpuDetailInfo({ gpu, detailData, className, embedded }: GpuDetailInfoProps) {
+  if (embedded) {
+    return <DetailContent gpu={gpu} detailData={detailData} />;
+  }
+
+  return (
     <Card className={cn("border-border/40", className)}>
       <CardHeader className="pb-2">
         <div className="flex items-center gap-2 flex-wrap">
@@ -62,21 +96,7 @@ export function GpuDetailInfo({ gpu, detailData, className }: GpuDetailInfoProps
         </div>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-5 gap-1.5">
-          {tiles.map((tile) => (
-            <div
-              key={tile.label}
-              className={cn(
-                "rounded-md border border-border/50 bg-muted/30 px-2 py-2 text-center",
-                tile.highlight && "border-[var(--status-warning)]/40 bg-[var(--status-warning)]/5"
-              )}
-            >
-              <tile.icon className="size-3 mx-auto mb-1 text-muted-foreground" />
-              <p className="text-[9px] text-muted-foreground leading-none mb-0.5">{tile.label}</p>
-              <p className="text-xs font-semibold tabular-nums leading-tight">{tile.value}</p>
-            </div>
-          ))}
-        </div>
+        <DetailContent gpu={gpu} detailData={detailData} />
       </CardContent>
     </Card>
   );

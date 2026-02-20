@@ -14,14 +14,6 @@ import { GpuPipelineTreemap } from "@/components/gpu/GpuPipelineTreemap";
 import { GpuPerformanceTrend } from "@/components/gpu/GpuPerformanceTrend";
 import { GpuHeatmapRidgelineToggle } from "@/components/gpu/GpuHeatmapRidgelineToggle";
 import { GpuHealthIssues } from "@/components/gpu/GpuHealthIssues";
-import { GpuDetailPanel } from "@/components/gpu/GpuDetailPanel";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetDescription,
-} from "@/components/ui/sheet";
 import {
   Card,
   CardContent,
@@ -39,7 +31,7 @@ import {
   getGpuFunnelData,
   getGpuDetailData,
 } from "@/data/gpu-data";
-import type { GpuMetricType, GpuTimeSeries } from "@/data/gpu-data";
+import type { GpuMetricType } from "@/data/gpu-data";
 
 type HeatmapView = "heatmap" | "ridgeline";
 type GpuListView = "list" | "grid";
@@ -47,7 +39,7 @@ type GpuListView = "list" | "grid";
 export default function GpuPage() {
   const [activeMetric, setActiveMetric] = useState<GpuMetricType>("utilization");
   const [heatmapView, setHeatmapView] = useState<HeatmapView>("heatmap");
-  const [selectedGpu, setSelectedGpu] = useState<number | null>(null);
+  const [selectedGpu, setSelectedGpu] = useState<number>(1);
   const [gpuListView, setGpuListView] = useState<GpuListView>("list");
 
   const gpus = useMemo(() => getGpuCards(), []);
@@ -59,12 +51,6 @@ export default function GpuPage() {
   const systemTrends = useMemo(() => getSystemResourceTrends(), []);
   const funnelStages = useMemo(() => getGpuFunnelData(), []);
 
-  const selectedGpuData = useMemo(
-    () => gpus.find((g) => g.id === selectedGpu) ?? null,
-    [gpus, selectedGpu]
-  );
-
-  // Active GPU for inline detail panel (defaults to first GPU)
   const activeGpu = useMemo(
     () => gpus.find((g) => g.id === selectedGpu) ?? gpus[0],
     [gpus, selectedGpu]
@@ -75,17 +61,8 @@ export default function GpuPage() {
     [activeGpu]
   );
 
-  const detailData = useMemo(
-    () => (selectedGpu ? getGpuDetailData(String(selectedGpu)) : null),
-    [selectedGpu]
-  );
-
   const handleGpuSelect = useCallback((gpuId: number) => {
     setSelectedGpu(gpuId);
-  }, []);
-
-  const handleSheetClose = useCallback(() => {
-    setSelectedGpu(null);
   }, []);
 
   return (
@@ -138,8 +115,8 @@ export default function GpuPage() {
         <GpuHealthIssues issues={healthIssues} className="lg:col-span-2" />
       </div>
 
-      {/* Performance Trends + GPU Detail + GPU List */}
-      <div className="grid grid-cols-1 lg:grid-cols-6 gap-3">
+      {/* Performance Trends + GPU List & Detail */}
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-3">
         <Card className="group border-border/40 lg:col-span-2">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between gap-2">
@@ -174,13 +151,8 @@ export default function GpuPage() {
           </CardContent>
         </Card>
 
-        <GpuDetailInfo
-          gpu={activeGpu}
-          detailData={activeDetailData}
-          className="border-border/40 lg:col-span-2"
-        />
-
-        <Card className="border-border/40 lg:col-span-2">
+        {/* GPU List + Detail (single card) */}
+        <Card className="border-border/40 lg:col-span-3">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between gap-2">
               <CardTitle className="text-sm">
@@ -209,48 +181,38 @@ export default function GpuPage() {
               </div>
             </div>
           </CardHeader>
-          <CardContent className={gpuListView === "list" ? "p-0" : ""}>
-            {gpuListView === "list" ? (
-              <GpuList
-                gpus={gpus}
-                processes={processes}
-                selectedId={selectedGpu}
-                onSelect={handleGpuSelect}
-              />
-            ) : (
-              <GpuCardGrid
-                gpus={gpus}
-                onGpuClick={handleGpuSelect}
-              />
-            )}
+          <CardContent>
+            <div className="flex gap-4">
+              {/* Left: GPU List */}
+              <div className="flex-1 min-w-0">
+                {gpuListView === "list" ? (
+                  <GpuList
+                    gpus={gpus}
+                    processes={processes}
+                    selectedId={selectedGpu}
+                    onSelect={handleGpuSelect}
+                  />
+                ) : (
+                  <GpuCardGrid
+                    gpus={gpus}
+                    onGpuClick={handleGpuSelect}
+                  />
+                )}
+              </div>
+              {/* Divider */}
+              <div className="w-px self-stretch bg-border/40 shrink-0" />
+              {/* Right: Detail Info */}
+              <div className="flex-1 min-w-0">
+                <GpuDetailInfo
+                  gpu={activeGpu}
+                  detailData={activeDetailData}
+                  embedded
+                />
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
-
-      {/* GPU Detail Slide Panel */}
-      <Sheet
-        open={selectedGpu !== null}
-        onOpenChange={(open) => {
-          if (!open) handleSheetClose();
-        }}
-      >
-        <SheetContent side="right" className="sm:max-w-[520px] px-6">
-          <SheetHeader>
-            <SheetTitle>GPU Details</SheetTitle>
-            <SheetDescription>
-              {selectedGpuData ? `${selectedGpuData.name} - ${selectedGpuData.model}` : "Select a GPU"}
-            </SheetDescription>
-          </SheetHeader>
-          <GpuDetailPanel
-            gpu={selectedGpuData}
-            allGpus={gpus}
-            processes={processes}
-            detailData={detailData}
-            onGpuChange={handleGpuSelect}
-            onClose={handleSheetClose}
-          />
-        </SheetContent>
-      </Sheet>
     </PageShell>
   );
 }
