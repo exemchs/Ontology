@@ -62,9 +62,9 @@ export function AlertBell() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <SidebarMenuButton tooltip="알림" className="relative">
+        <SidebarMenuButton tooltip="Notifications" className="relative">
           <Bell className="size-4" />
-          <span>알림</span>
+          <span>Notifications</span>
           {unresolvedCount > 0 && (
             <span className="absolute top-1.5 left-5 size-2 rounded-full bg-destructive group-data-[collapsible=icon]:left-1.5 group-data-[collapsible=icon]:top-1" />
           )}

@@ -3,7 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
-import { Moon, Sun, LogOut, Search, User2, ChevronsUpDown } from "lucide-react";
+import {
+  Moon,
+  Sun,
+  LogOut,
+  Search,
+  User2,
+  ChevronsUpDown,
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -123,7 +130,7 @@ export function AppSidebar() {
               <SidebarMenu>
                 <SidebarMenuItem>
                   <SidebarMenuButton
-                    tooltip="검색 (⌘K)"
+                    tooltip="Search (⌘K)"
                     onClick={openCommandPalette}
                   >
                     <Search className="size-4" />
@@ -136,7 +143,7 @@ export function AppSidebar() {
                 className="flex h-8 w-full items-center gap-2 rounded-md border border-input bg-background px-3 text-xs text-muted-foreground hover:bg-accent transition-colors"
               >
                 <Search className="size-3.5 shrink-0" />
-                <span>검색...</span>
+                <span>Search...</span>
                 <kbd className="ml-auto font-mono text-[10px]">⌘K</kbd>
               </button>
             )}
@@ -171,70 +178,73 @@ export function AppSidebar() {
 
       {/* ── Footer ─────────────────────────────────────────────────────── */}
       <SidebarFooter>
-        {/* Namespace selector */}
+        {/* Namespace + Notifications */}
         <SidebarMenu>
           <SidebarMenuItem>
             <NamespaceSelector />
           </SidebarMenuItem>
-        </SidebarMenu>
-
-        {/* Alert + Theme */}
-        <SidebarMenu>
           <SidebarMenuItem>
             <AlertBell />
           </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton onClick={toggleTheme} tooltip="테마 전환">
-              {theme === "dark" ? (
-                <Sun className="size-4" />
-              ) : (
-                <Moon className="size-4" />
-              )}
-              <span>테마 전환</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
         </SidebarMenu>
 
-        {/* User account */}
+        {/* User card (shadcn pattern) */}
         <SidebarMenu>
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton
                   size="lg"
-                  tooltip={formatRoleName(currentRole)}
+                  tooltip="Admin"
+                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                 >
-                  <User2 className="size-4" />
-                  <div className="flex flex-1 flex-col text-left leading-tight">
-                    <span className="text-xs font-medium truncate">Admin</span>
-                    <span className="text-[10px] text-muted-foreground truncate">
+                  <div className="flex size-8 items-center justify-center rounded-lg bg-sidebar-accent text-sidebar-accent-foreground">
+                    <User2 className="size-4" />
+                  </div>
+                  <div className="grid flex-1 text-left leading-tight">
+                    <span className="truncate text-sm font-medium">Admin</span>
+                    <span className="truncate text-xs text-muted-foreground">
                       {formatRoleName(currentRole)}
                     </span>
                   </div>
-                  <ChevronsUpDown className="ml-auto size-3 text-muted-foreground" />
+                  <ChevronsUpDown className="ml-auto size-4" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 side="right"
                 align="end"
-                className="w-48"
+                className="w-56"
+                sideOffset={4}
               >
-                <DropdownMenuLabel className="flex items-center gap-2 text-xs font-normal">
-                  <User2 className="size-3.5 text-muted-foreground" />
-                  <div className="flex flex-col">
-                    <span className="font-medium">Admin</span>
-                    <Badge
-                      variant={badgeCfg.variant}
-                      className={`mt-0.5 w-fit text-[10px] px-1.5 py-0 ${badgeCfg.className}`}
-                    >
-                      {formatRoleName(currentRole)}
-                    </Badge>
+                <DropdownMenuLabel className="p-0 font-normal">
+                  <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                    <div className="flex size-8 items-center justify-center rounded-lg bg-muted">
+                      <User2 className="size-4" />
+                    </div>
+                    <div className="grid flex-1 text-left leading-tight">
+                      <span className="truncate text-sm font-medium">Admin</span>
+                      <Badge
+                        variant={badgeCfg.variant}
+                        className={`mt-0.5 w-fit text-[10px] px-1.5 py-0 ${badgeCfg.className}`}
+                      >
+                        {formatRoleName(currentRole)}
+                      </Badge>
+                    </div>
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={toggleTheme}>
+                  {theme === "dark" ? (
+                    <Sun className="size-4" />
+                  ) : (
+                    <Moon className="size-4" />
+                  )}
+                  <span>Theme</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={logout}>
-                  <LogOut className="size-3.5" />
-                  <span>로그아웃</span>
+                  <LogOut className="size-4" />
+                  <span>Log out</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
