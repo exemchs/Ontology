@@ -61,6 +61,7 @@ export function HeaderBar() {
           <Search className="size-4" />
           <span className="sr-only">Search</span>
         </Button>
+        <AlertBell />
         <Button
           variant="ghost"
           size="icon"
@@ -74,7 +75,6 @@ export function HeaderBar() {
           )}
           <span className="sr-only">Toggle theme</span>
         </Button>
-        <AlertBell />
       </div>
     </header>
   );

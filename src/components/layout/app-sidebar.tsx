@@ -18,7 +18,6 @@ import {
   SidebarSeparator,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
 import { navigationGroups } from "@/lib/navigation";
 import { useAuth } from "@/hooks/use-auth";
 import { NamespaceSelector } from "@/components/layout/NamespaceSelector";
@@ -32,8 +31,8 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" className="border-r border-sidebar-border/40">
       {/* Logo — height matches HeaderBar h-12 so border lines up */}
-      <SidebarHeader className="h-12 shrink-0 border-b border-border/40 justify-center pb-0">
-        <div className="flex h-7 items-center px-2">
+      <SidebarHeader className="h-12 shrink-0 border-b border-border/40 justify-center p-0 px-2">
+        <div className="flex h-7 items-center">
           {!isCollapsed && (
             <>
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -87,17 +86,13 @@ export function AppSidebar() {
           <SidebarMenuItem>
             <NamespaceSelector />
           </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton onClick={logout} tooltip="Log out">
+              <LogOut className="size-4" />
+              <span>Log out</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
         </SidebarMenu>
-
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={logout}
-          className="w-full justify-start gap-2 h-8"
-        >
-          <LogOut className="size-3.5" />
-          {!isCollapsed && <span className="text-xs">Log out</span>}
-        </Button>
       </SidebarFooter>
     </Sidebar>
   );
