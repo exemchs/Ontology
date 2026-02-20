@@ -202,6 +202,7 @@ export function OntologyGraph({
   const graphNodesRef = useRef<GraphNode[]>([]);
   const destroyedRef = useRef(false);
   const dimensionsRef = useRef({ width: 0, height: 0 });
+  const initialFitDoneRef = useRef(false);
 
   const [mode, setMode] = useState<GraphMode>("force");
   const [minimapNodes, setMinimapNodes] = useState<MinimapNode[]>([]);
@@ -347,7 +348,6 @@ export function OntologyGraph({
     if (!svgEl || !containerEl) return;
 
     destroyedRef.current = false;
-    let initialFitDone = false;
 
     // Wait for valid dimensions from ResizeObserver before initializing
     const resizeObserver = createDebouncedResizeObserver((w, h) => {
@@ -667,11 +667,11 @@ export function OntologyGraph({
 
       // ── Auto fit-to-view on initial force layout settle ────────────
 
-      if (!initialFitDone && modeRef.current === "force") {
+      if (!initialFitDoneRef.current && modeRef.current === "force") {
         simulation.on("tick.initialFit", () => {
-          if (initialFitDone || destroyedRef.current) return;
+          if (initialFitDoneRef.current || destroyedRef.current) return;
           if (simulation.alpha() < 0.1) {
-            initialFitDone = true;
+            initialFitDoneRef.current = true;
             simulation.on("tick.initialFit", null);
             const nodes = graphNodesRef.current;
             if (nodes.length === 0 || !svgEl) return;
