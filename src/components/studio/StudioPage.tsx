@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { SchemaTreeView } from "@/components/studio/SchemaTreeView";
 import { SchemaHealthScore } from "@/components/studio/SchemaHealthScore";
 import { TypeDetail, type EdgeFilter } from "@/components/studio/TypeDetail";
-import { TypeEditDialog } from "@/components/studio/TypeEditDialog";
+import { TypeAddDialog } from "@/components/studio/TypeAddDialog";
 import { OntologyGraph } from "@/components/charts/studio/OntologyGraph";
 import {
   OntologyMinimap,
@@ -14,15 +14,16 @@ import {
 } from "@/components/studio/OntologyMinimap";
 import { TypeDistributionTreemap } from "@/components/charts/studio/TypeDistributionTreemap";
 import { getOntologyTypes } from "@/data/studio-data";
+import { toast } from "sonner";
 import type { OntologyType } from "@/types";
 
 export function StudioPage() {
-  const types = useMemo(() => getOntologyTypes(), []);
+  const [types, setTypes] = useState<OntologyType[]>(() => getOntologyTypes());
   const [selectedType, setSelectedType] = useState<OntologyType | null>(
     types[0] ?? null
   );
   const [edgeFilter, setEdgeFilter] = useState<EdgeFilter>("all");
-  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [addTypeDialogOpen, setAddTypeDialogOpen] = useState(false);
 
   // Minimap state
   const [minimapNodes, setMinimapNodes] = useState<MinimapNode[]>([]);
@@ -49,6 +50,123 @@ export function StudioPage() {
     [types]
   );
 
+  // ── Type CRUD ──────────────────────────────────────────────────────────────
+
+  const handleAddType = useCallback((name: string, description: string) => {
+    setTypes((prev) => {
+      const maxId = prev.reduce((max, t) => Math.max(max, t.id), 0);
+      const newType: OntologyType = {
+        id: maxId + 1,
+        name,
+        description,
+        nodeCount: 0,
+        predicates: [],
+        relations: [],
+      };
+      return [...prev, newType];
+    });
+    toast.success(`Type "${name}" added`);
+  }, []);
+
+  const handleDeleteType = useCallback(
+    (name: string) => {
+      setTypes((prev) => prev.filter((t) => t.name !== name));
+      if (selectedType?.name === name) {
+        setSelectedType((prev) => {
+          const remaining = types.filter((t) => t.name !== name);
+          return remaining[0] ?? null;
+        });
+      }
+      toast.success(`Type "${name}" deleted`);
+    },
+    [selectedType, types]
+  );
+
+  const handleRenameType = useCallback(
+    (oldName: string, newName: string) => {
+      setTypes((prev) =>
+        prev.map((t) => (t.name === oldName ? { ...t, name: newName } : t))
+      );
+      if (selectedType?.name === oldName) {
+        setSelectedType((prev) => (prev ? { ...prev, name: newName } : null));
+      }
+      toast.success(`Type renamed to "${newName}"`);
+    },
+    [selectedType]
+  );
+
+  // ── Predicate CRUD ─────────────────────────────────────────────────────────
+
+  const handleAddPredicate = useCallback(
+    (typeName: string, predicate: string) => {
+      setTypes((prev) =>
+        prev.map((t) =>
+          t.name === typeName
+            ? { ...t, predicates: [...t.predicates, predicate] }
+            : t
+        )
+      );
+      // Sync selectedType
+      setSelectedType((prev) =>
+        prev?.name === typeName
+          ? { ...prev, predicates: [...prev.predicates, predicate] }
+          : prev
+      );
+    },
+    []
+  );
+
+  const handleUpdatePredicate = useCallback(
+    (typeName: string, oldPred: string, newPred: string) => {
+      setTypes((prev) =>
+        prev.map((t) =>
+          t.name === typeName
+            ? {
+                ...t,
+                predicates: t.predicates.map((p) =>
+                  p === oldPred ? newPred : p
+                ),
+              }
+            : t
+        )
+      );
+      setSelectedType((prev) =>
+        prev?.name === typeName
+          ? {
+              ...prev,
+              predicates: prev.predicates.map((p) =>
+                p === oldPred ? newPred : p
+              ),
+            }
+          : prev
+      );
+    },
+    []
+  );
+
+  const handleDeletePredicate = useCallback(
+    (typeName: string, predicate: string) => {
+      setTypes((prev) =>
+        prev.map((t) =>
+          t.name === typeName
+            ? { ...t, predicates: t.predicates.filter((p) => p !== predicate) }
+            : t
+        )
+      );
+      setSelectedType((prev) =>
+        prev?.name === typeName
+          ? {
+              ...prev,
+              predicates: prev.predicates.filter((p) => p !== predicate),
+            }
+          : prev
+      );
+    },
+    []
+  );
+
+  const typeNames = useMemo(() => types.map((t) => t.name), [types]);
+
   return (
     <div data-testid="studio-page" className="flex h-full gap-3 p-3">
       {/* Left Panel (~35%) */}
@@ -58,6 +176,9 @@ export function StudioPage() {
             types={types}
             selectedType={selectedType?.name ?? null}
             onSelectType={handleTreeSelect}
+            onAddType={() => setAddTypeDialogOpen(true)}
+            onDeleteType={handleDeleteType}
+            onRenameType={handleRenameType}
           />
         </Card>
         <Card className="border-border/40 flex-[4] overflow-hidden py-0">
@@ -66,7 +187,16 @@ export function StudioPage() {
             allTypes={types}
             edgeFilter={edgeFilter}
             onEdgeFilterChange={setEdgeFilter}
-            onEdit={() => setEditDialogOpen(true)}
+            onAddPredicate={(pred) =>
+              selectedType && handleAddPredicate(selectedType.name, pred)
+            }
+            onUpdatePredicate={(oldPred, newPred) =>
+              selectedType &&
+              handleUpdatePredicate(selectedType.name, oldPred, newPred)
+            }
+            onDeletePredicate={(pred) =>
+              selectedType && handleDeletePredicate(selectedType.name, pred)
+            }
           />
         </Card>
         <SchemaHealthScore types={types} />
@@ -97,10 +227,11 @@ export function StudioPage() {
         </Card>
       </div>
 
-      <TypeEditDialog
-        type={selectedType}
-        open={editDialogOpen}
-        onOpenChange={setEditDialogOpen}
+      <TypeAddDialog
+        open={addTypeDialogOpen}
+        onOpenChange={setAddTypeDialogOpen}
+        onAdd={handleAddType}
+        existingNames={typeNames}
       />
     </div>
   );

@@ -1,9 +1,10 @@
 "use client";
 
-import { ArrowRight, ArrowLeft, Pencil } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { ArrowRight, ArrowLeft, Pencil, X, Plus, Check } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectTrigger,
@@ -22,7 +23,9 @@ interface TypeDetailProps {
   allTypes?: OntologyType[];
   edgeFilter: EdgeFilter;
   onEdgeFilterChange: (filter: EdgeFilter) => void;
-  onEdit: () => void;
+  onAddPredicate: (predicate: string) => void;
+  onUpdatePredicate: (oldPred: string, newPred: string) => void;
+  onDeletePredicate: (predicate: string) => void;
 }
 
 function getInboundRelations(
@@ -45,12 +48,199 @@ function getInboundRelations(
   return inbound;
 }
 
+// ── Editable Predicate Badge ────────────────────────────────────────────────
+
+function PredicateBadge({
+  name,
+  allPredicates,
+  onUpdate,
+  onDelete,
+}: {
+  name: string;
+  allPredicates: string[];
+  onUpdate: (oldName: string, newName: string) => void;
+  onDelete: (name: string) => void;
+}) {
+  const [editing, setEditing] = useState(false);
+  const [editValue, setEditValue] = useState(name);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (editing) {
+      inputRef.current?.focus();
+      inputRef.current?.select();
+    }
+  }, [editing]);
+
+  function handleSave() {
+    const trimmed = editValue.trim();
+    if (trimmed && trimmed !== name && !allPredicates.includes(trimmed)) {
+      onUpdate(name, trimmed);
+    }
+    setEditing(false);
+    setEditValue(name);
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSave();
+    }
+    if (e.key === "Escape") {
+      setEditing(false);
+      setEditValue(name);
+    }
+  }
+
+  if (editing) {
+    return (
+      <div className="inline-flex items-center gap-1 rounded-md border border-primary/40 bg-muted/50 px-1.5 py-0.5">
+        <Input
+          ref={inputRef}
+          value={editValue}
+          onChange={(e) => setEditValue(e.target.value)}
+          onKeyDown={handleKeyDown}
+          onBlur={handleSave}
+          className="h-5 w-24 border-0 bg-transparent p-0 text-xs shadow-none focus-visible:ring-0"
+        />
+        <button
+          type="button"
+          onMouseDown={(e) => e.preventDefault()}
+          onClick={handleSave}
+          className="rounded p-0.5 hover:bg-primary/10"
+        >
+          <Check className="size-3 text-primary" />
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <Badge
+      variant="secondary"
+      className="group/pred gap-0 pr-1 text-xs transition-all"
+    >
+      <span className="pr-1">{name}</span>
+      <span className="hidden items-center gap-0.5 group-hover/pred:inline-flex">
+        <button
+          type="button"
+          onClick={() => {
+            setEditValue(name);
+            setEditing(true);
+          }}
+          className="rounded p-0.5 hover:bg-muted-foreground/20"
+        >
+          <Pencil className="size-2.5" />
+        </button>
+        <button
+          type="button"
+          onClick={() => onDelete(name)}
+          className="rounded p-0.5 hover:bg-[var(--status-critical)]/20"
+        >
+          <X className="size-2.5" />
+        </button>
+      </span>
+    </Badge>
+  );
+}
+
+// ── Add Predicate Badge ─────────────────────────────────────────────────────
+
+function AddPredicateBadge({
+  existingPredicates,
+  onAdd,
+}: {
+  existingPredicates: string[];
+  onAdd: (name: string) => void;
+}) {
+  const [active, setActive] = useState(false);
+  const [value, setValue] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (active) inputRef.current?.focus();
+  }, [active]);
+
+  function handleAdd() {
+    const trimmed = value.trim();
+    if (trimmed && !existingPredicates.includes(trimmed)) {
+      onAdd(trimmed);
+      setValue("");
+      // Keep input open for rapid adding
+      inputRef.current?.focus();
+    }
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleAdd();
+    }
+    if (e.key === "Escape") {
+      setActive(false);
+      setValue("");
+    }
+  }
+
+  if (active) {
+    return (
+      <div className="inline-flex items-center gap-1 rounded-md border border-primary/40 bg-muted/50 px-1.5 py-0.5">
+        <Input
+          ref={inputRef}
+          placeholder="predicate name"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          onKeyDown={handleKeyDown}
+          onBlur={() => {
+            if (!value.trim()) setActive(false);
+          }}
+          className="h-5 w-28 border-0 bg-transparent p-0 text-xs shadow-none placeholder:text-muted-foreground/50 focus-visible:ring-0"
+        />
+        <button
+          type="button"
+          onMouseDown={(e) => e.preventDefault()}
+          onClick={handleAdd}
+          className="rounded p-0.5 hover:bg-primary/10"
+          disabled={!value.trim()}
+        >
+          <Check className="size-3 text-primary" />
+        </button>
+        <button
+          type="button"
+          onMouseDown={(e) => e.preventDefault()}
+          onClick={() => {
+            setActive(false);
+            setValue("");
+          }}
+          className="rounded p-0.5 hover:bg-muted-foreground/20"
+        >
+          <X className="size-3" />
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={() => setActive(true)}
+      className="inline-flex items-center justify-center rounded-md border border-dashed border-border bg-muted/30 px-2.5 py-0.5 text-xs text-muted-foreground transition-colors hover:border-primary/40 hover:bg-primary/5 hover:text-primary"
+    >
+      <Plus className="mr-0.5 size-3" />
+    </button>
+  );
+}
+
+// ── Main Component ──────────────────────────────────────────────────────────
+
 export function TypeDetail({
   type,
   allTypes = [],
   edgeFilter,
   onEdgeFilterChange,
-  onEdit,
+  onAddPredicate,
+  onUpdatePredicate,
+  onDeletePredicate,
 }: TypeDetailProps) {
   if (!type) {
     return (
@@ -79,10 +269,9 @@ export function TypeDetail({
     <div data-testid="type-detail" className="flex h-full flex-col">
       <div className="flex items-center justify-between border-b px-4 py-2">
         <h3 className="text-sm font-semibold">{type.name}</h3>
-        <Button variant="ghost" size="sm" onClick={onEdit}>
-          <Pencil className="mr-1 size-3.5" />
-          Edit
-        </Button>
+        <span className="text-xs text-muted-foreground">
+          {type.description}
+        </span>
       </div>
 
       <Tabs defaultValue="predicates" className="flex-1">
@@ -96,10 +285,18 @@ export function TypeDetail({
           <ScrollArea className="h-[180px]">
             <div className="flex flex-wrap gap-1.5">
               {type.predicates.map((pred) => (
-                <Badge key={pred} variant="secondary" className="text-xs">
-                  {pred}
-                </Badge>
+                <PredicateBadge
+                  key={pred}
+                  name={pred}
+                  allPredicates={type.predicates}
+                  onUpdate={onUpdatePredicate}
+                  onDelete={onDeletePredicate}
+                />
               ))}
+              <AddPredicateBadge
+                existingPredicates={type.predicates}
+                onAdd={onAddPredicate}
+              />
             </div>
           </ScrollArea>
         </TabsContent>
