@@ -102,7 +102,7 @@ export function GpuPipelineTreemap({ stages, className }: GpuPipelineTreemapProp
 
     treemap<TreeNode>()
       .size([width, chartHeight])
-      .tile(treemapSquarify.ratio(4))
+      .tile(treemapSquarify.ratio(1))
       .paddingInner(3)
       .round(true)(root);
 
@@ -165,7 +165,7 @@ export function GpuPipelineTreemap({ stages, className }: GpuPipelineTreemapProp
     nodes
       .append("text")
       .attr("x", (d) => (d.x1 - d.x0) / 2)
-      .attr("y", (d) => (d.y1 - d.y0) / 2 - 8)
+      .attr("y", (d) => (d.y1 - d.y0) / 2 - 6)
       .attr("text-anchor", "middle")
       .attr("dominant-baseline", "middle")
       .attr("fill", (d) => {
@@ -173,11 +173,13 @@ export function GpuPipelineTreemap({ stages, className }: GpuPipelineTreemapProp
         if (name === "Effective" || name === stages[stages.length - 1]?.label) return "#fff";
         return colors.text;
       })
-      .style("font-size", "12px")
+      .style("font-size", "11px")
       .style("font-weight", "600")
+      .style("pointer-events", "none")
       .text((d) => {
         const w = d.x1 - d.x0;
-        if (w < 50) return "";
+        const h = d.y1 - d.y0;
+        if (w < 45 || h < 36) return "";
         return d.data.name;
       });
 
@@ -185,7 +187,7 @@ export function GpuPipelineTreemap({ stages, className }: GpuPipelineTreemapProp
     nodes
       .append("text")
       .attr("x", (d) => (d.x1 - d.x0) / 2)
-      .attr("y", (d) => (d.y1 - d.y0) / 2 + 10)
+      .attr("y", (d) => (d.y1 - d.y0) / 2 + 8)
       .attr("text-anchor", "middle")
       .attr("dominant-baseline", "middle")
       .attr("fill", (d) => {
@@ -193,13 +195,15 @@ export function GpuPipelineTreemap({ stages, className }: GpuPipelineTreemapProp
         if (name === "Effective" || name === stages[stages.length - 1]?.label) return "rgba(255,255,255,0.8)";
         return colors.textSecondary;
       })
-      .style("font-size", "11px")
+      .style("font-size", "10px")
+      .style("pointer-events", "none")
       .text((d) => {
         const w = d.x1 - d.x0;
-        if (w < 50) return "";
+        const h = d.y1 - d.y0;
+        if (w < 45 || h < 36) return "";
         const val = d.data.value ?? 0;
         const pct = Math.round((val / total) * 100);
-        return `${val} GPU${val > 1 ? "s" : ""} · ${pct}%`;
+        return `${val} GPUs · ${pct}%`;
       });
 
     return () => {
