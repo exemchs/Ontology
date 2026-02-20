@@ -45,18 +45,18 @@ function getCellStyle(action: PiiAction): {
       return { bgClass: "", icon: null };
     case "masked":
       return {
-        bgClass: "bg-amber-500/10",
-        icon: <EyeOff className="size-3.5 text-amber-500 shrink-0" />,
+        bgClass: "bg-[var(--status-warning)]/10",
+        icon: <EyeOff className="size-3.5 text-[var(--status-warning)] shrink-0" />,
       };
     case "anonymized":
       return {
-        bgClass: "bg-red-500/10",
-        icon: <ShieldAlert className="size-3.5 text-red-500 shrink-0" />,
+        bgClass: "bg-[var(--status-critical)]/10",
+        icon: <ShieldAlert className="size-3.5 text-[var(--status-critical)] shrink-0" />,
       };
     case "denied":
       return {
-        bgClass: "bg-red-500/10",
-        icon: <Lock className="size-3.5 text-red-500 shrink-0" />,
+        bgClass: "bg-[var(--status-critical)]/10",
+        icon: <Lock className="size-3.5 text-[var(--status-critical)] shrink-0" />,
       };
   }
 }

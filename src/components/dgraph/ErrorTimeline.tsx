@@ -20,16 +20,16 @@ const severityStyles: Record<
   { badge: string; border: string }
 > = {
   error: {
-    badge: "bg-red-500/15 text-red-500 border-red-500/30",
-    border: "border-l-red-500",
+    badge: "bg-[var(--status-critical)]/15 text-[var(--status-critical)] border-[var(--status-critical)]/30",
+    border: "border-l-[var(--status-critical)]",
   },
   warning: {
-    badge: "bg-amber-500/15 text-amber-500 border-amber-500/30",
-    border: "border-l-amber-500",
+    badge: "bg-[var(--status-warning)]/15 text-[var(--status-warning)] border-[var(--status-warning)]/30",
+    border: "border-l-[var(--status-warning)]",
   },
   info: {
-    badge: "bg-blue-500/15 text-blue-500 border-blue-500/30",
-    border: "border-l-blue-500",
+    badge: "bg-[var(--status-healthy)]/15 text-[var(--status-healthy)] border-[var(--status-healthy)]/30",
+    border: "border-l-[var(--status-healthy)]",
   },
 };
 

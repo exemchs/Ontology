@@ -24,17 +24,17 @@ interface NodePopoverProps {
 function getStatusBadgeClass(status: string): string {
   switch (status) {
     case "warning":
-      return "bg-amber-500/10 text-amber-500 border-amber-500/20";
+      return "bg-[var(--status-warning)]/15 text-[var(--status-warning)] border-[var(--status-warning)]/30";
     case "error":
-      return "bg-red-500/10 text-red-500 border-red-500/20";
+      return "bg-[var(--status-critical)]/15 text-[var(--status-critical)] border-[var(--status-critical)]/30";
     default:
       return "";
   }
 }
 
 function getBarColor(value: number): string {
-  if (value > 80) return "bg-red-500";
-  if (value >= 60) return "bg-amber-500";
+  if (value > 80) return "bg-[var(--status-critical)]";
+  if (value >= 60) return "bg-[var(--status-warning)]";
   return "bg-[var(--status-healthy)]";
 }
 

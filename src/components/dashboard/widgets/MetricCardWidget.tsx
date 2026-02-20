@@ -19,9 +19,9 @@ const trendConfig = {
   },
   down: {
     icon: TrendingDown,
-    text: "text-red-600 dark:text-red-400",
-    bg: "bg-red-500/10",
-    cardBg: "bg-red-500/5",
+    text: "text-[var(--status-critical)]",
+    bg: "bg-[var(--status-critical)]/10",
+    cardBg: "bg-[var(--status-critical)]/5",
   },
   flat: {
     icon: Minus,

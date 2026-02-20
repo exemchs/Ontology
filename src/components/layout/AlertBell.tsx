@@ -100,7 +100,7 @@ export function AlertBell() {
                   variant={severityVariant(alert.severity)}
                   className={`mt-0.5 shrink-0 text-[10px] px-1.5 py-0 ${
                     alert.severity === "warning"
-                      ? "bg-amber-500/15 text-amber-600 border-amber-500/30 dark:text-amber-400"
+                      ? "bg-[var(--status-warning)]/15 text-[var(--status-warning)] border-[var(--status-warning)]/30"
                       : ""
                   }`}
                 >

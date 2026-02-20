@@ -44,7 +44,7 @@ export default function GpuSummaryWidget({
           )}
           {errorPct > 0 && (
             <div
-              className="h-full bg-red-500 transition-all"
+              className="h-full bg-[var(--status-critical)] transition-all"
               style={{ width: `${errorPct}%` }}
             />
           )}
@@ -69,8 +69,8 @@ export default function GpuSummaryWidget({
           </div>
           <div className="flex flex-col items-center">
             <div className="flex items-center gap-1.5">
-              <span className="h-2 w-2 rounded-full bg-red-500" />
-              <span className="text-lg font-bold text-red-500 tabular-nums">
+              <span className="h-2 w-2 rounded-full bg-[var(--status-critical)]" />
+              <span className="text-lg font-bold text-[var(--status-critical)] tabular-nums">
                 {error}
               </span>
             </div>

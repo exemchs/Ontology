@@ -35,17 +35,17 @@ const bannerConfigMap: Record<Role, BannerConfig> = {
     message:
       "분석 업무에 필요한 데이터만 접근 가능합니다. 개인 식별 정보는 마스킹됩니다.",
     icon: <BarChart3 className="size-4 shrink-0" />,
-    bgClass: "bg-amber-500/10",
-    borderClass: "border-amber-500/30",
-    iconColorClass: "text-amber-600 dark:text-amber-400",
+    bgClass: "bg-[var(--status-warning)]/10",
+    borderClass: "border-[var(--status-warning)]/30",
+    iconColorClass: "text-[var(--status-warning)]",
   },
   auditor: {
     message:
       "감사 목적으로 제한된 접근 권한이 있습니다. 대부분의 PII 필드가 차단됩니다.",
     icon: <Eye className="size-4 shrink-0" />,
-    bgClass: "bg-red-500/10",
-    borderClass: "border-red-500/30",
-    iconColorClass: "text-red-600 dark:text-red-400",
+    bgClass: "bg-[var(--status-critical)]/10",
+    borderClass: "border-[var(--status-critical)]/30",
+    iconColorClass: "text-[var(--status-critical)]",
   },
 };
 

@@ -25,22 +25,22 @@ function formatRelativeTime(timestamp: string): string {
 function getSeverityBorderColor(severity: DgraphEvent["severity"]): string {
   switch (severity) {
     case "error":
-      return "border-l-red-500";
+      return "border-l-[var(--status-critical)]";
     case "warning":
-      return "border-l-amber-500";
+      return "border-l-[var(--status-warning)]";
     case "info":
-      return "border-l-blue-500";
+      return "border-l-[var(--status-healthy)]";
   }
 }
 
 function getSeverityBadgeClass(severity: DgraphEvent["severity"]): string {
   switch (severity) {
     case "error":
-      return "bg-red-500/10 text-red-500 border-red-500/20";
+      return "bg-[var(--status-critical)]/15 text-[var(--status-critical)] border-[var(--status-critical)]/30";
     case "warning":
-      return "bg-amber-500/10 text-amber-500 border-amber-500/20";
+      return "bg-[var(--status-warning)]/15 text-[var(--status-warning)] border-[var(--status-warning)]/30";
     case "info":
-      return "bg-blue-500/10 text-blue-500 border-blue-500/20";
+      return "bg-[var(--status-healthy)]/15 text-[var(--status-healthy)] border-[var(--status-healthy)]/30";
   }
 }
 

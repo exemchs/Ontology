@@ -32,8 +32,8 @@ function getStatusVariant(status: string): "default" | "outline" {
 }
 
 function getStatusClassName(status: string): string {
-  if (status === "warning") return "bg-amber-500/10 text-amber-500 border-amber-500/20";
-  if (status === "error") return "bg-red-500/10 text-red-500 border-red-500/20";
+  if (status === "warning") return "bg-[var(--status-warning)]/15 text-[var(--status-warning)] border-[var(--status-warning)]/30";
+  if (status === "error") return "bg-[var(--status-critical)]/15 text-[var(--status-critical)] border-[var(--status-critical)]/30";
   return "";
 }
 

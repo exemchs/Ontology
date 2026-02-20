@@ -266,7 +266,7 @@ export function SchemaOverviewPanel({ types }: SchemaOverviewPanelProps) {
               {/* Left: Schema Health stats */}
               <div
                 className="flex flex-col gap-3 shrink-0"
-                style={{ width: 200 }}
+                style={{ width: 260 }}
               >
                 {/* Score */}
                 <div className="flex items-center gap-2">
@@ -349,7 +349,7 @@ export function SchemaOverviewPanel({ types }: SchemaOverviewPanelProps) {
                 </span>
                 <div
                   ref={containerRef}
-                  className="flex-1 min-h-[160px]"
+                  className="flex-1 min-h-[160px] overflow-hidden"
                 >
                   <svg ref={svgRef} className="w-full h-full" />
                 </div>
