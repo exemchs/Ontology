@@ -2,8 +2,9 @@
 
 import { useState, useMemo, useCallback } from "react";
 import { Card } from "@/components/ui/card";
+import { PageShell } from "@/components/ds/PageShell";
 import { SchemaTreeView } from "@/components/studio/SchemaTreeView";
-import { SchemaHealthScore } from "@/components/studio/SchemaHealthScore";
+import { SchemaOverviewPanel } from "@/components/studio/SchemaOverviewPanel";
 import { TypeDetail, type EdgeFilter } from "@/components/studio/TypeDetail";
 import { TypeAddDialog } from "@/components/studio/TypeAddDialog";
 import { OntologyGraph } from "@/components/charts/studio/OntologyGraph";
@@ -12,7 +13,6 @@ import {
   type MinimapNode,
   type MinimapTransform,
 } from "@/components/studio/OntologyMinimap";
-import { TypeDistributionTreemap } from "@/components/charts/studio/TypeDistributionTreemap";
 import { getOntologyTypes } from "@/data/studio-data";
 import { toast } from "sonner";
 import type { OntologyType } from "@/types";
@@ -216,70 +216,74 @@ export function StudioPage() {
   const typeNames = useMemo(() => types.map((t) => t.name), [types]);
 
   return (
-    <div data-testid="studio-page" className="flex h-full gap-3 p-3">
-      {/* Left Panel (~35%) */}
-      <div className="flex w-[35%] min-w-[280px] flex-col gap-3">
-        <Card className="border-border/40 flex-[3] overflow-hidden py-0">
-          <SchemaTreeView
-            types={types}
-            selectedType={selectedType?.name ?? null}
-            onSelectType={handleTreeSelect}
-            onAddType={() => setAddTypeDialogOpen(true)}
-            onDeleteType={handleDeleteType}
-            onRenameType={handleRenameType}
-          />
-        </Card>
-        <Card className="border-border/40 flex-[4] overflow-hidden py-0">
-          <TypeDetail
-            type={selectedType}
-            allTypes={types}
-            edgeFilter={edgeFilter}
-            onEdgeFilterChange={setEdgeFilter}
-            onAddPredicate={(pred) =>
-              selectedType && handleAddPredicate(selectedType.name, pred)
-            }
-            onUpdatePredicate={(oldPred, newPred) =>
-              selectedType &&
-              handleUpdatePredicate(selectedType.name, oldPred, newPred)
-            }
-            onDeletePredicate={(pred) =>
-              selectedType && handleDeletePredicate(selectedType.name, pred)
-            }
-            onAddRelation={(rel) =>
-              selectedType && handleAddRelation(selectedType.name, rel)
-            }
-            onDeleteRelation={(relName, target) =>
-              selectedType &&
-              handleDeleteRelation(selectedType.name, relName, target)
-            }
-          />
-        </Card>
-        <SchemaHealthScore types={types} />
-      </div>
+    <PageShell
+      title="Ontology Studio"
+      description="Define and visualize ontology schema, type relationships, and data distribution"
+      className="h-full"
+    >
+      <SchemaOverviewPanel types={types} />
 
-      {/* Right Panel (~65%) */}
-      <div className="flex flex-1 flex-col gap-3">
-        <Card className="border-border/40 relative flex-[6] overflow-hidden">
-          <OntologyGraph
-            types={types}
-            selectedType={selectedType}
-            onSelectType={setSelectedType}
-            edgeFilter={edgeFilter}
-            onZoomChange={handleZoomChange}
-          />
-          {/* Minimap overlay */}
-          <div className="absolute bottom-2 right-2 z-10">
-            <OntologyMinimap
-              nodes={minimapNodes}
-              viewportTransform={minimapTransform}
-              graphWidth={800}
-              graphHeight={500}
+      <div data-testid="studio-page" className="flex flex-1 min-h-0 gap-3">
+        {/* Left Panel (~35%) */}
+        <div className="flex w-[35%] min-w-[280px] flex-col gap-3">
+          <Card className="border-border/40 flex-[3] overflow-hidden py-0">
+            <SchemaTreeView
+              types={types}
+              selectedType={selectedType?.name ?? null}
+              onSelectType={handleTreeSelect}
+              onAddType={() => setAddTypeDialogOpen(true)}
+              onDeleteType={handleDeleteType}
+              onRenameType={handleRenameType}
             />
-          </div>
-        </Card>
-        <Card className="border-border/40 flex-[4] overflow-hidden">
-          <TypeDistributionTreemap types={types} />
-        </Card>
+          </Card>
+          <Card className="border-border/40 flex-1 overflow-hidden py-0">
+            <TypeDetail
+              type={selectedType}
+              allTypes={types}
+              edgeFilter={edgeFilter}
+              onEdgeFilterChange={setEdgeFilter}
+              onAddPredicate={(pred) =>
+                selectedType && handleAddPredicate(selectedType.name, pred)
+              }
+              onUpdatePredicate={(oldPred, newPred) =>
+                selectedType &&
+                handleUpdatePredicate(selectedType.name, oldPred, newPred)
+              }
+              onDeletePredicate={(pred) =>
+                selectedType && handleDeletePredicate(selectedType.name, pred)
+              }
+              onAddRelation={(rel) =>
+                selectedType && handleAddRelation(selectedType.name, rel)
+              }
+              onDeleteRelation={(relName, target) =>
+                selectedType &&
+                handleDeleteRelation(selectedType.name, relName, target)
+              }
+            />
+          </Card>
+        </div>
+
+        {/* Right Panel (~65%) */}
+        <div className="flex flex-1 flex-col gap-3">
+          <Card className="border-border/40 relative flex-1 overflow-hidden">
+            <OntologyGraph
+              types={types}
+              selectedType={selectedType}
+              onSelectType={setSelectedType}
+              edgeFilter={edgeFilter}
+              onZoomChange={handleZoomChange}
+            />
+            {/* Minimap overlay */}
+            <div className="absolute bottom-2 right-2 z-10">
+              <OntologyMinimap
+                nodes={minimapNodes}
+                viewportTransform={minimapTransform}
+                graphWidth={800}
+                graphHeight={500}
+              />
+            </div>
+          </Card>
+        </div>
       </div>
 
       <TypeAddDialog
@@ -288,6 +292,6 @@ export function StudioPage() {
         onAdd={handleAddType}
         existingNames={typeNames}
       />
-    </div>
+    </PageShell>
   );
 }
