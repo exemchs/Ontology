@@ -102,12 +102,10 @@ export function TruncatedLegend({
 
   if (!autoHide) return content;
 
-  // CSS grid height animation: 0fr → 1fr on parent group hover
+  // Opacity-only transition: space is always reserved so chart width stays fixed
   return (
-    <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-[grid-template-rows] duration-300 ease-in-out">
-      <div className="overflow-hidden">
-        {content}
-      </div>
+    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+      {content}
     </div>
   );
 }
