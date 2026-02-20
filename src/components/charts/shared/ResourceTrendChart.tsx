@@ -73,6 +73,7 @@ export function ResourceTrendChart({
           <ChartTooltip
             content={
               <ChartTooltipContent
+                className="min-w-[10rem]"
                 labelFormatter={(_, payload) => {
                   const ts = payload?.[0]?.payload?.time;
                   return ts ? formatTime(new Date(ts)) : "";
