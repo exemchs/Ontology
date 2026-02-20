@@ -9,7 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
+import { SidebarMenuButton } from "@/components/ui/sidebar";
 import { Badge } from "@/components/ui/badge";
 import { getDashboardAlerts } from "@/data/dashboard-data";
 import type { Alert } from "@/types";
@@ -62,13 +62,13 @@ export function AlertBell() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative h-8 w-8">
+        <SidebarMenuButton tooltip="알림" className="relative">
           <Bell className="size-4" />
+          <span>알림</span>
           {unresolvedCount > 0 && (
-            <span className="absolute top-1 right-1 size-2 rounded-full bg-destructive" />
+            <span className="absolute top-1.5 left-5 size-2 rounded-full bg-destructive group-data-[collapsible=icon]:left-1.5 group-data-[collapsible=icon]:top-1" />
           )}
-          <span className="sr-only">Notifications</span>
-        </Button>
+        </SidebarMenuButton>
       </PopoverTrigger>
 
       <PopoverContent side="right" align="end" className="w-80 p-0">

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
-import { Moon, Sun, LogOut, Search } from "lucide-react";
+import { Moon, Sun, LogOut, Search, User2, ChevronsUpDown } from "lucide-react";
 
 import {
   Sidebar,
@@ -16,12 +16,17 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarSeparator,
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { Switch } from "@/components/ui/switch";
-import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { navigationGroups } from "@/lib/navigation";
 import { useAuth } from "@/hooks/use-auth";
@@ -29,6 +34,7 @@ import { useRole } from "@/contexts/RoleContext";
 import { NamespaceSelector } from "@/components/layout/NamespaceSelector";
 import { AlertBell } from "@/components/layout/AlertBell";
 import type { Role } from "@/types";
+import { cn } from "@/lib/utils";
 
 // ── Role badge config ─────────────────────────────────────────────────────────
 
@@ -74,11 +80,20 @@ export function AppSidebar() {
     );
   };
 
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
+
   return (
     <Sidebar collapsible="icon" className="border-r border-sidebar-border/40">
       {/* ── Header: Logo + collapse trigger ────────────────────────────── */}
-      <SidebarHeader className="pb-0">
-        <div className="flex h-7 items-center justify-between px-2">
+      <SidebarHeader>
+        <div
+          className={cn(
+            "flex h-7 items-center px-2",
+            isCollapsed ? "justify-center" : "justify-between"
+          )}
+        >
           {!isCollapsed && (
             <>
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -99,32 +114,36 @@ export function AppSidebar() {
         </div>
       </SidebarHeader>
 
-      {/* ── Search trigger (opens ⌘K) ──────────────────────────────────── */}
-      <SidebarGroup className="py-0 px-2 pt-2">
-        <SidebarGroupContent>
-          {isCollapsed ? (
-            <SidebarMenuButton
-              tooltip="검색 (⌘K)"
-              onClick={openCommandPalette}
-              className="h-8"
-            >
-              <Search className="size-4" />
-            </SidebarMenuButton>
-          ) : (
-            <button
-              onClick={openCommandPalette}
-              className="flex h-8 w-full items-center gap-2 rounded-md border border-input bg-background px-3 text-xs text-muted-foreground hover:bg-accent transition-colors"
-            >
-              <Search className="size-3.5 shrink-0" />
-              <span>검색...</span>
-              <kbd className="ml-auto font-mono text-[10px]">⌘K</kbd>
-            </button>
-          )}
-        </SidebarGroupContent>
-      </SidebarGroup>
-
-      {/* ── Navigation groups ──────────────────────────────────────────── */}
+      {/* ── Content: Search + Navigation ────────────────────────────────── */}
       <SidebarContent>
+        {/* Search trigger (opens ⌘K) */}
+        <SidebarGroup>
+          <SidebarGroupContent>
+            {isCollapsed ? (
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    tooltip="검색 (⌘K)"
+                    onClick={openCommandPalette}
+                  >
+                    <Search className="size-4" />
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            ) : (
+              <button
+                onClick={openCommandPalette}
+                className="flex h-8 w-full items-center gap-2 rounded-md border border-input bg-background px-3 text-xs text-muted-foreground hover:bg-accent transition-colors"
+              >
+                <Search className="size-3.5 shrink-0" />
+                <span>검색...</span>
+                <kbd className="ml-auto font-mono text-[10px]">⌘K</kbd>
+              </button>
+            )}
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* Navigation groups */}
         {navigationGroups.map((group) => (
           <SidebarGroup key={group.label}>
             <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
@@ -150,10 +169,8 @@ export function AppSidebar() {
         ))}
       </SidebarContent>
 
-      {/* ── Footer: Namespace / Alert+Role / Theme / Logout ────────────── */}
-      <SidebarFooter className="gap-1">
-        <SidebarSeparator />
-
+      {/* ── Footer ─────────────────────────────────────────────────────── */}
+      <SidebarFooter>
         {/* Namespace selector */}
         <SidebarMenu>
           <SidebarMenuItem>
@@ -161,47 +178,68 @@ export function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
 
-        {/* AlertBell + RoleBadge row */}
-        <div className="flex items-center gap-1 px-2 py-0.5">
-          <AlertBell />
-          {!isCollapsed && (
-            <Badge
-              variant={badgeCfg.variant}
-              className={`text-[10px] px-1.5 py-0 ${badgeCfg.className}`}
-            >
-              {formatRoleName(currentRole)}
-            </Badge>
-          )}
-        </div>
+        {/* Alert + Theme */}
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <AlertBell />
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton onClick={toggleTheme} tooltip="테마 전환">
+              {theme === "dark" ? (
+                <Sun className="size-4" />
+              ) : (
+                <Moon className="size-4" />
+              )}
+              <span>테마 전환</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
 
-        {/* Theme toggle */}
-        <div className="flex items-center gap-2 px-2 py-0.5">
-          <Sun className="size-3.5 shrink-0 text-muted-foreground" />
-          {!isCollapsed && (
-            <>
-              <Switch
-                size="sm"
-                checked={theme === "dark"}
-                onCheckedChange={(checked) =>
-                  setTheme(checked ? "dark" : "light")
-                }
-                aria-label="Toggle dark mode"
-              />
-              <Moon className="size-3.5 shrink-0 text-muted-foreground" />
-            </>
-          )}
-        </div>
-
-        {/* Logout */}
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={logout}
-          className="w-full justify-start gap-2 h-8"
-        >
-          <LogOut className="size-3.5" />
-          {!isCollapsed && <span className="text-xs">로그아웃</span>}
-        </Button>
+        {/* User account */}
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton
+                  size="lg"
+                  tooltip={formatRoleName(currentRole)}
+                >
+                  <User2 className="size-4" />
+                  <div className="flex flex-1 flex-col text-left leading-tight">
+                    <span className="text-xs font-medium truncate">Admin</span>
+                    <span className="text-[10px] text-muted-foreground truncate">
+                      {formatRoleName(currentRole)}
+                    </span>
+                  </div>
+                  <ChevronsUpDown className="ml-auto size-3 text-muted-foreground" />
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                side="right"
+                align="end"
+                className="w-48"
+              >
+                <DropdownMenuLabel className="flex items-center gap-2 text-xs font-normal">
+                  <User2 className="size-3.5 text-muted-foreground" />
+                  <div className="flex flex-col">
+                    <span className="font-medium">Admin</span>
+                    <Badge
+                      variant={badgeCfg.variant}
+                      className={`mt-0.5 w-fit text-[10px] px-1.5 py-0 ${badgeCfg.className}`}
+                    >
+                      {formatRoleName(currentRole)}
+                    </Badge>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={logout}>
+                  <LogOut className="size-3.5" />
+                  <span>로그아웃</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
   );
