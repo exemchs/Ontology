@@ -63,7 +63,7 @@ export function GpuHealthIssues({ issues, className }: GpuHealthIssuesProps) {
 
   return (
     <>
-      <Card className={cn("border-border/40 flex flex-col max-h-[400px]", className)} data-testid="gpu-health-issues">
+      <Card className={cn("border-border/40 flex flex-col h-full", className)} data-testid="gpu-health-issues">
         <CardHeader className="pb-2 shrink-0">
           <div className="flex items-center justify-between gap-2">
             <CardTitle className="text-sm">Health Issues</CardTitle>
