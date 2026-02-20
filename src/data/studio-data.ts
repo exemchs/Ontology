@@ -30,11 +30,12 @@ const typeSeedsData: OntologyTypeSeed[] = [
     name: "Equipment",
     description: "Semiconductor manufacturing equipment",
     nodeCount: 832,
-    predicates: ["equipment_id", "name", "type", "manufacturer", "location", "status", "install_date"],
+    predicates: ["equipment_id", "name", "type", "manufacturer", "location", "status", "install_date", "serial_number", "firmware_version"],
     relations: [
       { name: "runs", target: "Process", direction: "outbound" },
       { name: "located_at", target: "Equipment", direction: "outbound" },
-      { name: "triggers", target: "Alert", direction: "outbound" },
+      { name: "maintained_by", target: "MaintenanceRecord", direction: "outbound" },
+      { name: "produces", target: "Wafer", direction: "outbound" },
     ],
   },
   {
@@ -42,10 +43,12 @@ const typeSeedsData: OntologyTypeSeed[] = [
     name: "Process",
     description: "Manufacturing process steps",
     nodeCount: 24500,
-    predicates: ["process_id", "name", "step_number", "duration", "temperature", "pressure"],
+    predicates: ["process_id", "name", "step_number", "duration", "temperature", "pressure", "gas_flow", "chamber_id"],
     relations: [
       { name: "produces", target: "Wafer", direction: "outbound" },
       { name: "uses", target: "Recipe", direction: "outbound" },
+      { name: "requires", target: "Equipment", direction: "outbound" },
+      { name: "generates", target: "Defect", direction: "outbound" },
     ],
   },
   {
@@ -53,9 +56,11 @@ const typeSeedsData: OntologyTypeSeed[] = [
     name: "Wafer",
     description: "Silicon wafer tracking",
     nodeCount: 156000,
-    predicates: ["wafer_id", "lot_id", "diameter", "thickness", "grade", "status"],
+    predicates: ["wafer_id", "lot_id", "diameter", "thickness", "grade", "status", "yield_rate", "layer_count"],
     relations: [
       { name: "has_defect", target: "Defect", direction: "outbound" },
+      { name: "processed_by", target: "Process", direction: "outbound" },
+      { name: "inspected_by", target: "Equipment", direction: "outbound" },
     ],
   },
   {
@@ -63,9 +68,10 @@ const typeSeedsData: OntologyTypeSeed[] = [
     name: "Recipe",
     description: "Process recipes and parameters",
     nodeCount: 310,
-    predicates: ["recipe_id", "name", "version", "parameters", "created_by"],
+    predicates: ["recipe_id", "name", "version", "parameters", "created_by", "approved_date", "target_thickness"],
     relations: [
       { name: "applied_to", target: "Process", direction: "outbound" },
+      { name: "optimized_for", target: "Equipment", direction: "outbound" },
     ],
   },
   {
@@ -73,9 +79,11 @@ const typeSeedsData: OntologyTypeSeed[] = [
     name: "Defect",
     description: "Wafer defect records",
     nodeCount: 48800,
-    predicates: ["defect_id", "type", "location_x", "location_y", "size", "severity"],
+    predicates: ["defect_id", "type", "location_x", "location_y", "size", "severity", "classification", "image_path"],
     relations: [
       { name: "found_by", target: "Equipment", direction: "outbound" },
+      { name: "affects", target: "Wafer", direction: "outbound" },
+      { name: "caused_by", target: "Process", direction: "outbound" },
     ],
   },
   {
@@ -83,9 +91,10 @@ const typeSeedsData: OntologyTypeSeed[] = [
     name: "MaintenanceRecord",
     description: "Equipment maintenance history",
     nodeCount: 3820,
-    predicates: ["record_id", "type", "scheduled_date", "completed_date", "technician", "notes"],
+    predicates: ["record_id", "type", "scheduled_date", "completed_date", "technician", "notes", "cost", "downtime_hours"],
     relations: [
       { name: "performed_on", target: "Equipment", direction: "outbound" },
+      { name: "triggered_by", target: "Defect", direction: "outbound" },
     ],
   },
 ];

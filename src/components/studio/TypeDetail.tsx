@@ -26,6 +26,8 @@ interface TypeDetailProps {
   onAddPredicate: (predicate: string) => void;
   onUpdatePredicate: (oldPred: string, newPred: string) => void;
   onDeletePredicate: (predicate: string) => void;
+  onAddRelation: (relation: OntologyRelation) => void;
+  onDeleteRelation: (relationName: string, target: string) => void;
 }
 
 function getInboundRelations(
@@ -231,6 +233,99 @@ function AddPredicateBadge({
   );
 }
 
+// ── Add Relation Row ────────────────────────────────────────────────────────
+
+function AddRelationRow({
+  typeNames,
+  onAdd,
+}: {
+  typeNames: string[];
+  onAdd: (relation: OntologyRelation) => void;
+}) {
+  const [active, setActive] = useState(false);
+  const [name, setName] = useState("");
+  const [target, setTarget] = useState("");
+  const nameRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (active) nameRef.current?.focus();
+  }, [active]);
+
+  function handleAdd() {
+    const trimmed = name.trim();
+    if (trimmed && target) {
+      onAdd({ name: trimmed, target, direction: "outbound" });
+      setName("");
+      setTarget("");
+      setActive(false);
+    }
+  }
+
+  if (!active) {
+    return (
+      <button
+        type="button"
+        onClick={() => setActive(true)}
+        className="flex items-center justify-center gap-1 rounded-md border border-dashed border-border bg-muted/30 px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-primary/40 hover:bg-primary/5 hover:text-primary"
+      >
+        <Plus className="size-3" />
+        <span>Add Relation</span>
+      </button>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-1.5 rounded-md border border-primary/40 bg-muted/30 px-2 py-1.5">
+      <Input
+        ref={nameRef}
+        placeholder="relation name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Escape") {
+            setActive(false);
+            setName("");
+            setTarget("");
+          }
+        }}
+        className="h-5 w-24 border-0 bg-transparent p-0 text-xs shadow-none focus-visible:ring-0"
+      />
+      <ArrowRight className="size-3 text-muted-foreground shrink-0" />
+      <Select value={target} onValueChange={setTarget}>
+        <SelectTrigger size="sm" className="h-5 w-28 border-0 bg-transparent text-xs shadow-none">
+          <SelectValue placeholder="target" />
+        </SelectTrigger>
+        <SelectContent>
+          {typeNames.map((tn) => (
+            <SelectItem key={tn} value={tn}>
+              {tn}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      <button
+        type="button"
+        onClick={handleAdd}
+        disabled={!name.trim() || !target}
+        className="rounded p-0.5 hover:bg-primary/10 disabled:opacity-30"
+      >
+        <Check className="size-3 text-primary" />
+      </button>
+      <button
+        type="button"
+        onClick={() => {
+          setActive(false);
+          setName("");
+          setTarget("");
+        }}
+        className="rounded p-0.5 hover:bg-muted-foreground/20"
+      >
+        <X className="size-3" />
+      </button>
+    </div>
+  );
+}
+
 // ── Main Component ──────────────────────────────────────────────────────────
 
 export function TypeDetail({
@@ -241,6 +336,8 @@ export function TypeDetail({
   onAddPredicate,
   onUpdatePredicate,
   onDeletePredicate,
+  onAddRelation,
+  onDeleteRelation,
 }: TypeDetailProps) {
   if (!type) {
     return (
@@ -328,7 +425,7 @@ export function TypeDetail({
                 filteredRelations.map((rel, i) => (
                   <div
                     key={`${rel.name}-${rel.target}-${i}`}
-                    className="bg-muted/50 flex items-center gap-2 rounded-md px-3 py-1.5 text-xs"
+                    className="group/rel bg-muted/50 flex items-center gap-2 rounded-md px-3 py-1.5 text-xs"
                   >
                     {rel.direction === "outbound" ? (
                       <>
@@ -347,9 +444,22 @@ export function TypeDetail({
                         <span className="font-medium">{rel.name}</span>
                       </>
                     )}
+                    {rel.direction === "outbound" && (
+                      <button
+                        type="button"
+                        onClick={() => onDeleteRelation(rel.name, rel.target)}
+                        className="ml-auto hidden rounded p-0.5 hover:bg-[var(--status-critical)]/20 group-hover/rel:block"
+                      >
+                        <X className="size-3 text-muted-foreground" />
+                      </button>
+                    )}
                   </div>
                 ))
               )}
+              <AddRelationRow
+                typeNames={allTypes.map((t) => t.name).filter((n) => n !== type.name)}
+                onAdd={onAddRelation}
+              />
             </div>
           </ScrollArea>
         </TabsContent>

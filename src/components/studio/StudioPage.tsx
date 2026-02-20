@@ -165,6 +165,54 @@ export function StudioPage() {
     []
   );
 
+  // ── Relation CRUD ───────────────────────────────────────────────────────
+
+  const handleAddRelation = useCallback(
+    (typeName: string, relation: import("@/types").OntologyRelation) => {
+      setTypes((prev) =>
+        prev.map((t) =>
+          t.name === typeName
+            ? { ...t, relations: [...t.relations, relation] }
+            : t
+        )
+      );
+      setSelectedType((prev) =>
+        prev?.name === typeName
+          ? { ...prev, relations: [...prev.relations, relation] }
+          : prev
+      );
+    },
+    []
+  );
+
+  const handleDeleteRelation = useCallback(
+    (typeName: string, relationName: string, target: string) => {
+      setTypes((prev) =>
+        prev.map((t) =>
+          t.name === typeName
+            ? {
+                ...t,
+                relations: t.relations.filter(
+                  (r) => !(r.name === relationName && r.target === target)
+                ),
+              }
+            : t
+        )
+      );
+      setSelectedType((prev) =>
+        prev?.name === typeName
+          ? {
+              ...prev,
+              relations: prev.relations.filter(
+                (r) => !(r.name === relationName && r.target === target)
+              ),
+            }
+          : prev
+      );
+    },
+    []
+  );
+
   const typeNames = useMemo(() => types.map((t) => t.name), [types]);
 
   return (
@@ -196,6 +244,13 @@ export function StudioPage() {
             }
             onDeletePredicate={(pred) =>
               selectedType && handleDeletePredicate(selectedType.name, pred)
+            }
+            onAddRelation={(rel) =>
+              selectedType && handleAddRelation(selectedType.name, rel)
+            }
+            onDeleteRelation={(relName, target) =>
+              selectedType &&
+              handleDeleteRelation(selectedType.name, relName, target)
             }
           />
         </Card>

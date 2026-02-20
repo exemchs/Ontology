@@ -459,6 +459,23 @@ export function OntologyGraph({
           tooltip.hide();
         });
 
+      // ── Edge Labels ─────────────────────────────────────────────────
+
+      const edgeLabelsGroup = g.append("g").attr("class", "edge-labels");
+
+      const edgeLabels = edgeLabelsGroup
+        .selectAll("text")
+        .data(graphData.links)
+        .join("text")
+        .attr("class", "edge-label")
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
+        .attr("fill", colors.textSecondary)
+        .attr("font-size", "9px")
+        .attr("font-weight", "500")
+        .attr("pointer-events", "none")
+        .text((d) => d.name);
+
       // ── Node Layer ───────────────────────────────────────────────────
 
       const nodesGroup = g.append("g").attr("class", "nodes");
@@ -560,6 +577,27 @@ export function OntologyGraph({
           const idx = (d as GraphLink & { _arcIndex: number })._arcIndex ?? 0;
           return arcPath(s.x, s.y, t.x, t.y, idx);
         });
+
+        // Update edge label positions at arc midpoint
+        edgeLabels
+          .attr("x", (d) => {
+            const s = d.source as GraphNode;
+            const t = d.target as GraphNode;
+            return (s.x + t.x) / 2;
+          })
+          .attr("y", (d) => {
+            const s = d.source as GraphNode;
+            const t = d.target as GraphNode;
+            const idx = (d as GraphLink & { _arcIndex: number })._arcIndex ?? 0;
+            const mx = (s.x + t.x) / 2;
+            const my = (s.y + t.y) / 2;
+            const dx = t.x - s.x;
+            const dy = t.y - s.y;
+            const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+            // Offset perpendicular to edge, alternate direction by arc index
+            const offset = (idx % 2 === 0 ? -1 : 1) * Math.min(20, dist * 0.1);
+            return my + (-dx / dist) * offset;
+          });
 
         // Update minimap with current node positions during simulation
         if (onZoomChangeRef.current) {
@@ -692,6 +730,19 @@ export function OntologyGraph({
 
 // ── Helper: Update edge positions (for static layouts) ─────────────────
 
+function edgeLabelPosition(d: GraphLink): { x: number; y: number } {
+  const s = d.source as GraphNode;
+  const t = d.target as GraphNode;
+  const idx = (d as GraphLink & { _arcIndex: number })._arcIndex ?? 0;
+  const mx = (s.x + t.x) / 2;
+  const my = (s.y + t.y) / 2;
+  const dx = t.x - s.x;
+  const dy = t.y - s.y;
+  const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+  const offset = (idx % 2 === 0 ? -1 : 1) * Math.min(20, dist * 0.1);
+  return { x: mx + (dy / dist) * offset, y: my + (-dx / dist) * offset };
+}
+
 function updateEdgePositions(
   g: Selection<SVGGElement, unknown, null, undefined>,
   duration: number
@@ -706,6 +757,11 @@ function updateEdgePositions(
         const idx = (d as GraphLink & { _arcIndex: number })._arcIndex ?? 0;
         return arcPath(s.x, s.y, t.x, t.y, idx);
       });
+    g.selectAll<SVGTextElement, GraphLink>("text.edge-label")
+      .transition()
+      .duration(duration)
+      .attr("x", (d) => edgeLabelPosition(d).x)
+      .attr("y", (d) => edgeLabelPosition(d).y);
   } else {
     g.selectAll<SVGPathElement, GraphLink>("path.edge-path").attr("d", (d) => {
       const s = d.source as GraphNode;
@@ -713,6 +769,9 @@ function updateEdgePositions(
       const idx = (d as GraphLink & { _arcIndex: number })._arcIndex ?? 0;
       return arcPath(s.x, s.y, t.x, t.y, idx);
     });
+    g.selectAll<SVGTextElement, GraphLink>("text.edge-label")
+      .attr("x", (d) => edgeLabelPosition(d).x)
+      .attr("y", (d) => edgeLabelPosition(d).y);
   }
 }
 
