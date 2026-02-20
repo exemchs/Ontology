@@ -59,8 +59,7 @@ export function GpuHealthIssues({ issues, className }: GpuHealthIssuesProps) {
   const [showThresholds, setShowThresholds] = useState(false);
 
   const sorted = [...issues]
-    .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
-    .slice(0, 6);
+    .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
 
   return (
     <>
@@ -78,9 +77,10 @@ export function GpuHealthIssues({ issues, className }: GpuHealthIssuesProps) {
             </Button>
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="overflow-hidden p-0">
+          <div className="max-h-[320px] overflow-y-auto px-6 pb-6">
           <Table>
-            <TableHeader>
+            <TableHeader className="sticky top-0 bg-card z-10">
               <TableRow>
                 <TableHead className="w-[60px]">Sev</TableHead>
                 <TableHead className="w-[50px]">GPU</TableHead>
@@ -108,6 +108,7 @@ export function GpuHealthIssues({ issues, className }: GpuHealthIssuesProps) {
               ))}
             </TableBody>
           </Table>
+          </div>
         </CardContent>
       </Card>
 
